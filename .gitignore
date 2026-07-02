@@ -1,0 +1,57 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs
+
+# Environment files
+.env
+.env.*
+
+# Node Modules
+**/node_modules
+
+# Build folders
+**/dist
+**/build
+
+# Coverage
+coverage
+
+# IDE
+.vscode
+.idea
+
+# npm
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Cache
+.cache
+
+# Temporary files
+*.tmp
+*.temp
+
+# Mac
+.AppleDouble
+.LSOverride
+
+# Windows
+Desktop.ini
+
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
