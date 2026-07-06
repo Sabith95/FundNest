@@ -1,4 +1,4 @@
-import { Role } from "../../shared/constants";
+import { Role } from "../../shared/constants/roles";
 import { User } from "../entities/User";
 import { IBaseRepository } from "./IBaseRepository";
 

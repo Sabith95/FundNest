@@ -3,7 +3,7 @@ import { injectable } from "tsyringe";
 import {env} from '../../config/env'
 import { GoogleUserPayload, IGoogleAuthService } from "./interfaces/IGoogleAuthService";
 import { AppError } from "../../shared/errors/AppError";
-import { HTTP_STATUS } from "../../shared/constants";
+import { HTTP_STATUS } from "../../shared/constants/httpStatus";
 
 @injectable()
 export class GoogleAuthService implements IGoogleAuthService {

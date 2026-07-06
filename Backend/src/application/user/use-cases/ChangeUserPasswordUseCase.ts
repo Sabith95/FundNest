@@ -14,14 +14,14 @@ import {
 export class ChangeUserPasswordUseCase {
     constructor(
     @inject(TOKENS.UserRepository)
-    private readonly userRepository: IUserRepository,
+    private readonly _userRepository: IUserRepository,
 
     @inject(TOKENS.BcryptService)
-    private readonly bcryptService: IBcryptService
+    private readonly _bcryptService: IBcryptService
   ) {}
 
   async execute(input: ChangePasswordDto): Promise<ChangePasswordResponseDto> {
-    const user = await this.userRepository.findById(input.userId)
+    const user = await this._userRepository.findById(input.userId)
 
     if (!user) {
       throw new AppError(MESSAGES.USER.NOT_FOUND, HTTP_STATUS.NOT_FOUND);
@@ -34,7 +34,7 @@ export class ChangeUserPasswordUseCase {
       );
     }
 
-    const isCurrentPasswordValid = await this.bcryptService.comparePassword(
+    const isCurrentPasswordValid = await this._bcryptService.comparePassword(
         input.currentPassword,
         user.password
     )
@@ -43,7 +43,7 @@ export class ChangeUserPasswordUseCase {
       throw new AppError(MESSAGES.AUTH.CURRENT_PASSWORD_INCORRECT, HTTP_STATUS.BAD_REQUEST);
     }
 
-    const isSamePassword = await this.bcryptService.comparePassword(
+    const isSamePassword = await this._bcryptService.comparePassword(
         input.newPassword,
         user.password
     )
@@ -55,9 +55,9 @@ export class ChangeUserPasswordUseCase {
       );
     }
 
-    const hashedPassword = await this.bcryptService.hashPassword(input.newPassword);
+    const hashedPassword = await this._bcryptService.hashPassword(input.newPassword);
 
-    await this.userRepository.updatePassword(user.id, hashedPassword);
+    await this._userRepository.updatePassword(user.id, hashedPassword);
 
     return {
       passwordChanged: true,

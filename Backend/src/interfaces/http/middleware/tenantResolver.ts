@@ -1,7 +1,7 @@
 import {Request, Response, NextFunction} from 'express'
 import { AppError } from '../../../shared/errors/AppError'
-import { HTTP_STATUS } from '../../../shared/constants'
-import { ROLES } from '../../../shared/constants'
+import { HTTP_STATUS } from '../../../shared/constants/httpStatus'
+import { ROLES } from '../../../shared/constants/roles'
 
 export const tenantResolver = (req: Request, res: Response, next:NextFunction): void =>{
     if(req.user?.role === ROLES.SUPER_ADMIN){

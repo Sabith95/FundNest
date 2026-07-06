@@ -15,13 +15,13 @@ import {
 export class ResetUserPasswordUseCase {
   constructor(
     @inject(TOKENS.UserRepository)
-    private readonly userRepository: IUserRepository,
+    private readonly _userRepository: IUserRepository,
 
     @inject(TOKENS.BcryptService)
-    private readonly bcryptService: IBcryptService,
+    private readonly _bcryptService: IBcryptService,
 
     @inject(TOKENS.OtpService)
-    private readonly otpService: IOtpService
+    private readonly _otpService: IOtpService
   ) {}
 
   async execute(input: ResetUserPasswordDto): Promise<ResetUserPasswordResponseDto> {
@@ -29,7 +29,7 @@ export class ResetUserPasswordUseCase {
       throw new AppError(MESSAGES.AUTH.PASSWORD_MISMATCH, HTTP_STATUS.BAD_REQUEST);
     }
 
-    const user = await this.userRepository.findByEmail(input.email);
+    const user = await this._userRepository.findByEmail(input.email);
 
     if (!user) {
       throw new AppError(MESSAGES.USER.NOT_FOUND, HTTP_STATUS.NOT_FOUND);
@@ -39,7 +39,7 @@ export class ResetUserPasswordUseCase {
       throw new AppError(MESSAGES.AUTH.GOOGLE_LOGIN, HTTP_STATUS.BAD_REQUEST);
     }
 
-    const session = await this.otpService.consumePasswordResetSession(user.email);
+    const session = await this._otpService.consumePasswordResetSession(user.email);
 
     if (session.userId !== user.id) {
       throw new AppError(
@@ -48,9 +48,9 @@ export class ResetUserPasswordUseCase {
       );
     }
 
-    const hashedPassword = await this.bcryptService.hashPassword(input.password);
+    const hashedPassword = await this._bcryptService.hashPassword(input.password);
 
-    await this.userRepository.updatePassword(user.id, hashedPassword);
+    await this._userRepository.updatePassword(user.id, hashedPassword);
 
     return {
       email: user.email,

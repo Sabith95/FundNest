@@ -13,15 +13,15 @@ import { ROLES } from "../../../shared/constants/roles";
 export class LoginUserUseCase {
   constructor(
     @inject(TOKENS.UserRepository)
-    private readonly userRepository: IUserRepository,
+    private readonly _userRepository: IUserRepository,
     @inject(TOKENS.BcryptService)
-    private readonly bcryptService: IBcryptService,
+    private readonly _bcryptService: IBcryptService,
     @inject(TOKENS.JwtService)
-    private readonly jwtService: IJwtService
+    private readonly _jwtService: IJwtService
   ) {}
 
   async execute(input: LoginDto): Promise<LoginResponseDto> {
-    const user = await this.userRepository.findByEmailAndRole(
+    const user = await this._userRepository.findByEmailAndRole(
       input.email,
       ROLES.USER
     );
@@ -38,7 +38,7 @@ export class LoginUserUseCase {
       throw new AppError(MESSAGES.AUTH.EMAIL_NOT_VERIFIED, HTTP_STATUS.UNAUTHORIZED);
     }
 
-    const isPasswordValid = await this.bcryptService.comparePassword(
+    const isPasswordValid = await this._bcryptService.comparePassword(
       input.password,
       user.password
     );
@@ -47,7 +47,7 @@ export class LoginUserUseCase {
       throw new AppError(MESSAGES.AUTH.INVALID_CREDENTIALS, HTTP_STATUS.UNAUTHORIZED);
     }
 
-    const tokens = this.jwtService.generateTokenPair({
+    const tokens = this._jwtService.generateTokenPair({
       id: user.id,
       email: user.email,
       role: user.role,

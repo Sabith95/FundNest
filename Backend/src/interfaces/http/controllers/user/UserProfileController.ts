@@ -18,16 +18,16 @@ import {
 export class UserProfileController {
     constructor(
         @inject(TOKENS.GetUserProfileUseCase)
-        private readonly getUserProfileUseCase: GetUserProfileUseCase,
+        private readonly _getUserProfileUseCase: GetUserProfileUseCase,
 
         @inject(TOKENS.UpdateUserProfileUseCase)
-        private readonly updateUserProfileUseCase: UpdateUserProfileUseCase,
+        private readonly _updateUserProfileUseCase: UpdateUserProfileUseCase,
 
         @inject(TOKENS.UpdateProfilePhotoUseCase)
-        private readonly updateProfilePhotoUseCase: UpdateProfilePhotoUseCase,
+        private readonly _updateProfilePhotoUseCase: UpdateProfilePhotoUseCase,
 
         @inject(TOKENS.ChangeUserPasswordUseCase)
-        private readonly changeUserPasswordUseCase: ChangeUserPasswordUseCase
+        private readonly _changeUserPasswordUseCase: ChangeUserPasswordUseCase
     ){}
 
     getProfile = async(
@@ -40,7 +40,7 @@ export class UserProfileController {
                 throw new AppError(MESSAGES.USER.NOT_AUTHENTICATED, HTTP_STATUS.UNAUTHORIZED)
             }
 
-            const result = await this.getUserProfileUseCase.execute(req.user.id)
+            const result = await this._getUserProfileUseCase.execute(req.user.id)
 
             res
                 .status(HTTP_STATUS.OK)
@@ -63,7 +63,7 @@ export class UserProfileController {
 
             const payload = updateUserProfileSchema.parse(req.body)
 
-            const result = await this.updateUserProfileUseCase.execute({ 
+            const result = await this._updateUserProfileUseCase.execute({ 
 
                 userId: req.user.id,
                 ...payload
@@ -91,7 +91,7 @@ export class UserProfileController {
                 throw new AppError(MESSAGES.USER.PROFILE_PHOTO_REQUIRED,HTTP_STATUS.BAD_REQUEST)
             }
 
-            const result = await this.updateProfilePhotoUseCase.execute({
+            const result = await this._updateProfilePhotoUseCase.execute({
                 userId: req.user.id,
                 file:{
                     buffer: req.file.buffer,
@@ -120,7 +120,7 @@ export class UserProfileController {
 
             const payload = changePasswordSchema.parse(req.body)
 
-            const result = await this.changeUserPasswordUseCase.execute({
+            const result = await this._changeUserPasswordUseCase.execute({
                 userId: req.user.id,
                 currentPassword: payload.currentPassword,
                 newPassword: payload.newPassword,

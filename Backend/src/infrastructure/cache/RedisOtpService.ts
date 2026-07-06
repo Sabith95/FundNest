@@ -2,7 +2,7 @@ import crypto from "crypto";
 import { injectable } from "tsyringe";
 import { env } from "../../config/env";
 import { AppError } from "../../shared/errors/AppError";
-import { HTTP_STATUS } from "../../shared/constants";
+import { HTTP_STATUS } from "../../shared/constants/httpStatus";
 import { redisClient } from "./RedisClient";
 import {
   IOtpService,

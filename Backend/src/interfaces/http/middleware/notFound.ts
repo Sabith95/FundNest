@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { ApiResponse } from '../../../shared/ApiResponse';
-import { HTTP_STATUS } from '../../../shared/constants';
+import { HTTP_STATUS } from '../../../shared/constants/httpStatus';
 
 export const notFound = (req: Request, res: Response): void => {
   const response = res as any;

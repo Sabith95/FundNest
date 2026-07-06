@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { AppError } from "../../../shared/errors/AppError";
-import {  Role } from "../../../shared/constants";
-import { HTTP_STATUS } from "../../../shared/constants";
+import {  Role } from "../../../shared/constants/roles";
+import { HTTP_STATUS } from "../../../shared/constants/httpStatus";
 import { IMiddleware } from "./interfaces/IMiddleware";
 
 

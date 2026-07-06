@@ -16,27 +16,27 @@ import { MESSAGES } from '../../../shared/constants/messages'
 export class RegisterUserUseCase {
     constructor(
         @inject(TOKENS.UserRepository)
-        private readonly userRepository: IUserRepository,
+        private readonly _userRepository: IUserRepository,
         @inject(TOKENS.BcryptService)
-        private readonly bcryptService: IBcryptService,
+        private readonly _bcryptService: IBcryptService,
         @inject(TOKENS.EmailService)
-        private readonly emailService: IEmailService,
+        private readonly _emailService: IEmailService,
         @inject(TOKENS.OtpService)
-        private readonly otpService: IOtpService
+        private readonly _otpService: IOtpService
     ){}
 
     async execute(input: RegisterUserDto): Promise<RegisterUserResponseDto> {
-        const existingUser = await this.userRepository.findByEmail(input.email)
+        const existingUser = await this._userRepository.findByEmail(input.email)
 
         if(existingUser){
             throw new AppError(MESSAGES.AUTH.EMAIL_ALREADY_REGISTERED, HTTP_STATUS.CONFLICT)
         }
 
-        const hashedPassword = await this.bcryptService.hashPassword(input.password)
+        const hashedPassword = await this._bcryptService.hashPassword(input.password)
 
         
 
-        const user = await this.userRepository.create({
+        const user = await this._userRepository.create({
             name:input.name,
             email: input.email,
             phone: input.phone,
@@ -53,14 +53,14 @@ export class RegisterUserUseCase {
 
         const otp = generateOtp()
 
-        await this.otpService.storeOtp({
+        await this._otpService.storeOtp({
             userId: user.id,
             email: user.email,
             otp,
             purpose: "USER_REGISTRATION"
         })
 
-        await this.emailService.sendOtp(user.email, otp)
+        await this._emailService.sendOtp(user.email, otp)
 
         return {
             user: {

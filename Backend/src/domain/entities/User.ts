@@ -1,4 +1,4 @@
-import { Role } from "../../shared/constants";
+import { Role } from "../../shared/constants/roles";
 
 export type KycStatus = 'PENDING' | 'VERIFIED' | 'REJECTED'
 export type AuthProvider = 'LOCAL' | 'GOOGLE'

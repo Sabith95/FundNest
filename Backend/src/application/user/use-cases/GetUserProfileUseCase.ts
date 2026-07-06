@@ -10,11 +10,11 @@ import { toUserProfileDto, UserProfileDto } from '../dto/ProfileDto'
 export class GetUserProfileUseCase {
     constructor(
         @inject(TOKENS.UserRepository)
-        private readonly userRepository: IUserRepository
+        private readonly _userRepository: IUserRepository
     ){}
 
     async execute(userId: string): Promise<UserProfileDto> {
-        const user = await this.userRepository.findById(userId)
+        const user = await this._userRepository.findById(userId)
 
         if(!user){
             throw new AppError(MESSAGES.USER.NOT_FOUND,HTTP_STATUS.NOT_FOUND)

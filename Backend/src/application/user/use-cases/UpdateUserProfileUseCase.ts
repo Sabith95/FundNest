@@ -15,11 +15,11 @@ import {
 export class UpdateUserProfileUseCase {
     constructor(
         @inject(TOKENS.UserRepository)
-        private readonly userRepository: IUserRepository
+        private readonly _userRepository: IUserRepository
     ){}
 
     async execute(input: UpdateProfileDto): Promise<UpdateProfileResponseDto>{
-     const user = await this.userRepository.findById(input.userId)   
+     const user = await this._userRepository.findById(input.userId)   
 
       if (!user) {
       throw new AppError(MESSAGES.USER.NOT_FOUND, HTTP_STATUS.NOT_FOUND);
@@ -29,14 +29,14 @@ export class UpdateUserProfileUseCase {
         const emailChanged = Boolean(normalizedEmail && normalizedEmail !== user.email)
 
         if(emailChanged && normalizedEmail){
-            const existingUser = await this.userRepository.findByEmail(normalizedEmail)
+            const existingUser = await this._userRepository.findByEmail(normalizedEmail)
 
             if(existingUser && existingUser.id !== user.id){
                 throw new AppError(MESSAGES.AUTH.EMAIL_ALREADY_REGISTERED,HTTP_STATUS.CONFLICT)
             }
         }
 
-        const updatedUser = await this.userRepository.updateProfile(user.id,{
+        const updatedUser = await this._userRepository.updateProfile(user.id,{
             name: input.name,
             email: normalizedEmail,
             phone: input.phone,

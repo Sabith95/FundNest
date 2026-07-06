@@ -13,26 +13,26 @@ import { ROLES } from '../../../shared/constants/roles'
 export class GoogleUserLoginUseCase {
     constructor (
         @inject(TOKENS.UserRepository)
-        private readonly userRepository: IUserRepository,
+        private readonly _userRepository: IUserRepository,
         @inject(TOKENS.GoogleAuthService)
-        private readonly googleAuthService: IGoogleAuthService,
+        private readonly _googleAuthService: IGoogleAuthService,
         @inject(TOKENS.JwtService)
-        private readonly jwtService: IJwtService
+        private readonly _jwtService: IJwtService
     ){}
 
     async execute(input: GoogleLoginDto): Promise<GoogleResponseDto> {
-        const googleUser = await this.googleAuthService.verifyIdToken(input.idToken)
+        const googleUser = await this._googleAuthService.verifyIdToken(input.idToken)
 
-        let user = await this.userRepository.findByGoogleId(googleUser.googleId)
+        let user = await this._userRepository.findByGoogleId(googleUser.googleId)
 
         if(!user){
-            const existingUserEmail = await this.userRepository.findByEmail(googleUser.email)
+            const existingUserEmail = await this._userRepository.findByEmail(googleUser.email)
 
             if(existingUserEmail && existingUserEmail.authProvider !== "GOOGLE"){
                 throw new AppError(MESSAGES.AUTH.EMAIL_ALREADY_REGISTERED_WITH_PASSWORD, HTTP_STATUS.CONFLICT)
             }
 
-            user = await this.userRepository.create({
+            user = await this._userRepository.create({
                 name: googleUser.name,
                 email: googleUser.email,
                 role: ROLES.USER,
@@ -50,7 +50,7 @@ export class GoogleUserLoginUseCase {
             throw new AppError(MESSAGES.AUTH.ACCOUNT_INACTIVE, HTTP_STATUS.FORBIDDEN)
         }
 
-        const tokens = this.jwtService.generateTokenPair({
+        const tokens = this._jwtService.generateTokenPair({
             id: user.id,
             email: user.email,
             role: user.role,

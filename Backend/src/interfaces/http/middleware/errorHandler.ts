@@ -4,7 +4,7 @@ import { ApiResponse } from '../../../shared/ApiResponse';
 import { AppError } from '../../../shared/errors/AppError';
 import { logger } from '../../../shared/logger';
 import { env } from '../../../config/env';
-import { HTTP_STATUS } from '../../../shared/constants';
+import { HTTP_STATUS } from '../../../shared/constants/httpStatus';
 
 
 interface IErrorHandlerStrategy{

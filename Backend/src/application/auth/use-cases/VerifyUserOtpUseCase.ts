@@ -8,20 +8,20 @@ import { verifyOtpDto, verifyOtpResponseDto } from "../dto/verifyOtpDto";
 export class VerifyUserOtpUseCase {
     constructor (
         @inject(TOKENS.UserRepository)
-        private readonly userRepository: IUserRepository,
+        private readonly _userRepository: IUserRepository,
         @inject(TOKENS.OtpService)
-        private readonly otpService: IOtpService
+        private readonly _otpService: IOtpService
     ){}
     
 
     async execute(input: verifyOtpDto): Promise<verifyOtpResponseDto> {
-        const verifiedOtp = await this.otpService.verifyOtp({
+        const verifiedOtp = await this._otpService.verifyOtp({
             email: input.email,
             otp: input.otp,
             purpose: "USER_REGISTRATION",
         })
 
-        await this.userRepository.markEmailAsVerified(verifiedOtp.userId)
+        await this._userRepository.markEmailAsVerified(verifiedOtp.userId)
 
         return {
             email: verifiedOtp.email,

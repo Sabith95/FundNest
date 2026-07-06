@@ -17,20 +17,20 @@ import { MESSAGES } from '../../../shared/constants/messages'
 export class RequestPasswordResetOtpUseCase {
   constructor(
     @inject(TOKENS.UserRepository)
-    private readonly userRepository: IUserRepository,
+    private readonly _userRepository: IUserRepository,
 
     @inject(TOKENS.EmailService)
-    private readonly emailService: IEmailService,
+    private readonly _emailService: IEmailService,
 
     @inject(TOKENS.OtpService)
-    private readonly otpService: IOtpService
+    private readonly _otpService: IOtpService
   ) {}
 
   async execute(
     input: RequestPasswordResetOtpDto
   ): Promise<RequestPasswordResetOtpResponseDto> {
     const normalizedEmail = input.email.toLowerCase().trim();
-    const user = await this.userRepository.findByEmail(normalizedEmail);
+    const user = await this._userRepository.findByEmail(normalizedEmail);
 
     if(!user){
       throw new AppError(MESSAGES.USER.NOT_FOUND,HTTP_STATUS.NOT_FOUND)
@@ -49,14 +49,14 @@ export class RequestPasswordResetOtpUseCase {
     
       const otp = generateOtp();
 
-      await this.otpService.storeOtp({
+      await this._otpService.storeOtp({
         userId: user.id,
         email: user.email,
         otp,
         purpose: 'PASSWORD_RESET',
       });
 
-      await this.emailService.sendPasswordResetOtp(user.email, otp);
+      await this._emailService.sendPasswordResetOtp(user.email, otp);
     
 
     return {

@@ -15,17 +15,17 @@ import { ResendOtpDto, ResendOtpResponseDto } from '../dto/resendOtpDto';
 export class ResendUserOtpUseCase {
     constructor(
         @inject(TOKENS.UserRepository)
-        private readonly userRepository: IUserRepository,
+        private readonly _userRepository: IUserRepository,
 
         @inject(TOKENS.EmailService)
-        private readonly emailService: IEmailService,
+        private readonly _emailService: IEmailService,
 
         @inject(TOKENS.OtpService)
-        private readonly otpService: IOtpService
+        private readonly _otpService: IOtpService
     ){}
 
     async execute(input: ResendOtpDto): Promise<ResendOtpResponseDto> {
-        const user = await this.userRepository.findByEmail(input.email)
+        const user = await this._userRepository.findByEmail(input.email)
 
         if(!user){
             throw new AppError(MESSAGES.USER.NOT_FOUND,HTTP_STATUS.NOT_FOUND)
@@ -42,14 +42,14 @@ export class ResendUserOtpUseCase {
         
         const otp = generateOtp()
 
-        await this.otpService.storeOtp({
+        await this._otpService.storeOtp({
             userId: user.id,
             email: user.email,
             otp,
             purpose: "USER_REGISTRATION"
         })
 
-        await this.emailService.sendOtp(user.email,otp)
+        await this._emailService.sendOtp(user.email,otp)
 
         return {
             email: user.email,

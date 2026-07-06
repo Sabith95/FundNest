@@ -2,7 +2,7 @@ import { injectable } from "tsyringe";
 import { User } from "../../domain/entities/User";
 import { UserModel } from "../database/models/UserModel";
 import { CreateUserData, IUserRepository, UpdateUserProfileData } from "../../domain/repositories/IUserRepository";
-import { Role } from "../../shared/constants";
+import { Role } from "../../shared/constants/roles";
 import { MongoBaseRepository } from "./MongoBaseRepository";
 
 @injectable()

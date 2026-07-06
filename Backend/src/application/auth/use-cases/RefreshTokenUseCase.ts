@@ -12,10 +12,10 @@ import { ROLES } from "../../../shared/constants/roles";
 export class RefreshTokenUseCase {
   constructor(
     @inject(TOKENS.UserRepository)
-    private readonly userRepository: IUserRepository,
+    private readonly _userRepository: IUserRepository,
 
     @inject(TOKENS.JwtService)
-    private readonly jwtService: IJwtService
+    private readonly _jwtService: IJwtService
   ) {}   
 
   async execute(refreshToken: string): Promise<RefreshTokenResponseDto> {
@@ -23,8 +23,8 @@ export class RefreshTokenUseCase {
         throw new AppError(MESSAGES.AUTH.REFRESH_TOKEN_MISSING, HTTP_STATUS.UNAUTHORIZED)
     }
 
-    const payload = this.jwtService.verifyRefreshToken(refreshToken)
-    const user = await this.userRepository.findById(payload.id)
+    const payload = this._jwtService.verifyRefreshToken(refreshToken)
+    const user = await this._userRepository.findById(payload.id)
 
     if(!user){
         throw new AppError(MESSAGES.USER.NOT_FOUND, HTTP_STATUS.UNAUTHORIZED)
@@ -37,7 +37,7 @@ export class RefreshTokenUseCase {
       );
     }
     
-    const accessToken = this.jwtService.generateAccessToken({
+    const accessToken = this._jwtService.generateAccessToken({
         id: user.id,
         email: user.email,
         role: user.role,

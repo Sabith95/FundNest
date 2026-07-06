@@ -23,25 +23,25 @@ export class AuthController {
   constructor(
 
     @inject(TOKENS.LoginSuperAdminUseCase)
-    private readonly loginSuperAdminUseCase: LoginSuperAdminUseCase,
+    private readonly _loginSuperAdminUseCase: LoginSuperAdminUseCase,
     @inject(TOKENS.RegisterUserUseCase)
-    private readonly registerUserUserCase: RegisterUserUseCase,
+    private readonly _registerUserUserCase: RegisterUserUseCase,
     @inject(TOKENS.GoogleUserLoginUseCase)
-    private readonly googleUserLoginUseCase: GoogleUserLoginUseCase,
+    private readonly _googleUserLoginUseCase: GoogleUserLoginUseCase,
     @inject(TOKENS.VerifyUserOtpUseCase)
-    private readonly verifyUserOtpUseCase: VerifyUserOtpUseCase,
+    private readonly _verifyUserOtpUseCase: VerifyUserOtpUseCase,
     @inject(TOKENS.ResendUserOtpUseCase)
-    private readonly resendUserOtpUseCase: ResendUserOtpUseCase,
+    private readonly _resendUserOtpUseCase: ResendUserOtpUseCase,
     @inject(TOKENS.RequestPasswordResetOtpUseCase)
-    private readonly requestPasswordResetOtpUseCase: RequestPasswordResetOtpUseCase,
+    private readonly _requestPasswordResetOtpUseCase: RequestPasswordResetOtpUseCase,
     @inject(TOKENS.VerifyPasswordResetOtpUseCase)
-    private readonly verifyPasswordResetOtpUseCase: VerifyPasswordResetOtpUseCase,
+    private readonly _verifyPasswordResetOtpUseCase: VerifyPasswordResetOtpUseCase,
     @inject(TOKENS.ResetUserPasswordUseCase)
-    private readonly resetUserPasswordUseCase: ResetUserPasswordUseCase,
+    private readonly _resetUserPasswordUseCase: ResetUserPasswordUseCase,
     @inject(TOKENS.LoginUserUseCase)
-    private readonly loginUserUseCase: LoginUserUseCase,
+    private readonly _loginUserUseCase: LoginUserUseCase,
     @inject(TOKENS.RefreshTokenUseCase)
-    private readonly refreshTokenUseCase: RefreshTokenUseCase,
+    private readonly _refreshTokenUseCase: RefreshTokenUseCase,
   ){}
 
   loginSuperAdmin = async(
@@ -52,7 +52,7 @@ export class AuthController {
 
     try {
       const payload = loginSchema.parse(req.body)
-      const result = await this.loginSuperAdminUseCase.execute(payload)
+      const result = await this._loginSuperAdminUseCase.execute(payload)
 
       // res.status(HTTP_STATUS.OK)
       // .json(ApiResponse.success(result, 'Super admin logged in successfully'))
@@ -81,7 +81,7 @@ export class AuthController {
   registerUser = async(req: Request, res: Response, next: NextFunction): Promise<void> =>{
     try {
       const payload = registerUserSchema.parse(req.body)
-      const result = await this.registerUserUserCase.execute(payload)
+      const result = await this._registerUserUserCase.execute(payload)
 
       res
         .status(HTTP_STATUS.CREATED)
@@ -94,7 +94,7 @@ export class AuthController {
   googleUserLogin = async (req: Request, res: Response, next: NextFunction): Promise<void> =>{
     try {
       const payload = googleLoginSchema.parse(req.body)
-      const result = await this.googleUserLoginUseCase.execute(payload)
+      const result = await this._googleUserLoginUseCase.execute(payload)
 
       res.cookie(
         REFRESH_TOKEN_COOKIE_NAMES.USER,
@@ -120,7 +120,7 @@ export class AuthController {
   verifyUserOtp = async(req: Request, res: Response, next: NextFunction): Promise<void> =>{
     try {
       const payload = verifyOtpSchema.parse(req.body)
-      const result = await this.verifyUserOtpUseCase.execute(payload)
+      const result = await this._verifyUserOtpUseCase.execute(payload)
 
       res
         .status(HTTP_STATUS.OK)
@@ -133,7 +133,7 @@ export class AuthController {
   resendUserOtp = async(req: Request, res: Response, next: NextFunction): Promise<void> =>{
     try {
       const payload = resendOtpSchema.parse(req.body)
-      const result = await this.resendUserOtpUseCase.execute(payload)
+      const result = await this._resendUserOtpUseCase.execute(payload)
 
       res
         .status(HTTP_STATUS.OK)
@@ -146,7 +146,7 @@ export class AuthController {
   requestPasswordResetOtp = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const payload = forgotPasswordSchema.parse(req.body);
-    const result = await this.requestPasswordResetOtpUseCase.execute(payload);
+    const result = await this._requestPasswordResetOtpUseCase.execute(payload);
 
     res.status(HTTP_STATUS.OK).json(
       ApiResponse.success(result, MESSAGES.AUTH.PASSWORD_RESET_OTP_SENT)
@@ -163,7 +163,7 @@ export class AuthController {
   ): Promise<void> => {
     try {
       const payload = verifyOtpSchema.parse(req.body);
-      const result = await this.verifyPasswordResetOtpUseCase.execute(payload);
+      const result = await this._verifyPasswordResetOtpUseCase.execute(payload);
 
       res.status(HTTP_STATUS.OK).json(
         ApiResponse.success(result, MESSAGES.AUTH.PASSWORD_RESET_OTP_VERIFIED)
@@ -176,7 +176,7 @@ export class AuthController {
 resetUserPassword = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const payload = resetPasswordSchema.parse(req.body);
-    const result = await this.resetUserPasswordUseCase.execute(payload);
+    const result = await this._resetUserPasswordUseCase.execute(payload);
 
     res.status(HTTP_STATUS.OK).json(
       ApiResponse.success(result, MESSAGES.AUTH.PASSWORD_UPDATED)
@@ -189,7 +189,7 @@ resetUserPassword = async (req: Request, res: Response, next: NextFunction): Pro
 loginUser = async(req: Request, res: Response, next: NextFunction): Promise<void> =>{
   try {
     const payload = loginSchema.parse(req.body)
-    const result = await this.loginUserUseCase.execute(payload)
+    const result = await this._loginUserUseCase.execute(payload)
 
     // res
     //   .status(HTTP_STATUS.OK)
@@ -228,7 +228,7 @@ private handleRefreshToken = async(
   try {
     const refreshToken = req.cookies?.[cookieName]
 
-    const result = await this.refreshTokenUseCase.execute(refreshToken)
+    const result = await this._refreshTokenUseCase.execute(refreshToken)
 
     res
       .status(HTTP_STATUS.OK)

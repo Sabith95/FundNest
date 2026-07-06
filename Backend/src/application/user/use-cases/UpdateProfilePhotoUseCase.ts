@@ -15,32 +15,32 @@ import {
 export class UpdateProfilePhotoUseCase {
     constructor(
     @inject(TOKENS.UserRepository)
-    private readonly userRepository: IUserRepository,
+    private readonly _userRepository: IUserRepository,
 
     @inject(TOKENS.ImageStorageService)
-    private readonly imageStorageService: IImageStorageService
+    private readonly _imageStorageService: IImageStorageService
   ) {}
 
   async execute(input: UpdateProfilePhotoDto): Promise<UserProfileDto> {
-    const user = await this.userRepository.findById(input.userId);
+    const user = await this._userRepository.findById(input.userId);
 
     if (!user) {
       throw new AppError(MESSAGES.USER.NOT_FOUND, HTTP_STATUS.NOT_FOUND);
     }
 
-     const uploadedImage = await this.imageStorageService.uploadImage({
+     const uploadedImage = await this._imageStorageService.uploadImage({
       buffer: input.file.buffer,
       filename: `${user.id}-${Date.now()}-${input.file.originalName}`,
     });
 
-     const updatedUser = await this.userRepository.updateProfilePhoto(
+     const updatedUser = await this._userRepository.updateProfilePhoto(
       user.id,
       uploadedImage.url,
       uploadedImage.publicId
     );
 
     if(!updatedUser){
-        await this.imageStorageService.deleteImage(uploadedImage.publicId)
+        await this._imageStorageService.deleteImage(uploadedImage.publicId)
         throw new AppError(
             MESSAGES.USER.PROFILE_PHOTO_UPDATE_FAILED,
             HTTP_STATUS.INTERNAL_SERVER_ERROR
@@ -48,7 +48,7 @@ export class UpdateProfilePhotoUseCase {
     }
 
     if (user.profile?.avatarPublicId) {
-      this.imageStorageService
+      this._imageStorageService
         .deleteImage(user.profile.avatarPublicId)
         .catch(() => undefined);
     }

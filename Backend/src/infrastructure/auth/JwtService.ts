@@ -1,7 +1,7 @@
 import {injectable} from 'tsyringe'
 import jwt from 'jsonwebtoken'
 import {env} from '../../config/env'
-import { Role } from '../../shared/constants'
+import { Role } from '../../shared/constants/roles'
 import { IJwtService } from './interfaces/IJwtService'
 
 export interface JwtPayload {

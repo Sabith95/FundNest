@@ -4,14 +4,14 @@ import { AppError } from "../../../shared/errors/AppError";
 import { logger } from "../../../shared/logger";
 import { IMiddleware } from "./interfaces/IMiddleware";
 import { TokenExtracter } from "./helpers/tokenExtracter";
-import { HTTP_STATUS } from "../../../shared/constants";
+import { HTTP_STATUS } from "../../../shared/constants/httpStatus";
 
 
 
 export class AuthenticateMiddleware implements IMiddleware {
 
     constructor(
-        private jwtService: IJwtService
+        private _jwtService: IJwtService
      ){}
 
      handle = (req: Request, res: Response, next: NextFunction): void =>{
@@ -23,7 +23,7 @@ export class AuthenticateMiddleware implements IMiddleware {
                 throw new AppError('No token provided', HTTP_STATUS.UNAUTHORIZED)
             }
 
-            const payload = this.jwtService.verifyAccessToken(token)
+            const payload = this._jwtService.verifyAccessToken(token)
 
             req.user = payload
 

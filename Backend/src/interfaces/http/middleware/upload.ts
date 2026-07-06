@@ -1,7 +1,7 @@
 import multer from "multer";
 import { env } from "../../../config/env";
 import { AppError } from "../../../shared/errors/AppError";
-import { HTTP_STATUS } from "../../../shared/constants";
+import { HTTP_STATUS } from "../../../shared/constants/httpStatus";
 
 const allowedImageTypes = [
   "image/jpeg",
