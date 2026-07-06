@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { ROUTES } from '../shared/constants';
+import { ROUTES, ROLES } from '../shared/constants';
 
 import PublicRoute from './PublicRoute';
 import ProtectedRoute from './ProtectedRoute';
@@ -24,15 +24,19 @@ const AppRouter = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<LandingPage/>} />
-        
-          <Route
-          path='/pricing'
-          element = {<PricingPage />}
-          />
+
 
         {/* Public routes */}
         <Route element={<PublicRoute />}>
+
+        <Route path={ROUTES.COMMON.LANDING} element={<LandingPage/>} />
+        
+          <Route
+          path={ROUTES.COMMON.PRICING}
+          element = {<PricingPage />}
+          />
+
+          
           <Route
             path={ROUTES.SUPER_ADMIN.LOGIN}
             element={<SuperAdminLoginPage />}
@@ -74,7 +78,7 @@ const AppRouter = () => {
         <Route
           element={
             <ProtectedRoute
-              allowedRoles={['SUPER_ADMIN']}
+              allowedRoles={[ROLES.SUPER_ADMIN]}
               redirectTo={ROUTES.SUPER_ADMIN.LOGIN}
             />
           }
@@ -91,7 +95,7 @@ const AppRouter = () => {
         <Route
           element={
             <ProtectedRoute
-              allowedRoles={['USER']}
+              allowedRoles={[ROLES.USER]}
               redirectTo={ROUTES.USER.LOGIN}
             />
           }
@@ -102,12 +106,12 @@ const AppRouter = () => {
           />
 
           <Route
-          path='/profile'
+          path={ROUTES.USER.PROFILE}
           element ={<ProfilePage></ProfilePage>}
           />
 
           <Route 
-          path='/profile/info'
+          path={ROUTES.USER.PROFILE_INFO}
           element ={<ProfilePage></ProfilePage>}
           />
 
