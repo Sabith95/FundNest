@@ -1,7 +1,15 @@
 import { Role } from "../../shared/constants/roles";
 
-export type KycStatus = 'PENDING' | 'VERIFIED' | 'REJECTED'
-export type AuthProvider = 'LOCAL' | 'GOOGLE'
+export enum AuthProvider {
+  LOCAL = "LOCAL",
+  GOOGLE = "GOOGLE",
+}
+
+export enum KycStatus {
+  PENDING = "PENDING",
+  VERIFIED = "VERIFIED",
+  REJECTED = "REJECTED",
+}
 
 
 export interface UserProfile {

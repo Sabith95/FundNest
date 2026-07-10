@@ -1,5 +1,5 @@
 import { Schema, model, models, HydratedDocument } from "mongoose";
-import { ROLES, Role } from "../../../shared/constants";
+import { ROLES, Role } from "../../../shared/constants/roles";
 
 export type KycStatus = "PENDING" | "VERIFIED" | "REJECTED";
 export type AuthProvider = "LOCAL" | "GOOGLE";
