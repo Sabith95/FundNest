@@ -1,60 +1,51 @@
 import { inject, injectable } from "tsyringe";
 import { TOKENS } from '../../../shared/tokens';
-import { IUserRepository } from '../../../domain/repositories/IUserRepository';
+import { ITenantRepository } from "../../../domain/repositories/ITenantRepository";
 import { IEmailService } from '../../../infrastructure/notification/interfaces/IEmailService';
 import { IOtpService } from '../../../infrastructure/cache/interfaces/IOtpService';
 import { generateOtp } from '../../../shared/utils/generateOtp';
 import { AppError } from '../../../shared/errors/AppError';
 import { HTTP_STATUS } from '../../../shared/constants/httpStatus'
 import { MESSAGES } from '../../../shared/constants/messages'
-import { env } from '../../../config/env';
-import { ResendOtpDto, ResendOtpResponseDto } from '../dto/resendOtpDto';
+import { ResendOtpDto, ResendOtpResponseDto } from "../dto/resendOtpDto";
 import { OtpPurpose } from "../../../shared/constants/enums/OtpPurpose";
-
+import { env } from "../../../config/env";
 
 @injectable()
-export class ResendUserOtpUseCase {
+export class ResendTenantOtpUseCase {
     constructor(
-        @inject(TOKENS.UserRepository)
-        private readonly _userRepository: IUserRepository,
-
+        @inject(TOKENS.TenantRepository)
+        private readonly _tenantRepository: ITenantRepository,
         @inject(TOKENS.EmailService)
         private readonly _emailService: IEmailService,
-
         @inject(TOKENS.OtpService)
         private readonly _otpService: IOtpService
     ){}
 
     async execute(input: ResendOtpDto): Promise<ResendOtpResponseDto> {
-        const user = await this._userRepository.findByEmail(input.email)
+        const tenant = await this._tenantRepository.findByEmail(input.email)
 
-        if(!user){
-            throw new AppError(MESSAGES.USER.NOT_FOUND,HTTP_STATUS.NOT_FOUND)
+        if(!tenant){
+            throw new AppError(MESSAGES.TENANT.NOT_FOUND,HTTP_STATUS.NOT_FOUND)
         }
 
-        
-        if (user.isEmailVerified) {
-        throw new AppError(MESSAGES.AUTH.EMAIL_VERIFIED, HTTP_STATUS.BAD_REQUEST);
+        if(tenant.isEmailVerified){
+            throw new AppError(MESSAGES.AUTH.EMAIL_VERIFIED,HTTP_STATUS.BAD_REQUEST)
         }
 
-        if (user.authProvider !== 'LOCAL') {
-        throw new AppError(MESSAGES.AUTH.GOOGLE_LOGIN, HTTP_STATUS.BAD_REQUEST);
-        }
-        
         const otp = generateOtp()
 
         await this._otpService.storeOtp({
-            userId: user.id,
-            email: user.email,
+            userId: tenant.id,
+            email: tenant.email,
             otp,
-            purpose: OtpPurpose.USER_REGISTRATION
+            purpose: OtpPurpose.TENANT_REGISTRATION
         })
 
-        await this._emailService.sendOtp(user.email,otp)
-
+        await this._emailService.sendOtp(tenant.email,otp)
         return {
-            email: user.email,
-            otpExpiresInSeconds: env.OTP_EXPIRES_IN_SECONDS,
+            email: tenant.email,
+            otpExpiresInSeconds: env.OTP_EXPIRES_IN_SECONDS
         }
     }
 }

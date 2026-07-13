@@ -10,6 +10,7 @@ import { generateOtp } from "../../../shared/utils/generateOtp";
 import { ROLES } from "../../../shared/constants/roles";
 import { HTTP_STATUS } from '../../../shared/constants/httpStatus'
 import { MESSAGES } from '../../../shared/constants/messages'
+import { OtpPurpose } from "../../../shared/constants/enums/OtpPurpose";
 
 
 @injectable()
@@ -57,7 +58,7 @@ export class RegisterUserUseCase {
             userId: user.id,
             email: user.email,
             otp,
-            purpose: "USER_REGISTRATION"
+            purpose: OtpPurpose.USER_REGISTRATION
         })
 
         await this._emailService.sendOtp(user.email, otp)

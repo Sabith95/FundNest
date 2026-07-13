@@ -1,16 +1,16 @@
-export type otpPurpose = "USER_REGISTRATION" | "PASSWORD_RESET"
+import { OtpPurpose } from "../../../shared/constants/enums/OtpPurpose"
 
 export interface StoreOtpData {
     email: string
     userId: string
     otp: string
-    purpose: otpPurpose
+    purpose: OtpPurpose
 }
 
 export interface VerifyOtpData {
     email: string
     otp: string
-    purpose: otpPurpose
+    purpose: OtpPurpose
 }
 
 export interface VerifiedOtpResult {

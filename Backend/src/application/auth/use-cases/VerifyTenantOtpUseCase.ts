@@ -1,15 +1,15 @@
 import { injectable, inject } from "tsyringe";
 import { TOKENS } from "../../../shared/tokens";
-import { IUserRepository } from "../../../domain/repositories/IUserRepository";
 import { IOtpService } from "../../../infrastructure/cache/interfaces/IOtpService";
 import { verifyOtpDto, verifyOtpResponseDto } from "../dto/verifyOtpDto";
 import { OtpPurpose } from "../../../shared/constants/enums/OtpPurpose";
+import { ITenantRepository } from "../../../domain/repositories/ITenantRepository";
 
 @injectable()
-export class VerifyUserOtpUseCase {
+export class VerifyTenantOtpUseCase {
     constructor (
-        @inject(TOKENS.UserRepository)
-        private readonly _userRepository: IUserRepository,
+        @inject(TOKENS.TenantRepository)
+        private readonly _tenantRepository: ITenantRepository,
         @inject(TOKENS.OtpService)
         private readonly _otpService: IOtpService
     ){}
@@ -19,10 +19,10 @@ export class VerifyUserOtpUseCase {
         const verifiedOtp = await this._otpService.verifyOtp({
             email: input.email,
             otp: input.otp,
-            purpose: OtpPurpose.USER_REGISTRATION
+            purpose: OtpPurpose.TENANT_REGISTRATION
         })
 
-        await this._userRepository.markEmailAsVerified(verifiedOtp.userId)
+        await this._tenantRepository.markEmailAsVerified(verifiedOtp.userId)
 
         return {
             email: verifiedOtp.email,

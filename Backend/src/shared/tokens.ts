@@ -3,7 +3,6 @@ export const TOKENS = {
     //services
     JwtService: Symbol.for('JwtService'),
     BcryptService: Symbol.for("BcryptService"),
-    UserRepository: Symbol.for("UserRepository"),
     GoogleAuthService: Symbol.for("GoogleAuthService"),
     OtpService: Symbol.for('OtpService'),
     EmailService: Symbol.for('EmailService'),
@@ -25,5 +24,13 @@ export const TOKENS = {
     UpdateProfilePhotoUseCase: Symbol.for("UpdateProfilePhotoUseCase"),
     ChangeUserPasswordUseCase: Symbol.for("ChangeUserPasswordUseCase"),
     RefreshTokenUseCase: Symbol.for("RefreshTokenUseCase"),
+    RegisterTenantUseCase: Symbol.for("RegisterTenantUseCase"),
+    VerifyTenantOtpUseCase: Symbol.for("VerifyTenantOtpUseCase"),
+    ResendTenantOtpUseCase: Symbol.for("ResendTenantOtpUseCase"),
+
+    //repositories
+
+    TenantRepository: Symbol.for("TenantRepository"),
+    UserRepository: Symbol.for("UserRepository"),
     
 }as const

@@ -40,4 +40,12 @@ export const ENDPOINTS = {
     },
 
   },
+
+  TENANT: {
+    AUTH: {
+      REGISTER: '/register',
+      VERIFY_OTP: '/register/verify-otp',
+      RESEND_OTP: '/register/resend-otp',
+    }
+  }
 } as const;

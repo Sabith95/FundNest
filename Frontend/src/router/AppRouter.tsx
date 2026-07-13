@@ -3,10 +3,11 @@ import { ROUTES, ROLES } from '../shared/constants';
 
 import PublicRoute from './PublicRoute';
 import ProtectedRoute from './ProtectedRoute';
-
+// super admin
 import SuperAdminLoginPage from '../pages/superAdmin/auth/LoginPage';
 import SuperAdminDashboardPage from '../pages/superAdmin/dashboard/DashboardPage';
 
+//user
 import UserRegisterPage from '../pages/user/auth/RegisterPage';
 import UserLoginPage from '../pages/user/auth/LoginPage';
 import OtpPage from '../pages/user/auth/OtpPage';
@@ -20,6 +21,13 @@ import ProfilePage from '../pages/user/profile/ProfilePage';
 import LandingPage from '../pages/landing/LandingPage';
 import PricingPage from '../pages/pricing/PricingPage';
 
+//tenant
+
+import TenantRegisterPage from '../pages/Tenant/auth/TenantRegisterPage';
+import OtpVerificationPage from '../pages/Tenant/auth/OtpPage';
+
+
+
 const AppRouter = () => {
   return (
     <BrowserRouter>
@@ -29,14 +37,21 @@ const AppRouter = () => {
         {/* Public routes */}
         <Route element={<PublicRoute />}>
 
-        <Route path={ROUTES.COMMON.LANDING} element={<LandingPage/>} />
-        
+          <Route path={ROUTES.COMMON.LANDING} element={<LandingPage />} />
+
           <Route
-          path={ROUTES.COMMON.PRICING}
-          element = {<PricingPage />}
+            path={ROUTES.COMMON.PRICING}
+            element={<PricingPage />}
           />
 
-          
+          <Route
+            path={ROUTES.TENANT.REGISTER}
+            element={<TenantRegisterPage />}
+          />
+
+          <Route
+            path={ROUTES.TENANT.VERIFY_OTP}
+            element={<OtpVerificationPage />} />
           <Route
             path={ROUTES.SUPER_ADMIN.LOGIN}
             element={<SuperAdminLoginPage />}
@@ -71,7 +86,7 @@ const AppRouter = () => {
             path={ROUTES.USER.RESET_PASSWORD}
             element={<ResetPasswordPage />}
           />
-          
+
         </Route>
 
         {/* Super admin protected routes */}
@@ -89,9 +104,9 @@ const AppRouter = () => {
           />
         </Route>
 
-       
-{/* user protected routes */}
-       
+
+        {/* user protected routes */}
+
         <Route
           element={
             <ProtectedRoute
@@ -106,18 +121,18 @@ const AppRouter = () => {
           />
 
           <Route
-          path={ROUTES.USER.PROFILE}
-          element ={<ProfilePage></ProfilePage>}
+            path={ROUTES.USER.PROFILE}
+            element={<ProfilePage></ProfilePage>}
           />
 
-          <Route 
-          path={ROUTES.USER.PROFILE_INFO}
-          element ={<ProfilePage></ProfilePage>}
+          <Route
+            path={ROUTES.USER.PROFILE_INFO}
+            element={<ProfilePage></ProfilePage>}
           />
 
         </Route>
-        
-        
+
+
       </Routes>
     </BrowserRouter>
   );

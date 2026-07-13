@@ -3,12 +3,14 @@ import { ApiResponse } from "../../../shared/ApiResponse";
 import {env} from '../../../config/env'
 import authRoutes from './auth/authRoutes'
 import userRoutes from '../routes/user/userRoutes'
+import tenantRoutes from '../routes/Tenant/tenantRoutes'
 
 
 const router = Router()
 
 router.use('/auth', authRoutes)
 router.use('/users',userRoutes)
+router.use('/tenants',tenantRoutes)
 // Health check
 
 router.get('/health',(_req: Request, res: Response) =>{

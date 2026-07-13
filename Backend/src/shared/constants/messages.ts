@@ -56,6 +56,7 @@ export const MESSAGES = {
     NOT_FOUND: "Tenant not found",
     BLOCKED: "Tenant blocked successfully",
     UNBLOCKED: "Tenant unblocked successfully",
+    
   },
 
   SUPER_ADMIN: {

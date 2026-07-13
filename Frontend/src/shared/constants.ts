@@ -4,6 +4,28 @@ export const ROLES = {
     USER: "USER",
 } as const;
 
+export const TENANT_STATUS = {
+  PENDING: "PENDING",
+  APPROVED: "APPROVED",
+  REJECTED: "REJECTED",
+} as const;
+
+export type TenantStatus =
+  (typeof TENANT_STATUS)[keyof typeof TENANT_STATUS];
+
+export const ONBOARDING_STEP = {
+  REGISTERED: "REGISTERED",
+  BUSINESS_INFO: "BUSINESS_INFO",
+  KYC_UPLOAD: "KYC_UPLOAD",
+  BANK_DETAILS: "BANK_DETAILS",
+  COMPLETED: "COMPLETED",
+} as const;
+
+export type OnboardingStep =
+  (typeof ONBOARDING_STEP)[keyof typeof ONBOARDING_STEP];
+
+
+
 export const ROUTES = {
 
   COMMON: {
@@ -15,8 +37,10 @@ export const ROUTES = {
     DASHBOARD: '/superadmin/dashboard',
   },
   TENANT: {
-    LOGIN: '/tenant/login',
-    DASHBOARD: '/tenant/dashboard',
+    REGISTER: '/tenants/register',
+    VERIFY_OTP: '/tenants/verify-otp',
+    LOGIN: '/tenants/login',
+    DASHBOARD: '/tenants/dashboard',
   },
   USER: {
     LOGIN: '/login',

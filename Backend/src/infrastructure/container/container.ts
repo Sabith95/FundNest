@@ -19,6 +19,8 @@ import { CloudinaryImageStorageService } from "../storage/CloudinaryImageStorage
 //Repository
 import { IUserRepository } from "../../domain/repositories/IUserRepository";
 import { UserRepository } from "../repositories/UserRepository";
+import { TenantRepository } from "../repositories/TenantRepository";
+import { ITenantRepository } from "../../domain/repositories/ITenantRepository";
 
 
 //use cases
@@ -36,6 +38,9 @@ import { UpdateUserProfileUseCase } from "../../application/user/use-cases/Updat
 import { UpdateProfilePhotoUseCase } from "../../application/user/use-cases/UpdateProfilePhotoUseCase";
 import { ChangeUserPasswordUseCase } from "../../application/user/use-cases/ChangeUserPasswordUseCase";
 import { RefreshTokenUseCase } from "../../application/auth/use-cases/RefreshTokenUseCase";
+import { RegisterTenantUseCase } from "../../application/auth/use-cases/RegisterTenantUseCase";
+import { VerifyTenantOtpUseCase } from "../../application/auth/use-cases/VerifyTenantOtpUseCase";
+import { ResendTenantOtpUseCase } from "../../application/auth/use-cases/ResendTenantOtpUseCase";
 
 
 
@@ -121,9 +126,25 @@ container.register<RefreshTokenUseCase>(TOKENS.RefreshTokenUseCase,{
         useClass: RefreshTokenUseCase,
 });
 
+container.register<RegisterTenantUseCase>(TOKENS.RegisterTenantUseCase,{
+  useClass: RegisterTenantUseCase
+})
+
+container.register<VerifyTenantOtpUseCase>(TOKENS.VerifyTenantOtpUseCase,{
+  useClass: VerifyTenantOtpUseCase,
+})
+
+container.register<ResendTenantOtpUseCase>(TOKENS.ResendTenantOtpUseCase,{
+  useClass: ResendTenantOtpUseCase
+})
+
 
 // Respository
 container.register<IUserRepository>(TOKENS.UserRepository, {
   useClass: UserRepository,
 });
+
+container.register<ITenantRepository>(TOKENS.TenantRepository, {
+  useClass: TenantRepository,
+})
 export { container };

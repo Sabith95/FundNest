@@ -12,6 +12,7 @@ import {
 import { AppError } from '../../../shared/errors/AppError';
 import { HTTP_STATUS } from '../../../shared/constants/httpStatus'
 import { MESSAGES } from '../../../shared/constants/messages'
+import { OtpPurpose } from '../../../shared/constants/enums/OtpPurpose';
 
 @injectable()
 export class RequestPasswordResetOtpUseCase {
@@ -53,7 +54,7 @@ export class RequestPasswordResetOtpUseCase {
         userId: user.id,
         email: user.email,
         otp,
-        purpose: 'PASSWORD_RESET',
+        purpose: OtpPurpose.PASSWORD_RESET
       });
 
       await this._emailService.sendPasswordResetOtp(user.email, otp);
