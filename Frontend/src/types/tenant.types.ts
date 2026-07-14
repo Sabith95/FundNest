@@ -35,6 +35,7 @@ export interface IVerifyTenantOtpRequest {
 export interface IVerifyTenantOtpResponse {
   email: string;
   isEmailVerified: boolean;
+  accessToken: string;
 }
 
 export interface IResendTenantOtpRequest {
@@ -54,4 +55,14 @@ export interface ITenantLoginRequest {
 export interface ITenantLoginResponse {
   tenant: ITenant;
   accessToken: string;
+}
+
+export interface IUpdateBusinessInfoRequest {
+  businessType: string;
+  registrationId?: string;
+  registeredBusinessAddress: string;
+}
+
+export interface IUpdateBusinessInfoResponse {
+  tenant: ITenant;
 }

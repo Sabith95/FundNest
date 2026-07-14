@@ -46,6 +46,11 @@ export const ENDPOINTS = {
       REGISTER: '/register',
       VERIFY_OTP: '/register/verify-otp',
       RESEND_OTP: '/register/resend-otp',
+      
+    },
+
+    BUSINESS: {
+      BUSINESS_INFO: '/business-info',
     }
   }
 } as const;

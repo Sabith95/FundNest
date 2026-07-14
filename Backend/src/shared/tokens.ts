@@ -27,6 +27,9 @@ export const TOKENS = {
     RegisterTenantUseCase: Symbol.for("RegisterTenantUseCase"),
     VerifyTenantOtpUseCase: Symbol.for("VerifyTenantOtpUseCase"),
     ResendTenantOtpUseCase: Symbol.for("ResendTenantOtpUseCase"),
+    UpdateBusinessInfoUseCase: Symbol.for("UpdateBusinessInfoUseCase"),
+    TenantBusinessInfoController: Symbol.for("TenantBusinessInfoController"),
+
 
     //repositories
 

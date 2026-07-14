@@ -56,6 +56,8 @@ export const MESSAGES = {
     NOT_FOUND: "Tenant not found",
     BLOCKED: "Tenant blocked successfully",
     UNBLOCKED: "Tenant unblocked successfully",
+    REGISTER_WITH_EMAIL: "Please verify your email before completing business information.",
+    BUSINESS_INFO_UPDATED: "Business info updated successfully",
     
   },
 

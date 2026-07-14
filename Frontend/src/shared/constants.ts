@@ -41,6 +41,8 @@ export const ROUTES = {
     VERIFY_OTP: '/tenants/verify-otp',
     LOGIN: '/tenants/login',
     DASHBOARD: '/tenants/dashboard',
+    BUSINESS_INFO: '/tenants/business-info',
+    KYC_UPLOAD: '/tenants/kyc-upload'
   },
   USER: {
     LOGIN: '/login',

@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { tenantAuthService } from '../../../services/tenantAuthService';
 import axios from 'axios';
 import { ROUTES } from '../../../shared/constants';
+import { setAccessToken } from '../../../services/api';
 
 // ─── Config ───────────────────────────────────────────────
 const OTP_LENGTH = 6;
@@ -246,8 +247,9 @@ const OtpVerificationPage: React.FC = () => {
     setLoading(true);
     setError(undefined);
     try {
-      await tenantAuthService.verifyTenantOtp({ email, otp: code });
-      navigate('/tenant/dashboard');
+      const result = await tenantAuthService.verifyTenantOtp({ email, otp: code });
+      setAccessToken(result.accessToken, 'tenant');
+      navigate(ROUTES.TENANT.BUSINESS_INFO);
     } catch (err) {
       if (axios.isAxiosError(err)) {
         setError(err.response?.data?.message || 'Invalid or expired code. Please try again.');

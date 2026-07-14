@@ -1,5 +1,7 @@
 import { Tenant } from "../entities/Tenant";
 import { IBaseRepository } from "./IBaseRepository";
+import { BusinessType } from "../../shared/constants/enums/BusinessType";
+import { OnboardingStep } from "../../shared/constants/enums/OnboardingStep";
 
 export interface CreateTenantData {
     companyName: string
@@ -11,7 +13,7 @@ export interface CreateTenantData {
 }
 
 export interface UpdateBusinessInfoData {
-  businessType: string;
+  businessType: BusinessType;
   registrationId: string;
   registeredBusinessAddress: string;
 }
@@ -40,7 +42,7 @@ export interface ITenantRepository extends IBaseRepository<Tenant> {
 
     markEmailAsVerified(tenantId: string): Promise<void>
 
-    updateBusinessInfo(tenantId: string, data: UpdateBusinessInfoData) : Promise<Tenant | null>
+    updateBusinessInfo(tenantId: string, data: UpdateBusinessInfoData, onboardingStep: OnboardingStep) : Promise<Tenant | null>
 
     updateKycDocuments(
         tenantId: string,

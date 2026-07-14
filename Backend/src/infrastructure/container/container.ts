@@ -41,6 +41,8 @@ import { RefreshTokenUseCase } from "../../application/auth/use-cases/RefreshTok
 import { RegisterTenantUseCase } from "../../application/auth/use-cases/RegisterTenantUseCase";
 import { VerifyTenantOtpUseCase } from "../../application/auth/use-cases/VerifyTenantOtpUseCase";
 import { ResendTenantOtpUseCase } from "../../application/auth/use-cases/ResendTenantOtpUseCase";
+import { UpdateBusinessInfoUseCase } from "../../application/tenant/use-cases/UpdateBusinessInfoUseCase";
+import { TenantBusinessInfoController } from "../../interfaces/http/controllers/Tenant/TenantBusinessInfoController";
 
 
 
@@ -138,6 +140,13 @@ container.register<ResendTenantOtpUseCase>(TOKENS.ResendTenantOtpUseCase,{
   useClass: ResendTenantOtpUseCase
 })
 
+container.register<UpdateBusinessInfoUseCase>(TOKENS.UpdateBusinessInfoUseCase,{
+  useClass: UpdateBusinessInfoUseCase
+})
+
+container.register<TenantBusinessInfoController>(TOKENS.TenantBusinessInfoController, {
+  useClass: TenantBusinessInfoController
+})
 
 // Respository
 container.register<IUserRepository>(TOKENS.UserRepository, {

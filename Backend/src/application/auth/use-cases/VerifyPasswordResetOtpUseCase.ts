@@ -9,6 +9,7 @@ import {
   VerifyPasswordResetOtpDto,
   VerifyPasswordResetOtpResponseDto,
 } from '../dto/PasswordResetDto';
+import { OtpPurpose } from '../../../shared/constants/enums/OtpPurpose';
 
 @injectable()
 export class VerifyPasswordResetOtpUseCase {
@@ -33,7 +34,7 @@ export class VerifyPasswordResetOtpUseCase {
     const verified = await this._otpService.verifyOtp({
       email: user.email,
       otp: input.otp,
-      purpose: 'PASSWORD_RESET',
+      purpose: OtpPurpose.PASSWORD_RESET,
     });
 
     if (verified.userId !== user.id) {

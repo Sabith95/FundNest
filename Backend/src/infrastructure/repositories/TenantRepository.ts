@@ -9,6 +9,7 @@ import { Tenant } from "../../domain/entities/Tenant";
 import { TenantModel } from "../database/models/TenantModel";
 import { MongoBaseRepository } from "./MongoBaseRepository";
 import { VerificationStatus } from "../../shared/constants/enums/VerificationStatus";
+import { OnboardingStep } from "../../shared/constants/enums/OnboardingStep";
 
 @injectable()
 export class TenantRepository extends MongoBaseRepository<Tenant> implements ITenantRepository {
@@ -49,7 +50,7 @@ export class TenantRepository extends MongoBaseRepository<Tenant> implements ITe
         )
     }
 
-    async updateBusinessInfo(tenantId: string, data: UpdateBusinessInfoData): Promise<Tenant | null> {
+    async updateBusinessInfo(tenantId: string, data: UpdateBusinessInfoData, onboardingStep: OnboardingStep): Promise<Tenant | null> {
         const doc = await TenantModel.findByIdAndUpdate(
             tenantId,{
                 $set:{
@@ -58,6 +59,7 @@ export class TenantRepository extends MongoBaseRepository<Tenant> implements ITe
                         verification: VerificationStatus.PENDING,
                     },
                 },
+                onboardingStep,
             },
             {
                 new: true,

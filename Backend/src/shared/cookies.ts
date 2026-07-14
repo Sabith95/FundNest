@@ -6,6 +6,7 @@ export const LEGACY_REFRESH_TOKEN_COOKIE_NAME = "refreshToken";
 export const REFRESH_TOKEN_COOKIE_NAMES = {
   USER: "userRefreshToken",
   SUPER_ADMIN: "superAdminRefreshToken",
+  TENANT: "tenantRefreshToken",
 } as const;
 
 export const refreshTokenCookieOptions: CookieOptions = {

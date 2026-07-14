@@ -1,5 +1,5 @@
 import { User } from "../../../domain/entities/User";
-import { Role } from "../../../shared/constants";
+import { Role } from "../../../shared/constants/roles";
 
 export interface AddressDto {
   line1?: string;

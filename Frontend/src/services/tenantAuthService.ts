@@ -5,7 +5,9 @@ import type {
     IVerifyTenantOtpRequest,
     IVerifyTenantOtpResponse,
     IResendTenantOtpRequest,
-    IResendTenantOtpResponse
+    IResendTenantOtpResponse,
+    IUpdateBusinessInfoRequest,
+    IUpdateBusinessInfoResponse
 } from "../types/tenant.types";
 
 
@@ -13,6 +15,7 @@ export interface ITenantAuthService {
     registerTenant(data: ITenantRegisterRequest): Promise<ITenantRegisterResponse>
     verifyTenantOtp(data: IVerifyTenantOtpRequest): Promise<IVerifyTenantOtpResponse>
     resendTenantOtp(data: IResendTenantOtpRequest): Promise<IResendTenantOtpResponse>
+    updateBusinessInfo(data: IUpdateBusinessInfoRequest): Promise<IUpdateBusinessInfoResponse>
 }
 
 class TenantAuthService implements ITenantAuthService {
@@ -34,8 +37,16 @@ class TenantAuthService implements ITenantAuthService {
     }
 
     async resendTenantOtp(data: IResendTenantOtpRequest): Promise<IResendTenantOtpResponse> {
-        const response = await api.post<{data: IResendTenantOtpResponse}>(
+        const response = await api.post<{ data: IResendTenantOtpResponse }>(
             '/tenants/register/resend-otp',
+            data
+        )
+        return response.data.data
+    }
+
+    async updateBusinessInfo(data: IUpdateBusinessInfoRequest): Promise<IUpdateBusinessInfoResponse> {
+        const response = await api.post<{ data: IUpdateBusinessInfoResponse }>(
+            '/tenants/business-info',
             data
         )
         return response.data.data

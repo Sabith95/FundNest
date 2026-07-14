@@ -25,6 +25,8 @@ import PricingPage from '../pages/pricing/PricingPage';
 
 import TenantRegisterPage from '../pages/Tenant/auth/TenantRegisterPage';
 import OtpVerificationPage from '../pages/Tenant/auth/OtpPage';
+import BusinessSetup from '../pages/Tenant/Business/BusinessSetup';
+import KycUpload from '../pages/Tenant/Kyc/KycUpload';
 
 
 
@@ -52,6 +54,17 @@ const AppRouter = () => {
           <Route
             path={ROUTES.TENANT.VERIFY_OTP}
             element={<OtpVerificationPage />} />
+
+          <Route 
+          path = {ROUTES.TENANT.BUSINESS_INFO}
+          element = {<BusinessSetup />}
+          />
+
+          <Route 
+          path={ROUTES.TENANT.KYC_UPLOAD}
+          element = {<KycUpload />}
+          
+          />
           <Route
             path={ROUTES.SUPER_ADMIN.LOGIN}
             element={<SuperAdminLoginPage />}

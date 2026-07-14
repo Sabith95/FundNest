@@ -9,6 +9,7 @@ interface RetriableRequestConfig extends InternalAxiosRequestConfig {
 const AUTH_SCOPE = {
     USER: 'user',
     SUPER_ADMIN: 'super-admin',
+    TENANT: 'tenant',
 } as const
 
 type AuthScope = (typeof AUTH_SCOPE)[keyof typeof AUTH_SCOPE]
@@ -16,32 +17,40 @@ type AuthScope = (typeof AUTH_SCOPE)[keyof typeof AUTH_SCOPE]
 const ACCESS_TOKEN_KEYS: Record<AuthScope, string> = {
     [AUTH_SCOPE.USER]: 'userAccessToken',
     [AUTH_SCOPE.SUPER_ADMIN]: 'superAdminAccessToken',
+    [AUTH_SCOPE.TENANT]: 'tenantAccessToken',
 }
 
 const refreshTokenRequests: Partial<Record<AuthScope, Promise<string>>> = {}
 
 const getAuthScopeFromRole = (role?: Role): AuthScope => {
-    return role === 'SUPER_ADMIN' ? AUTH_SCOPE.SUPER_ADMIN : AUTH_SCOPE.USER
+    if (role === 'SUPER_ADMIN') return AUTH_SCOPE.SUPER_ADMIN;
+    if (role === 'TENANT_ADMIN') return AUTH_SCOPE.TENANT;
+    return AUTH_SCOPE.USER;
 }
 
 const getAuthScopeFromPath = (path: string = window.location.pathname): AuthScope => {
-    return path.startsWith('/superadmin') ? AUTH_SCOPE.SUPER_ADMIN : AUTH_SCOPE.USER
+    if (path.startsWith('/superadmin')) return AUTH_SCOPE.SUPER_ADMIN;
+    if (path.startsWith('/tenant') || path.startsWith('/tenants')) return AUTH_SCOPE.TENANT;
+    return AUTH_SCOPE.USER;
 }
 
 const getAuthScopeFromRequest = (url?: string): AuthScope => {
-    if(url?.includes('/auth/super-admin')) {
-        return AUTH_SCOPE.SUPER_ADMIN
+    if (url?.includes('/auth/super-admin')) {
+        return AUTH_SCOPE.SUPER_ADMIN;
+    }
+    if (url?.includes('/tenants') || url?.includes('/tenant/')) {
+        return AUTH_SCOPE.TENANT;
     }
 
     return getAuthScopeFromPath()
 }
 
 export const getAccessTokenKey = (roleOrScope?: Role | AuthScope): string => {
-    if(roleOrScope === AUTH_SCOPE.SUPER_ADMIN || roleOrScope === AUTH_SCOPE.USER) {
-        return ACCESS_TOKEN_KEYS[roleOrScope]
+    if (roleOrScope === AUTH_SCOPE.SUPER_ADMIN || roleOrScope === AUTH_SCOPE.USER || roleOrScope === AUTH_SCOPE.TENANT) {
+        return ACCESS_TOKEN_KEYS[roleOrScope as AuthScope]
     }
 
-    return ACCESS_TOKEN_KEYS[getAuthScopeFromRole(roleOrScope)]
+    return ACCESS_TOKEN_KEYS[getAuthScopeFromRole(roleOrScope as Role)]
 }
 
 export const getCurrentAccessToken = (scope: AuthScope = getAuthScopeFromPath()): string | null => {
@@ -65,11 +74,11 @@ const getRefreshTokenEndpoint = (scope: AuthScope): string => {
 const getLoginRedirectPath = (): string => {
     const currentPath = window.location.pathname
 
-    if(currentPath.startsWith('/superadmin')) {
+    if (currentPath.startsWith('/superadmin')) {
         return '/superadmin/login'
     }
 
-    if(currentPath.startsWith('/tenant')) {
+    if (currentPath.startsWith('/tenant')) {
         return '/tenant/login'
     }
 
@@ -86,22 +95,22 @@ const api: AxiosInstance = axios.create({
 
 export const refreshAccessToken = async (roleOrScope?: Role | AuthScope): Promise<string> => {
     const scope =
-        roleOrScope === AUTH_SCOPE.SUPER_ADMIN || roleOrScope === AUTH_SCOPE.USER
+        roleOrScope === AUTH_SCOPE.SUPER_ADMIN || roleOrScope === AUTH_SCOPE.USER || roleOrScope === AUTH_SCOPE.TENANT
             ? roleOrScope
-            : getAuthScopeFromRole(roleOrScope)
+            : getAuthScopeFromRole(roleOrScope as Role)
 
-    if(refreshTokenRequests[scope]) {
+    if (refreshTokenRequests[scope]) {
         return refreshTokenRequests[scope]
     }
 
     refreshTokenRequests[scope] = axios.post(
-            `${import.meta.env.VITE_API_URL}${getRefreshTokenEndpoint(scope)}`,
-            {},
-            {withCredentials: true}
-        )
+        `${import.meta.env.VITE_API_URL}${getRefreshTokenEndpoint(scope)}`,
+        {},
+        { withCredentials: true }
+    )
         .then((response) => {
             const newToken = response.data.data.accessToken
-            if(!newToken) {
+            if (!newToken) {
                 throw new Error('Refresh response did not include an access token')
             }
 
@@ -118,9 +127,9 @@ export const refreshAccessToken = async (roleOrScope?: Role | AuthScope): Promis
 // Attatch access token to every request
 
 api.interceptors.request.use(
-    (config: InternalAxiosRequestConfig) =>{
+    (config: InternalAxiosRequestConfig) => {
         const token = getCurrentAccessToken(getAuthScopeFromRequest(config.url))
-        if(token && config.headers) {
+        if (token && config.headers) {
             config.headers.Authorization = `Bearer ${token}`
         }
         return config
@@ -132,39 +141,39 @@ api.interceptors.request.use(
 
 api.interceptors.response.use(
     (response: AxiosResponse) => response,
-    async (error) =>{
+    async (error) => {
         const originalRequest = error.config as RetriableRequestConfig | undefined
 
         const isLoginRequest = originalRequest?.url?.includes(`/auth/super-admin/login`) ||
-        originalRequest?.url?.includes(`/tenant/login`) ||
-        originalRequest?.url?.includes(`/users/login`);
-        
+            originalRequest?.url?.includes(`/tenant/login`) ||
+            originalRequest?.url?.includes(`/users/login`);
+
         const isGoogleLoginRequest = originalRequest?.url?.includes(`/users/google`)
         const isRefreshRequest = originalRequest?.url?.includes(`/refresh-token`)
         const isLogoutRequest = originalRequest?.url?.includes(`/logout`)
 
-        if(isLoginRequest || isGoogleLoginRequest || isRefreshRequest || isLogoutRequest || !originalRequest){
+        if (isLoginRequest || isGoogleLoginRequest || isRefreshRequest || isLogoutRequest || !originalRequest) {
             return Promise.reject(error)
         }
 
-        if(error.response?.status === 401 && !originalRequest._retry) {
+        if (error.response?.status === 401 && !originalRequest._retry) {
             originalRequest._retry = true
-        
 
-        try {
-            const requestScope = getAuthScopeFromRequest(originalRequest.url)
-            const newToken = await refreshAccessToken(requestScope)
-            originalRequest.headers.set('Authorization', `Bearer ${newToken}`)
 
-            return api(originalRequest)
-        } catch {
-            removeAccessToken(getAuthScopeFromRequest(originalRequest.url))
-            window.location.href = getLoginRedirectPath()
+            try {
+                const requestScope = getAuthScopeFromRequest(originalRequest.url)
+                const newToken = await refreshAccessToken(requestScope)
+                originalRequest.headers.set('Authorization', `Bearer ${newToken}`)
+
+                return api(originalRequest)
+            } catch {
+                removeAccessToken(getAuthScopeFromRequest(originalRequest.url))
+                window.location.href = getLoginRedirectPath()
+            }
         }
-    }
 
-    return Promise.reject(error)
-}
+        return Promise.reject(error)
+    }
 )
 
 export default api

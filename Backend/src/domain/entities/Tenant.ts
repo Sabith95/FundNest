@@ -1,6 +1,7 @@
 import { OnboardingStep } from "../../shared/constants/enums/OnboardingStep";
 import { TenantStatus } from "../../shared/constants/enums/TenantStatus";
 import { VerificationStatus } from "../../shared/constants/enums/VerificationStatus";
+import { BusinessType } from "../../shared/constants/enums/BusinessType";
 
 export interface VerificationInfo {
   status: VerificationStatus;
@@ -9,7 +10,7 @@ export interface VerificationInfo {
 }
 
 export interface BusinessInfo {
-  businessType: string;
+  businessType: BusinessType;
   registrationId: string;
   registeredBusinessAddress: string;
 
