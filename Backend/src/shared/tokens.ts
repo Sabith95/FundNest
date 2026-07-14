@@ -29,6 +29,7 @@ export const TOKENS = {
     ResendTenantOtpUseCase: Symbol.for("ResendTenantOtpUseCase"),
     UpdateBusinessInfoUseCase: Symbol.for("UpdateBusinessInfoUseCase"),
     TenantBusinessInfoController: Symbol.for("TenantBusinessInfoController"),
+    UploadKycDocumentsUseCase: Symbol.for("UploadKycDocumentsUseCase"),
 
 
     //repositories

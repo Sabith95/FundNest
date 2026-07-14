@@ -42,7 +42,7 @@ import { RegisterTenantUseCase } from "../../application/auth/use-cases/Register
 import { VerifyTenantOtpUseCase } from "../../application/auth/use-cases/VerifyTenantOtpUseCase";
 import { ResendTenantOtpUseCase } from "../../application/auth/use-cases/ResendTenantOtpUseCase";
 import { UpdateBusinessInfoUseCase } from "../../application/tenant/use-cases/UpdateBusinessInfoUseCase";
-import { TenantBusinessInfoController } from "../../interfaces/http/controllers/Tenant/TenantBusinessInfoController";
+import { UploadKycDocumentsUseCase } from "../../application/tenant/use-cases/UploadKycDocumentsUseCase";
 
 
 
@@ -144,9 +144,11 @@ container.register<UpdateBusinessInfoUseCase>(TOKENS.UpdateBusinessInfoUseCase,{
   useClass: UpdateBusinessInfoUseCase
 })
 
-container.register<TenantBusinessInfoController>(TOKENS.TenantBusinessInfoController, {
-  useClass: TenantBusinessInfoController
+container.register<UploadKycDocumentsUseCase>(TOKENS.UploadKycDocumentsUseCase, {
+  useClass: UploadKycDocumentsUseCase
 })
+
+
 
 // Respository
 container.register<IUserRepository>(TOKENS.UserRepository, {

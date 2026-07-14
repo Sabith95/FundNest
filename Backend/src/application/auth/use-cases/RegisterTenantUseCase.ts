@@ -15,6 +15,8 @@ import { HTTP_STATUS } from "../../../shared/constants/httpStatus";
 import { MESSAGES } from "../../../shared/constants/messages";
 import { OtpPurpose } from "../../../shared/constants/enums/OtpPurpose";
 
+import { ROLES } from "../../../shared/constants/roles";
+
 
 @injectable()
 export class RegisterTenantUseCase {
@@ -49,6 +51,7 @@ export class RegisterTenantUseCase {
             email: input.email,
             phone: input.phone,
             password: hashedPassword,
+            role: ROLES.TENANT_ADMIN,
             isEmailVerified: false,
         })
 

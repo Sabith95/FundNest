@@ -2,6 +2,7 @@ import { OnboardingStep } from "../../shared/constants/enums/OnboardingStep";
 import { TenantStatus } from "../../shared/constants/enums/TenantStatus";
 import { VerificationStatus } from "../../shared/constants/enums/VerificationStatus";
 import { BusinessType } from "../../shared/constants/enums/BusinessType";
+import { Role } from "../../shared/constants/roles";
 
 export interface VerificationInfo {
   status: VerificationStatus;
@@ -46,6 +47,8 @@ export interface Tenant {
   email: string;
   phone: string;
   password: string;
+
+  role: Role;
 
   isEmailVerified: boolean;
   isActive: boolean;

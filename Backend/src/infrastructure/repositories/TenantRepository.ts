@@ -70,7 +70,7 @@ export class TenantRepository extends MongoBaseRepository<Tenant> implements ITe
         return doc ? this.toEntity(doc) : null
     }
 
-    async updateKycDocuments(tenantId: string, data: UpdateKycDocumentsData): Promise<Tenant | null> {
+    async updateKycDocuments(tenantId: string, data: UpdateKycDocumentsData, onboardingStep: OnboardingStep): Promise<Tenant | null> {
         const doc = await TenantModel.findByIdAndUpdate(
             tenantId,
             {
@@ -86,6 +86,7 @@ export class TenantRepository extends MongoBaseRepository<Tenant> implements ITe
                         },
                     },
                 },
+                onboardingStep,
             },
             {
                 new : true,
@@ -129,6 +130,8 @@ export class TenantRepository extends MongoBaseRepository<Tenant> implements ITe
       email: tenant.email,
       phone: tenant.phone,
       password: tenant.password,
+
+      role: tenant.role,
 
       isEmailVerified: tenant.isEmailVerified,
       isActive: tenant.isActive,

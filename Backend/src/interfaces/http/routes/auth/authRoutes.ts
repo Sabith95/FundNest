@@ -12,7 +12,8 @@ router.post(ENDPOINTS.SUPER_ADMIN.SESSION.REFRESH_TOKEN, authController.refreshS
 router.post(ENDPOINTS.SUPER_ADMIN.SESSION.LOGOUT, authController.logoutSuperAdmin);
 router.post(ENDPOINTS.USER.SESSION.REFRESH_TOKEN, authController.refreshUserToken);
 router.post(ENDPOINTS.USER.SESSION.LOGOUT, authController.logoutUser);
-
+router.post(ENDPOINTS.TENANT.SESSION.REFRESH_TOKEN, authController.refreshTenantToken)
+router.post(ENDPOINTS.TENANT.SESSION.LOGOUT, authController.logoutTenant)
 
 
 export default router;

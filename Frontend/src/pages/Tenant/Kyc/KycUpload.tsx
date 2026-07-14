@@ -1,5 +1,8 @@
 import React, { useCallback, useRef, useState } from "react";
 import { ArrowLeft, Check, Cloud, FileText, IdCard } from "lucide-react";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+import { tenantKycService } from "../../../services/tenantKycService";
 
 /**
  * KycUpload
@@ -18,6 +21,7 @@ interface DocumentItem {
   description: string;
   icon: React.ElementType;
   status: DocumentStatus;
+  file?: File; // the actual selected File, sent to the backend on submit
   fileName?: string;
   fileSize?: string;
   uploadedLabel?: string;
@@ -138,8 +142,10 @@ const UploadDropzone: React.FC<{
 };
 
 const KycUpload: React.FC = () => {
+  const navigate = useNavigate();
   const [documents, setDocuments] =
     useState<DocumentItem[]>(INITIAL_DOCUMENTS);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleFilesForDoc = (docId: string, files: FileList) => {
     const file = files[0];
@@ -152,14 +158,20 @@ const KycUpload: React.FC = () => {
         doc.id === docId
           ? error
             ? { ...doc, error, status: "pending" }
-            : { ...doc, status: "uploaded", fileName: file.name, error: undefined }
+            : {
+                ...doc,
+                status: "uploaded",
+                file,
+                fileName: file.name,
+                error: undefined,
+              }
           : doc
       )
     );
     // Real upload logic (API call) would go here.
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     const validated = documents.map((doc) =>
@@ -172,7 +184,30 @@ const KycUpload: React.FC = () => {
     setDocuments(validated);
     if (hasErrors) return;
 
-    console.log("KYC documents submitted:", validated);
+    const businessRegistrationCertificate = validated.find(
+      (doc) => doc.id === "business-registration"
+    )?.file;
+    const ownerIdProof = validated.find((doc) => doc.id === "owner-id")?.file;
+
+    if (!businessRegistrationCertificate || !ownerIdProof) return;
+
+    setIsSubmitting(true);
+    try {
+      await tenantKycService.uploadKyc({
+        businessRegistrationCertificate,
+        ownerIdProof,
+      });
+      toast.success("KYC documents uploaded successfully.");
+      navigate("/tenants/login");
+    } catch (err) {
+      const message =
+        err instanceof Error
+          ? err.message
+          : "Failed to upload KYC documents. Please try again.";
+      toast.error(message);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -350,9 +385,10 @@ const KycUpload: React.FC = () => {
               {/* Submit button */}
               <button
                 type="submit"
-                className="mt-8 w-full rounded-lg bg-gradient-to-r from-indigo-800 to-indigo-600 py-3.5 text-base font-semibold text-white shadow-sm transition hover:from-indigo-900 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2"
+                disabled={isSubmitting}
+                className="mt-8 w-full rounded-lg bg-gradient-to-r from-indigo-800 to-indigo-600 py-3.5 text-base font-semibold text-white shadow-sm transition hover:from-indigo-900 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60"
               >
-                Upload &amp; Continue
+                {isSubmitting ? "Uploading..." : "Upload & Continue"}
               </button>
             </form>
           </div>

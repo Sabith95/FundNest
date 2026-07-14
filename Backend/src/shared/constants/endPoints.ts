@@ -51,6 +51,15 @@ export const ENDPOINTS = {
 
     BUSINESS: {
       BUSINESS_INFO: '/business-info',
-    }
-  }
+    },
+    
+    KYC: {
+      KYC_UPLOAD: '/kyc',
+    },
+
+    SESSION: {
+    REFRESH_TOKEN: "/tenants/refresh-token",
+    LOGOUT: "/tenants/logout",
+    },
+}
 } as const;

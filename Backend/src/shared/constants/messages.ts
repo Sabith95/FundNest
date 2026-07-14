@@ -58,6 +58,9 @@ export const MESSAGES = {
     UNBLOCKED: "Tenant unblocked successfully",
     REGISTER_WITH_EMAIL: "Please verify your email before completing business information.",
     BUSINESS_INFO_UPDATED: "Business info updated successfully",
+    KYC_DOCUMENTS_REQUIRED: "Business registration certificate and owner ID proof are required.",
+    KYC_UPLOADED_SUCCESSFULLY: "KYC documents uploaded successfully.",
+    NOT_AUTHENTICATED: "Tenant is not authenticated.",
     
   },
 

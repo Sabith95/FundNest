@@ -246,6 +246,10 @@ refreshSuperAdminToken = async(req: Request, res: Response, next: NextFunction):
   await this.handleRefreshToken(req, res, next, REFRESH_TOKEN_COOKIE_NAMES.SUPER_ADMIN)
 }
 
+refreshTenantToken = async(req: Request, res: Response, next: NextFunction): Promise<void> =>{
+  await this.handleRefreshToken(req,res,next, REFRESH_TOKEN_COOKIE_NAMES.TENANT)
+}
+
 private handleLogout = async(res: Response, next: NextFunction, cookieName: string): Promise<void> => {
   try {
     res.clearCookie(cookieName, refreshTokenCookieOptions)
@@ -265,6 +269,10 @@ logoutUser = async(_req: Request, res: Response, next: NextFunction): Promise<vo
 
 logoutSuperAdmin = async(_req: Request, res: Response, next: NextFunction): Promise<void> => {
   await this.handleLogout(res, next, REFRESH_TOKEN_COOKIE_NAMES.SUPER_ADMIN)
+}
+
+logoutTenant = async(_req:Request, res: Response, next: NextFunction): Promise<void> => {
+  await this.handleLogout(res,next, REFRESH_TOKEN_COOKIE_NAMES.TENANT)
 }
 
 }

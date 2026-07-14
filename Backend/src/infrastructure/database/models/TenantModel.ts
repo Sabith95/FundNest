@@ -7,6 +7,7 @@ import {
 import { TenantStatus } from "../../../shared/constants/enums/TenantStatus";
 import { OnboardingStep } from "../../../shared/constants/enums/OnboardingStep";
 import { VerificationStatus } from "../../../shared/constants/enums/VerificationStatus";
+import { Role, ROLES } from "../../../shared/constants/roles";
 
 export interface BusinessInfoDocument {
   businessType: string;
@@ -40,6 +41,8 @@ export interface TenantDocument {
   email: string;
   phone: string;
   password: string;
+
+  role: Role;
 
   isEmailVerified: boolean;
   isActive: boolean;
@@ -170,6 +173,13 @@ const tenantSchema = new Schema<TenantDocument>(
     password: {
       type: String,
       required: true,
+    },
+
+    role: {
+      type: String,
+      enum: Object.values(ROLES),
+      required: true,
+      index: true,
     },
 
     isEmailVerified: {

@@ -1,7 +1,8 @@
-import { Tenant } from "../entities/Tenant";
+import { Tenant, VerificationInfo } from "../entities/Tenant";
 import { IBaseRepository } from "./IBaseRepository";
 import { BusinessType } from "../../shared/constants/enums/BusinessType";
 import { OnboardingStep } from "../../shared/constants/enums/OnboardingStep";
+import { Role } from "../../shared/constants/roles";
 
 export interface CreateTenantData {
     companyName: string
@@ -9,6 +10,7 @@ export interface CreateTenantData {
     email: string
     phone: string
     password: string
+    role: Role
     isEmailVerified: boolean
 }
 
@@ -22,10 +24,12 @@ export interface UpdateKycDocumentsData {
   businessRegistrationCertificate: {
     url: string;
     publicId: string;
+    verification: VerificationInfo
   };
   ownerIdProof: {
     url: string;
     publicId: string;
+    verification: VerificationInfo
   };
 }
 
@@ -46,7 +50,8 @@ export interface ITenantRepository extends IBaseRepository<Tenant> {
 
     updateKycDocuments(
         tenantId: string,
-        data: UpdateKycDocumentsData
+        data: UpdateKycDocumentsData,
+        onboardingStep: OnboardingStep
     ): Promise<Tenant | null>;
 
     updateBankDetails(
