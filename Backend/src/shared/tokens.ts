@@ -28,10 +28,8 @@ export const TOKENS = {
     VerifyTenantOtpUseCase: Symbol.for("VerifyTenantOtpUseCase"),
     ResendTenantOtpUseCase: Symbol.for("ResendTenantOtpUseCase"),
     UpdateBusinessInfoUseCase: Symbol.for("UpdateBusinessInfoUseCase"),
-    TenantBusinessInfoController: Symbol.for("TenantBusinessInfoController"),
     UploadKycDocumentsUseCase: Symbol.for("UploadKycDocumentsUseCase"),
-
-
+    UpdateBankDetailsUseCase: Symbol.for("UpdateBankDetailsUseCase"),    
     //repositories
 
     TenantRepository: Symbol.for("TenantRepository"),

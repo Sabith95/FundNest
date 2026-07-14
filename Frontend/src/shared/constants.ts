@@ -1,6 +1,6 @@
 export const ROLES = {
     SUPER_ADMIN: "SUPER_ADMIN",
-    TENANT: "TENANT",
+    TENANT: "TENANT_ADMIN",
     USER: "USER",
 } as const;
 
@@ -42,7 +42,9 @@ export const ROUTES = {
     LOGIN: '/tenants/login',
     DASHBOARD: '/tenants/dashboard',
     BUSINESS_INFO: '/tenants/business-info',
-    KYC_UPLOAD: '/tenants/kyc-upload'
+    KYC_UPLOAD: '/tenants/kyc-upload',
+    BANKING: '/tenants/banking'
+
   },
   USER: {
     LOGIN: '/login',

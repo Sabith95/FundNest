@@ -61,6 +61,7 @@ export const MESSAGES = {
     KYC_DOCUMENTS_REQUIRED: "Business registration certificate and owner ID proof are required.",
     KYC_UPLOADED_SUCCESSFULLY: "KYC documents uploaded successfully.",
     NOT_AUTHENTICATED: "Tenant is not authenticated.",
+    BANKING_DETAILS_UPDATED: "Banking details updated successfully",
     
   },
 

@@ -99,7 +99,8 @@ export class TenantRepository extends MongoBaseRepository<Tenant> implements ITe
 
     async updateBankDetails(
     tenantId: string,
-    data: UpdateBankDetailsData
+    data: UpdateBankDetailsData,
+    onboardingStep: OnboardingStep
   ): Promise<Tenant | null> {
     const doc = await TenantModel.findByIdAndUpdate(
       tenantId,
@@ -110,6 +111,7 @@ export class TenantRepository extends MongoBaseRepository<Tenant> implements ITe
             verification: VerificationStatus.PENDING,
           },
         },
+        onboardingStep,
       },
       {
         new: true,

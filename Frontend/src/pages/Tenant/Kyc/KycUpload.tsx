@@ -3,6 +3,7 @@ import { ArrowLeft, Check, Cloud, FileText, IdCard } from "lucide-react";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { tenantKycService } from "../../../services/tenantKycService";
+import { ROUTES } from "../../../shared/constants";
 
 /**
  * KycUpload
@@ -198,7 +199,7 @@ const KycUpload: React.FC = () => {
         ownerIdProof,
       });
       toast.success("KYC documents uploaded successfully.");
-      navigate("/tenants/login");
+      navigate(ROUTES.TENANT.BANKING);
     } catch (err) {
       const message =
         err instanceof Error

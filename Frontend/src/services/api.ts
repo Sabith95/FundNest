@@ -79,7 +79,7 @@ const getLoginRedirectPath = (): string => {
     }
 
     if (currentPath.startsWith('/tenant')) {
-        return '/tenant/login'
+        return '/tenants/login'
     }
 
     return '/login'
@@ -145,7 +145,7 @@ api.interceptors.response.use(
         const originalRequest = error.config as RetriableRequestConfig | undefined
 
         const isLoginRequest = originalRequest?.url?.includes(`/auth/super-admin/login`) ||
-            originalRequest?.url?.includes(`/tenant/login`) ||
+            originalRequest?.url?.includes(`/tenants/login`) ||
             originalRequest?.url?.includes(`/users/login`);
 
         const isGoogleLoginRequest = originalRequest?.url?.includes(`/users/google`)

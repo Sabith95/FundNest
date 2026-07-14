@@ -37,6 +37,7 @@ export interface UpdateBankDetailsData {
   accountHolderName: string;
   accountNumber: string;
   ifscCode: string;
+  verification: VerificationInfo
 }
 
 export interface ITenantRepository extends IBaseRepository<Tenant> {
@@ -56,7 +57,8 @@ export interface ITenantRepository extends IBaseRepository<Tenant> {
 
     updateBankDetails(
         tenantId: string,
-        data: UpdateBankDetailsData
+        data: UpdateBankDetailsData,
+        onboardingStep: OnboardingStep
     ): Promise<Tenant | null>;
 
     updatePassword(

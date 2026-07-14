@@ -45,8 +45,7 @@ export const ENDPOINTS = {
     AUTH: {
       REGISTER: '/register',
       VERIFY_OTP: '/register/verify-otp',
-      RESEND_OTP: '/register/resend-otp',
-      
+      RESEND_OTP: '/register/resend-otp',      
     },
 
     BUSINESS: {
@@ -55,6 +54,10 @@ export const ENDPOINTS = {
     
     KYC: {
       KYC_UPLOAD: '/kyc',
+    },
+
+    BANKING: {
+      BANK_DETAILS: '/bank-details',
     },
 
     SESSION: {

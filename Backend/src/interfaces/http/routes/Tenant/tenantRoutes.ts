@@ -10,6 +10,7 @@ import { TenantKycController } from "../../controllers/Tenant/TenantKycControlle
 import { authorize } from "../../middleware/authorize";
 import { ROLES } from "../../../../shared/constants/roles";
 import upload from "../../middleware/upload";
+import { TenantBankDetailsController } from "../../controllers/Tenant/TenantBankDetailsController";
 
 const router = Router()
 const jwtService = container.resolve(TOKENS.JwtService) as JwtService;
@@ -17,8 +18,9 @@ const authenticate = createAuthMiddleware(jwtService);
 const tenantAuthcontroller = container.resolve(TenantAuthController)
 const tenantBusinessInfoController = container.resolve(TenantBusinessInfoController)
 const tenantKycController = container.resolve(TenantKycController)
+const tenantBankDetailsController = container.resolve(TenantBankDetailsController)
 
-
+//tenant registration
 router.post(ENDPOINTS.TENANT.AUTH.REGISTER, tenantAuthcontroller.registerTenant)
 router.post(ENDPOINTS.TENANT.AUTH.VERIFY_OTP, tenantAuthcontroller.verifyTenantOtp)
 router.post(ENDPOINTS.TENANT.AUTH.RESEND_OTP, tenantAuthcontroller.resendTenantOtp)
@@ -31,5 +33,7 @@ router.post(ENDPOINTS.TENANT.KYC.KYC_UPLOAD, authenticate,authorize(ROLES.TENANT
 ]),
     tenantKycController.uploadKycDocuments
 )
+
+router.post(ENDPOINTS.TENANT.BANKING.BANK_DETAILS,authenticate, authorize(ROLES.TENANT_ADMIN), tenantBankDetailsController.updateBankingDetails)
 
 export default router

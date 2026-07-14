@@ -43,7 +43,7 @@ import { VerifyTenantOtpUseCase } from "../../application/auth/use-cases/VerifyT
 import { ResendTenantOtpUseCase } from "../../application/auth/use-cases/ResendTenantOtpUseCase";
 import { UpdateBusinessInfoUseCase } from "../../application/tenant/use-cases/UpdateBusinessInfoUseCase";
 import { UploadKycDocumentsUseCase } from "../../application/tenant/use-cases/UploadKycDocumentsUseCase";
-
+import { UpdateBankDetailsUseCase } from "../../application/tenant/use-cases/UpdateBankDetailsUseCase";
 
 
 // Services
@@ -148,6 +148,10 @@ container.register<UploadKycDocumentsUseCase>(TOKENS.UploadKycDocumentsUseCase, 
   useClass: UploadKycDocumentsUseCase
 })
 
+
+container.register<UpdateBankDetailsUseCase>(TOKENS.UpdateBankDetailsUseCase, {
+  useClass: UpdateBankDetailsUseCase
+})
 
 
 // Respository
