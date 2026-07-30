@@ -8,6 +8,7 @@ import {
   Briefcase,
   Bell,
 } from "lucide-react";
+import { ROUTES } from "../../shared/constants";
 
 /**
  * FundNest Landing Page
@@ -16,10 +17,10 @@ import {
  */
 
 const NAV_LINKS = [
-  { label: "Home", href: "#home", active: true },
-  { label: "Pricing", href: "/pricing" },
-  { label: "Register", href: "#register" },
-  { label: "Login", href: "#login" },
+  { label: "Home", href: ROUTES.COMMON.LANDING, active: true },
+  { label: "Pricing", href: ROUTES.COMMON.PRICING },
+  { label: "Register", href: ROUTES.TENANT.REGISTER },
+  { label: "Login", href: ROUTES.TENANT.LOGIN },
 ];
 
 const STATS = [

@@ -4,9 +4,10 @@ import { IUserRepository } from "../../../domain/repositories/IUserRepository";
 import { IOtpService } from "../../../infrastructure/cache/interfaces/IOtpService";
 import { verifyOtpDto, verifyOtpResponseDto } from "../dto/verifyOtpDto";
 import { OtpPurpose } from "../../../shared/constants/enums/OtpPurpose";
+import { IVerifyUserOtpUseCase } from "../../interface/auth/IVerifyUserOtpUseCase";
 
 @injectable()
-export class VerifyUserOtpUseCase {
+export class VerifyUserOtpUseCase implements IVerifyUserOtpUseCase {
     constructor (
         @inject(TOKENS.UserRepository)
         private readonly _userRepository: IUserRepository,
