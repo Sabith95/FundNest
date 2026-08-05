@@ -4,14 +4,15 @@ import { IImageStorageService } from "../../../infrastructure/storage/interfaces
 import { UploadKycDocumentsDto } from "../dto/UploadKycDocumentsDto";
 import { Tenant } from "../../../domain/entities/Tenant";
 import { TOKENS } from "../../../shared/tokens";
-import { AppError } from "../../../shared/errors/AppError";
 import { MESSAGES } from "../../../shared/constants/messages";
-import { HTTP_STATUS } from "../../../shared/constants/httpStatus";
 import { OnboardingStep } from "../../../shared/constants/enums/OnboardingStep";
 import { VerificationStatus } from "../../../shared/constants/enums/VerificationStatus";
+import { IUploadKycDocumentsUseCase } from "../../interface/tenant/IUploadKycDocumentsUseCase";
+import { NotFoundError } from "../../../shared/errors/NotFoundError";
+import { ForbiddenError } from "../../../shared/errors/ForbiddenError";
 
 @injectable()
-export class UploadKycDocumentsUseCase {
+export class UploadKycDocumentsUseCase implements IUploadKycDocumentsUseCase {
     constructor(
         @inject(TOKENS.TenantRepository)
         private readonly _tenantRepository: ITenantRepository,
@@ -28,16 +29,14 @@ export class UploadKycDocumentsUseCase {
         const tenant = await this._tenantRepository.findById(tenantId);
 
         if (!tenant) {
-            throw new AppError(
-                MESSAGES.TENANT.NOT_FOUND,
-                HTTP_STATUS.NOT_FOUND
+            throw new NotFoundError(
+                MESSAGES.TENANT.NOT_FOUND
             );
         }
 
         if (!tenant.isEmailVerified) {
-            throw new AppError(
-                MESSAGES.TENANT.REGISTER_WITH_EMAIL,
-                HTTP_STATUS.FORBIDDEN
+            throw new ForbiddenError(
+                MESSAGES.TENANT.REGISTER_WITH_EMAIL
             );
         }
 
@@ -45,9 +44,8 @@ export class UploadKycDocumentsUseCase {
             tenant.onboardingStep !==
             OnboardingStep.BUSINESS_INFO_COMPLETED
         ) {
-            throw new AppError(
-                "Complete business information before uploading KYC documents.",
-                HTTP_STATUS.FORBIDDEN
+            throw new ForbiddenError(
+                MESSAGES.TENANT.COMPLETE_BUSINESS_INFO
             );
         }
 
@@ -88,9 +86,8 @@ export class UploadKycDocumentsUseCase {
             );
 
         if (!updatedTenant) {
-            throw new AppError(
-                MESSAGES.TENANT.NOT_FOUND,
-                HTTP_STATUS.NOT_FOUND
+            throw new NotFoundError(
+                MESSAGES.TENANT.NOT_FOUND
             );
         }
 

@@ -6,16 +6,12 @@ import { OtpPurpose } from "../../../shared/constants/enums/OtpPurpose";
 import { ITenantRepository } from "../../../domain/repositories/ITenantRepository";
 import { IJwtService } from "../../../infrastructure/auth/interfaces/IJwtService";
 import { ROLES } from "../../../shared/constants/roles";
+import { IVerifyTenantOtpUseCase } from "../../interface/tenant/IVerifyTenantOtpUseCase";
+import {VerifyTenantOtpResponseDto} from '../dto/VerifyTenantOtpResponseDto'
 
-export interface VerifyTenantOtpResponseDto {
-    email: string;
-    isEmailVerified: boolean;
-    accessToken: string;
-    refreshToken: string;
-}
 
 @injectable()
-export class VerifyTenantOtpUseCase {
+export class VerifyTenantOtpUseCase implements IVerifyTenantOtpUseCase {
     constructor(
         @inject(TOKENS.TenantRepository)
         private readonly _tenantRepository: ITenantRepository,

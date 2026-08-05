@@ -2,19 +2,19 @@ import { inject, injectable } from "tsyringe";
 import { TOKENS } from "../../../shared/tokens";
 import { IUserRepository } from "../../../domain/repositories/IUserRepository";
 import { IBcryptService } from "../../../infrastructure/auth/interfaces/IBcryptService";
-import { AppError } from "../../../shared/errors/AppError";
 import { RegisterUserDto, RegisterUserResponseDto } from "../dto/RegisterUserDto";
 import { IEmailService } from "../../../infrastructure/notification/interfaces/IEmailService";
 import { IOtpService } from "../../../infrastructure/cache/interfaces/IOtpService";
 import { generateOtp } from "../../../shared/utils/generateOtp";
 import { ROLES } from "../../../shared/constants/roles";
-import { HTTP_STATUS } from '../../../shared/constants/httpStatus'
 import { MESSAGES } from '../../../shared/constants/messages'
 import { OtpPurpose } from "../../../shared/constants/enums/OtpPurpose";
+import { IRegisterUserUseCase } from "../../interface/auth/IRegisterUseCase";
+import { ConflictError } from "../../../shared/errors/ConflictError";
 
 
 @injectable()
-export class RegisterUserUseCase {
+export class RegisterUserUseCase implements IRegisterUserUseCase {
     constructor(
         @inject(TOKENS.UserRepository)
         private readonly _userRepository: IUserRepository,
@@ -30,7 +30,7 @@ export class RegisterUserUseCase {
         const existingUser = await this._userRepository.findByEmail(input.email)
 
         if(existingUser){
-            throw new AppError(MESSAGES.AUTH.EMAIL_ALREADY_REGISTERED, HTTP_STATUS.CONFLICT)
+            throw new ConflictError(MESSAGES.AUTH.EMAIL_ALREADY_REGISTERED)
         }
 
         const hashedPassword = await this._bcryptService.hashPassword(input.password)

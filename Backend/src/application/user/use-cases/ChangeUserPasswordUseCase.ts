@@ -2,16 +2,18 @@ import { inject, injectable } from "tsyringe";
 import { TOKENS } from "../../../shared/tokens";
 import { IUserRepository } from "../../../domain/repositories/IUserRepository";
 import { IBcryptService } from "../../../infrastructure/auth/interfaces/IBcryptService";
-import { AppError } from "../../../shared/errors/AppError";
-import { HTTP_STATUS } from "../../../shared/constants/httpStatus";
 import { MESSAGES } from "../../../shared/constants/messages";
 import {
   ChangePasswordDto,
   ChangePasswordResponseDto,
 } from "../dto/ProfileDto";
+import { IChangeUserPasswordUseCase } from "../../interface/user/IChangeUserPasswordUseCase";
+import { NotFoundError } from "../../../shared/errors/NotFoundError";
+import { BadRequestError } from "../../../shared/errors/BadRequestError";
+
 
 @injectable()
-export class ChangeUserPasswordUseCase {
+export class ChangeUserPasswordUseCase implements IChangeUserPasswordUseCase {
     constructor(
     @inject(TOKENS.UserRepository)
     private readonly _userRepository: IUserRepository,
@@ -24,13 +26,12 @@ export class ChangeUserPasswordUseCase {
     const user = await this._userRepository.findById(input.userId)
 
     if (!user) {
-      throw new AppError(MESSAGES.USER.NOT_FOUND, HTTP_STATUS.NOT_FOUND);
+      throw new NotFoundError(MESSAGES.USER.NOT_FOUND);
     }
 
     if (user.authProvider !== "LOCAL" || !user.password) {
-      throw new AppError(
-        MESSAGES.AUTH.PASSWORD_CHANGE_NOT_ALLOWED,
-        HTTP_STATUS.BAD_REQUEST
+      throw new BadRequestError(
+        MESSAGES.AUTH.PASSWORD_CHANGE_NOT_ALLOWED
       );
     }
 
@@ -40,7 +41,7 @@ export class ChangeUserPasswordUseCase {
     )
 
     if (!isCurrentPasswordValid) {
-      throw new AppError(MESSAGES.AUTH.CURRENT_PASSWORD_INCORRECT, HTTP_STATUS.BAD_REQUEST);
+      throw new BadRequestError(MESSAGES.AUTH.CURRENT_PASSWORD_INCORRECT);
     }
 
     const isSamePassword = await this._bcryptService.comparePassword(
@@ -49,9 +50,8 @@ export class ChangeUserPasswordUseCase {
     )
 
     if (isSamePassword) {
-      throw new AppError(
-        MESSAGES.AUTH.NEW_PASSWORD_MUST_BE_DIFFERENT,
-        HTTP_STATUS.BAD_REQUEST
+      throw new BadRequestError(
+        MESSAGES.AUTH.NEW_PASSWORD_MUST_BE_DIFFERENT
       );
     }
 

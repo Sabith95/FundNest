@@ -4,15 +4,16 @@ import { ITenantRepository } from "../../../domain/repositories/ITenantRepositor
 import { IEmailService } from '../../../infrastructure/notification/interfaces/IEmailService';
 import { IOtpService } from '../../../infrastructure/cache/interfaces/IOtpService';
 import { generateOtp } from '../../../shared/utils/generateOtp';
-import { AppError } from '../../../shared/errors/AppError';
-import { HTTP_STATUS } from '../../../shared/constants/httpStatus'
 import { MESSAGES } from '../../../shared/constants/messages'
 import { ResendOtpDto, ResendOtpResponseDto } from "../dto/resendOtpDto";
 import { OtpPurpose } from "../../../shared/constants/enums/OtpPurpose";
 import { env } from "../../../config/env";
+import { IResendTenantOtpUseCase } from "../../interface/tenant/IResendTenantOtpUseCase";
+import { NotFoundError } from "../../../shared/errors/NotFoundError";
+import { BadRequestError } from "../../../shared/errors/BadRequestError";
 
 @injectable()
-export class ResendTenantOtpUseCase {
+export class ResendTenantOtpUseCase implements IResendTenantOtpUseCase {
     constructor(
         @inject(TOKENS.TenantRepository)
         private readonly _tenantRepository: ITenantRepository,
@@ -26,11 +27,11 @@ export class ResendTenantOtpUseCase {
         const tenant = await this._tenantRepository.findByEmail(input.email)
 
         if(!tenant){
-            throw new AppError(MESSAGES.TENANT.NOT_FOUND,HTTP_STATUS.NOT_FOUND)
+            throw new NotFoundError(MESSAGES.TENANT.NOT_FOUND)
         }
 
         if(tenant.isEmailVerified){
-            throw new AppError(MESSAGES.AUTH.EMAIL_VERIFIED,HTTP_STATUS.BAD_REQUEST)
+            throw new BadRequestError(MESSAGES.AUTH.EMAIL_VERIFIED)
         }
 
         const otp = generateOtp()

@@ -4,16 +4,16 @@ import { IUserRepository } from '../../../domain/repositories/IUserRepository';
 import { IEmailService } from '../../../infrastructure/notification/interfaces/IEmailService';
 import { IOtpService } from '../../../infrastructure/cache/interfaces/IOtpService';
 import { generateOtp } from '../../../shared/utils/generateOtp';
-import { AppError } from '../../../shared/errors/AppError';
-import { HTTP_STATUS } from '../../../shared/constants/httpStatus'
 import { MESSAGES } from '../../../shared/constants/messages'
 import { env } from '../../../config/env';
 import { ResendOtpDto, ResendOtpResponseDto } from '../dto/resendOtpDto';
 import { OtpPurpose } from "../../../shared/constants/enums/OtpPurpose";
-
+import { IResendUserOtpUseCase } from "../../interface/auth/IResendUserOtpUseCase";
+import { NotFoundError } from "../../../shared/errors/NotFoundError";
+import { BadRequestError } from "../../../shared/errors/BadRequestError";
 
 @injectable()
-export class ResendUserOtpUseCase {
+export class ResendUserOtpUseCase implements IResendUserOtpUseCase {
     constructor(
         @inject(TOKENS.UserRepository)
         private readonly _userRepository: IUserRepository,
@@ -29,16 +29,16 @@ export class ResendUserOtpUseCase {
         const user = await this._userRepository.findByEmail(input.email)
 
         if(!user){
-            throw new AppError(MESSAGES.USER.NOT_FOUND,HTTP_STATUS.NOT_FOUND)
+            throw new NotFoundError(MESSAGES.USER.NOT_FOUND)
         }
 
         
         if (user.isEmailVerified) {
-        throw new AppError(MESSAGES.AUTH.EMAIL_VERIFIED, HTTP_STATUS.BAD_REQUEST);
+        throw new BadRequestError(MESSAGES.AUTH.EMAIL_VERIFIED);
         }
 
         if (user.authProvider !== 'LOCAL') {
-        throw new AppError(MESSAGES.AUTH.GOOGLE_LOGIN, HTTP_STATUS.BAD_REQUEST);
+        throw new BadRequestError(MESSAGES.AUTH.GOOGLE_LOGIN);
         }
         
         const otp = generateOtp()

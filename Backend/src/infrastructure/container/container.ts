@@ -25,8 +25,11 @@ import { ITenantRepository } from "../../domain/repositories/ITenantRepository";
 
 //use cases
 import { LoginSuperAdminUseCase } from "../../application/auth/use-cases/LoginSuperAdminUseCase";
+import { ILoginSuperAdminUseCase } from "../../application/interface/auth/ILoginSuperAdminUseCase";
 import { RegisterUserUseCase } from "../../application/auth/use-cases/RegisterUserUseCase";
+import { IRegisterUserUseCase } from "../../application/interface/auth/IRegisterUseCase";
 import { GoogleUserLoginUseCase } from "../../application/auth/use-cases/GoogleUserLoginUseCase";
+import { IGoogleUserLoginUseCase } from "../../application/interface/auth/IGoogleUserLoginUseCase";
 import { VerifyUserOtpUseCase } from "../../application/auth/use-cases/VerifyUserOtpUseCase";
 import { ResendUserOtpUseCase } from "../../application/auth/use-cases/ResendUserOtpUseCase";
 import { RequestPasswordResetOtpUseCase } from "../../application/auth/use-cases/RequestPasswordResetOtpUseCase";
@@ -44,7 +47,23 @@ import { ResendTenantOtpUseCase } from "../../application/auth/use-cases/ResendT
 import { UpdateBusinessInfoUseCase } from "../../application/tenant/use-cases/UpdateBusinessInfoUseCase";
 import { UploadKycDocumentsUseCase } from "../../application/tenant/use-cases/UploadKycDocumentsUseCase";
 import { UpdateBankDetailsUseCase } from "../../application/tenant/use-cases/UpdateBankDetailsUseCase";
-
+import { IVerifyUserOtpUseCase } from "../../application/interface/auth/IVerifyUserOtpUseCase";
+import { IResendUserOtpUseCase } from "../../application/interface/auth/IResendUserOtpUseCase";
+import { IRequestPasswordResetOtpUseCase } from "../../application/interface/auth/IRequestPasswordResetOtpUseCase";
+import { IVerifyPasswordResetOtpUseCase } from "../../application/interface/auth/IVerifyPasswordResetOtpUseCase";
+import { IResetUserPasswordUseCase } from "../../application/interface/auth/IResetUserPasswordUseCase";
+import { ILoginUserUseCase } from "../../application/interface/auth/ILoginUserUseCase";
+import { IRefreshTokenUseCase } from "../../application/interface/auth/IRefreshTokenUseCase";
+import { IRegisterTenantUseCase } from "../../application/interface/tenant/IRegisterTenantUseCase";
+import { IVerifyTenantOtpUseCase } from "../../application/interface/tenant/IVerifyTenantOtpUseCase";
+import { IResendTenantOtpUseCase } from "../../application/interface/tenant/IResendTenantOtpUseCase";
+import { IGetUserProfileUseCase } from "../../application/interface/user/IGetUserProfileUseCase";
+import { IUpdateUserProfileUseCase } from "../../application/interface/user/IUpdateUserProfileUseCase";
+import { IUpdateProfilePhotoUseCase } from "../../application/interface/user/IUpdateProfilePhotoUseCase";
+import { IChangeUserPasswordUseCase } from "../../application/interface/user/IChangeUserPasswordUseCase";
+import { IUpdateBankDetailsUseCase } from "../../application/interface/tenant/IUpdateBankDetailsUseCase";
+import { IUpdateBusinessInfoUseCase } from "../../application/interface/tenant/IUpdateBusinessInfoUseCase";
+import { IUploadKycDocumentsUseCase } from "../../application/interface/tenant/IUploadKycDocumentsUseCase";
 
 // Services
 container.register<IJwtService>(TOKENS.JwtService, {
@@ -72,84 +91,84 @@ container.register<IImageStorageService>(TOKENS.ImageStorageService, {
 });
 
 //use cases
-container.register<LoginSuperAdminUseCase>(TOKENS.LoginSuperAdminUseCase, {
+container.register<ILoginSuperAdminUseCase>(TOKENS.LoginSuperAdminUseCase, {
   useClass: LoginSuperAdminUseCase,
 });
 
-container.register<RegisterUserUseCase>(TOKENS.RegisterUserUseCase, {
+container.register<IRegisterUserUseCase>(TOKENS.RegisterUserUseCase, {
   useClass: RegisterUserUseCase,
 });
 
-container.register<GoogleUserLoginUseCase>(TOKENS.GoogleUserLoginUseCase, {
+container.register<IGoogleUserLoginUseCase>(TOKENS.GoogleUserLoginUseCase, {
   useClass: GoogleUserLoginUseCase,
 });
 
-container.register<VerifyUserOtpUseCase>(TOKENS.VerifyUserOtpUseCase, {
+container.register<IVerifyUserOtpUseCase>(TOKENS.VerifyUserOtpUseCase, {
   useClass: VerifyUserOtpUseCase,
 })
 
-container.register<ResendUserOtpUseCase>(TOKENS.ResendUserOtpUseCase, {
+container.register<IResendUserOtpUseCase>(TOKENS.ResendUserOtpUseCase, {
   useClass: ResendUserOtpUseCase,
 });
 
-container.register<RequestPasswordResetOtpUseCase>(TOKENS.RequestPasswordResetOtpUseCase, {
+container.register<IRequestPasswordResetOtpUseCase>(TOKENS.RequestPasswordResetOtpUseCase, {
   useClass: RequestPasswordResetOtpUseCase,
 });
 
-container.register<VerifyPasswordResetOtpUseCase>(TOKENS.VerifyPasswordResetOtpUseCase, {
+container.register<IVerifyPasswordResetOtpUseCase>(TOKENS.VerifyPasswordResetOtpUseCase, {
   useClass: VerifyPasswordResetOtpUseCase,
 });
 
-container.register<ResetUserPasswordUseCase>(TOKENS.ResetUserPasswordUseCase, {
+container.register<IResetUserPasswordUseCase>(TOKENS.ResetUserPasswordUseCase, {
   useClass: ResetUserPasswordUseCase,
 });
 
-container.register<LoginUserUseCase>(TOKENS.LoginUserUseCase, {
+container.register<ILoginUserUseCase>(TOKENS.LoginUserUseCase, {
   useClass: LoginUserUseCase,
 });
 
-container.register<GetUserProfileUseCase>(TOKENS.GetUserProfileUseCase, {
+container.register<IGetUserProfileUseCase>(TOKENS.GetUserProfileUseCase, {
   useClass: GetUserProfileUseCase,
 });
 
-container.register<UpdateUserProfileUseCase>(TOKENS.UpdateUserProfileUseCase, {
+container.register<IUpdateUserProfileUseCase>(TOKENS.UpdateUserProfileUseCase, {
   useClass: UpdateUserProfileUseCase,
 });
 
-container.register<UpdateProfilePhotoUseCase>(TOKENS.UpdateProfilePhotoUseCase, {
+container.register<IUpdateProfilePhotoUseCase>(TOKENS.UpdateProfilePhotoUseCase, {
   useClass: UpdateProfilePhotoUseCase,
 });
 
-container.register<ChangeUserPasswordUseCase>(TOKENS.ChangeUserPasswordUseCase, {
+container.register<IChangeUserPasswordUseCase>(TOKENS.ChangeUserPasswordUseCase, {
   useClass: ChangeUserPasswordUseCase,
 });
 
-container.register<RefreshTokenUseCase>(TOKENS.RefreshTokenUseCase,{
+container.register<IRefreshTokenUseCase>(TOKENS.RefreshTokenUseCase,{
         useClass: RefreshTokenUseCase,
 });
 
-container.register<RegisterTenantUseCase>(TOKENS.RegisterTenantUseCase,{
+container.register<IRegisterTenantUseCase>(TOKENS.RegisterTenantUseCase,{
   useClass: RegisterTenantUseCase
 })
 
-container.register<VerifyTenantOtpUseCase>(TOKENS.VerifyTenantOtpUseCase,{
+container.register<IVerifyTenantOtpUseCase>(TOKENS.VerifyTenantOtpUseCase,{
   useClass: VerifyTenantOtpUseCase,
 })
 
-container.register<ResendTenantOtpUseCase>(TOKENS.ResendTenantOtpUseCase,{
+container.register<IResendTenantOtpUseCase>(TOKENS.ResendTenantOtpUseCase,{
   useClass: ResendTenantOtpUseCase
 })
 
-container.register<UpdateBusinessInfoUseCase>(TOKENS.UpdateBusinessInfoUseCase,{
+container.register<IUpdateBusinessInfoUseCase>(TOKENS.UpdateBusinessInfoUseCase,{
   useClass: UpdateBusinessInfoUseCase
 })
 
-container.register<UploadKycDocumentsUseCase>(TOKENS.UploadKycDocumentsUseCase, {
+container.register<IUploadKycDocumentsUseCase>(TOKENS.UploadKycDocumentsUseCase, {
   useClass: UploadKycDocumentsUseCase
 })
 
 
-container.register<UpdateBankDetailsUseCase>(TOKENS.UpdateBankDetailsUseCase, {
+container.register<IUpdateBankDetailsUseCase>(TOKENS.UpdateBankDetailsUseCase, {
   useClass: UpdateBankDetailsUseCase
 })
 

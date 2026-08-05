@@ -10,6 +10,7 @@ import { TenantModel } from "../database/models/TenantModel";
 import { MongoBaseRepository } from "./MongoBaseRepository";
 import { VerificationStatus } from "../../shared/constants/enums/VerificationStatus";
 import { OnboardingStep } from "../../shared/constants/enums/OnboardingStep";
+import { TenantPersistenceMapper, TenantRecord } from "../database/mapper/TenantPersistenceMapper";
 
 @injectable()
 export class TenantRepository extends MongoBaseRepository<Tenant> implements ITenantRepository {
@@ -56,7 +57,9 @@ export class TenantRepository extends MongoBaseRepository<Tenant> implements ITe
                 $set:{
                     businessInfo: {
                         ...data,
-                        verification: VerificationStatus.PENDING,
+                        verification:{
+                            status:VerificationStatus.PENDING
+                        } 
                     },
                 },
                 onboardingStep,
@@ -78,11 +81,15 @@ export class TenantRepository extends MongoBaseRepository<Tenant> implements ITe
                     kycDocuments: {
                         businessRegistrationCertificate: {
                             ...data.businessRegistrationCertificate,
-                            verification: VerificationStatus.PENDING,
+                        verification:{
+                            status:VerificationStatus.PENDING
+                        } 
                         },
                         ownerIdProof: {
                             ...data.ownerIdProof,
-                            verification: VerificationStatus.PENDING,
+                        verification:{
+                            status:VerificationStatus.PENDING
+                        } 
                         },
                     },
                 },
@@ -108,7 +115,9 @@ export class TenantRepository extends MongoBaseRepository<Tenant> implements ITe
         $set: {
           bankDetails: {
             ...data,
-            verification: VerificationStatus.PENDING,
+                        verification:{
+                            status:VerificationStatus.PENDING
+                        } 
           },
         },
         onboardingStep,
@@ -122,38 +131,42 @@ export class TenantRepository extends MongoBaseRepository<Tenant> implements ITe
     return doc ? this.toEntity(doc) : null;
   }
 
-  protected toEntity(tenant: any): Tenant {
-    return {
-      id: tenant._id.toString(),
+//   protected toEntity(tenant: any): Tenant {
+//     return {
+//       id: tenant._id.toString(),
 
-      companyName: tenant.companyName,
-      ownerName: tenant.ownerName,
+//       companyName: tenant.companyName,
+//       ownerName: tenant.ownerName,
 
-      email: tenant.email,
-      phone: tenant.phone,
-      password: tenant.password,
+//       email: tenant.email,
+//       phone: tenant.phone,
+//       password: tenant.password,
 
-      role: tenant.role,
+//       role: tenant.role,
 
-      isEmailVerified: tenant.isEmailVerified,
-      isActive: tenant.isActive,
+//       isEmailVerified: tenant.isEmailVerified,
+//       isActive: tenant.isActive,
 
-      status: tenant.status,
-      onboardingStep: tenant.onboardingStep,
+//       status: tenant.status,
+//       onboardingStep: tenant.onboardingStep,
 
-      businessInfo: tenant.businessInfo,
+//       businessInfo: tenant.businessInfo,
 
-      kycDocuments: tenant.kycDocuments,
+//       kycDocuments: tenant.kycDocuments,
 
-      bankDetails: tenant.bankDetails,
+//       bankDetails: tenant.bankDetails,
 
-      rejectionReason: tenant.rejectionReason,
+//       rejectionReason: tenant.rejectionReason,
 
-      approvedAt: tenant.approvedAt,
+//       approvedAt: tenant.approvedAt,
 
-      createdAt: tenant.createdAt,
-      updatedAt: tenant.updatedAt,
-    };
-  }
+//       createdAt: tenant.createdAt,
+//       updatedAt: tenant.updatedAt,
+//     };
+//   }
+
+protected toEntity(tenant: TenantRecord): Tenant {
+    return TenantPersistenceMapper.toEntity(tenant)
+}
 
 }

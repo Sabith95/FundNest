@@ -1,6 +1,4 @@
 import { injectable, inject } from "tsyringe";
-import { AppError } from "../../../shared/errors/AppError";
-import { HTTP_STATUS } from '../../../shared/constants/httpStatus'
 import { MESSAGES } from '../../../shared/constants/messages'
 import { ROLES } from "../../../shared/constants/roles";
 import { TOKENS } from "../../../shared/tokens";
@@ -8,6 +6,8 @@ import { LoginTenantDto, LoginTenantResponseDto } from "../dto/LoginTenantDto";
 import { IJwtService } from "../../../infrastructure/auth/interfaces/IJwtService";
 import { IBcryptService } from "../../../infrastructure/auth/interfaces/IBcryptService";
 import { ITenantRepository } from "../../../domain/repositories/ITenantRepository";
+import { UnauthorizedError } from "../../../shared/errors/UnauthorizedError";
+import { ForbiddenError } from "../../../shared/errors/ForbiddenError";
 
 @injectable()
 export class LoginTenantUseCase {
@@ -24,7 +24,7 @@ export class LoginTenantUseCase {
         const tenant = await this._tenantRepository.findByEmail(input.email)
 
         if(!tenant || !tenant.password){
-            throw new AppError(MESSAGES.AUTH.INVALID_CREDENTIALS, HTTP_STATUS.UNAUTHORIZED)
+            throw new UnauthorizedError(MESSAGES.AUTH.INVALID_CREDENTIALS)
         }
 
         const isPasswordValid =
@@ -34,23 +34,20 @@ export class LoginTenantUseCase {
         );
 
         if (!isPasswordValid) {
-        throw new AppError(
-            MESSAGES.AUTH.INVALID_CREDENTIALS,
-            HTTP_STATUS.UNAUTHORIZED
+        throw new UnauthorizedError(
+            MESSAGES.AUTH.INVALID_CREDENTIALS
         );
         }
 
         if (!tenant.isEmailVerified) {
-        throw new AppError(
-            MESSAGES.AUTH.EMAIL_NOT_VERIFIED,
-            HTTP_STATUS.FORBIDDEN
+        throw new UnauthorizedError(
+            MESSAGES.AUTH.EMAIL_NOT_VERIFIED
         );
         }
 
         if (!tenant.isActive) {
-        throw new AppError(
-            MESSAGES.AUTH.ACCOUNT_INACTIVE,
-            HTTP_STATUS.FORBIDDEN
+        throw new ForbiddenError(
+            MESSAGES.AUTH.ACCOUNT_INACTIVE
         );
         }
 

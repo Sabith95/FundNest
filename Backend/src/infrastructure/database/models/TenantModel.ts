@@ -8,18 +8,26 @@ import { TenantStatus } from "../../../shared/constants/enums/TenantStatus";
 import { OnboardingStep } from "../../../shared/constants/enums/OnboardingStep";
 import { VerificationStatus } from "../../../shared/constants/enums/VerificationStatus";
 import { Role, ROLES } from "../../../shared/constants/roles";
+import { BusinessType } from "../../../shared/constants/enums/BusinessType";
+
+
+export interface VerificationInfoDocument {
+  status: VerificationStatus;
+  rejectionReason?: string;
+  verifiedAt?: Date;
+}
 
 export interface BusinessInfoDocument {
-  businessType: string;
+  businessType: BusinessType;
   registrationId: string;
   registeredBusinessAddress: string;
-  verification: VerificationStatus
+  verification: VerificationInfoDocument
 }
 
 export interface DocumentInfoDocument {
   url: string;
   publicId: string;
-  verification: VerificationStatus
+  verification: VerificationInfoDocument
 }
 
 export interface KycDocumentsDocument {
@@ -31,7 +39,7 @@ export interface BankDetailsDocument {
   accountHolderName: string;
   accountNumber: string;
   ifscCode: string;
-  verification: VerificationStatus
+  verification: VerificationInfoDocument
 }
 
 export interface TenantDocument {
@@ -62,13 +70,28 @@ export interface TenantDocument {
 }
 
 
+
+const verificationInfoSchema = new Schema<VerificationInfoDocument>(
+  {
+    status: {
+      type: String,
+      enum: Object.values(VerificationStatus),
+      default: VerificationStatus.PENDING,
+      required: true,
+    },
+    rejectionReason: { type: String, trim: true },
+    verifiedAt: { type: Date },
+  },
+  { _id: false }
+);
+
 //sub scehmas
 
 const businessInfoSchema = new Schema<BusinessInfoDocument>(
   {
     businessType: {
       type: String,
-      required: true,
+      enum: Object.values(BusinessType),
       trim: true,
     },
     registrationId: {
@@ -81,6 +104,11 @@ const businessInfoSchema = new Schema<BusinessInfoDocument>(
       required: true,
       trim: true,
     },
+    verification: {
+    type: verificationInfoSchema,
+    default: () => ({ status: VerificationStatus.PENDING }),
+    required: true,
+  },
   },
   { _id: false }
 );
@@ -97,6 +125,11 @@ const documentInfoSchema = new Schema<DocumentInfoDocument>(
       required: true,
       trim: true,
     },
+    verification: {
+    type: verificationInfoSchema,
+    default: () => ({ status: VerificationStatus.PENDING }),
+    required: true,
+  },
   },
   { _id: false }
 );
@@ -111,6 +144,7 @@ const kycDocumentsSchema = new Schema<KycDocumentsDocument>(
       type: documentInfoSchema,
       required: true,
     },
+
   },
   { _id: false }
 );
@@ -133,6 +167,11 @@ const bankDetailsSchema = new Schema<BankDetailsDocument>(
       uppercase: true,
       trim: true,
     },
+    verification: {
+    type: verificationInfoSchema,
+    default: () => ({ status: VerificationStatus.PENDING }),
+    required: true,
+  },
   },
   { _id: false }
 );

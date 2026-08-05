@@ -2,17 +2,18 @@ import { inject, injectable } from "tsyringe";
 import { TOKENS } from "../../../shared/tokens";
 import { IUserRepository } from "../../../domain/repositories/IUserRepository";
 import { IImageStorageService } from "../../../infrastructure/storage/interfaces/IImageStorageService";
-import { AppError } from "../../../shared/errors/AppError";
-import { HTTP_STATUS } from "../../../shared/constants/httpStatus";
 import { MESSAGES } from "../../../shared/constants/messages";
 import {
   UpdateProfilePhotoDto,
   UserProfileDto,
   toUserProfileDto,
 } from "../dto/ProfileDto";
+import { IUpdateProfilePhotoUseCase } from "../../interface/user/IUpdateProfilePhotoUseCase";
+import { NotFoundError } from "../../../shared/errors/NotFoundError";
+import { InternalServerError } from "../../../shared/errors/InternalServerError";
 
 @injectable()
-export class UpdateProfilePhotoUseCase {
+export class UpdateProfilePhotoUseCase implements IUpdateProfilePhotoUseCase {
     constructor(
     @inject(TOKENS.UserRepository)
     private readonly _userRepository: IUserRepository,
@@ -25,7 +26,7 @@ export class UpdateProfilePhotoUseCase {
     const user = await this._userRepository.findById(input.userId);
 
     if (!user) {
-      throw new AppError(MESSAGES.USER.NOT_FOUND, HTTP_STATUS.NOT_FOUND);
+      throw new NotFoundError(MESSAGES.USER.NOT_FOUND);
     }
 
      const uploadedImage = await this._imageStorageService.uploadImage({
@@ -41,9 +42,8 @@ export class UpdateProfilePhotoUseCase {
 
     if(!updatedUser){
         await this._imageStorageService.deleteImage(uploadedImage.publicId)
-        throw new AppError(
-            MESSAGES.USER.PROFILE_PHOTO_UPDATE_FAILED,
-            HTTP_STATUS.INTERNAL_SERVER_ERROR
+        throw new InternalServerError(
+            MESSAGES.USER.PROFILE_PHOTO_UPDATE_FAILED
         )
     }
 

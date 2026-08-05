@@ -2,17 +2,17 @@ import { inject, injectable } from 'tsyringe';
 import { TOKENS } from '../../../shared/tokens';
 import { IUserRepository } from '../../../domain/repositories/IUserRepository';
 import { IOtpService } from '../../../infrastructure/cache/interfaces/IOtpService';
-import { AppError } from '../../../shared/errors/AppError';
-import { HTTP_STATUS } from '../../../shared/constants/httpStatus'
 import { MESSAGES } from '../../../shared/constants/messages'
 import {
   VerifyPasswordResetOtpDto,
   VerifyPasswordResetOtpResponseDto,
 } from '../dto/PasswordResetDto';
 import { OtpPurpose } from '../../../shared/constants/enums/OtpPurpose';
+import { IVerifyPasswordResetOtpUseCase } from '../../interface/auth/IVerifyPasswordResetOtpUseCase';
+import { BadRequestError } from '../../../shared/errors/BadRequestError';
 
 @injectable()
-export class VerifyPasswordResetOtpUseCase {
+export class VerifyPasswordResetOtpUseCase implements IVerifyPasswordResetOtpUseCase {
   constructor(
     @inject(TOKENS.UserRepository)
     private readonly _userRepository: IUserRepository,
@@ -28,7 +28,7 @@ export class VerifyPasswordResetOtpUseCase {
     const user = await this._userRepository.findByEmail(normalizedEmail);
 
     if (!user || user.authProvider !== 'LOCAL' || !user.isActive) {
-      throw new AppError(MESSAGES.AUTH.INVALID_OTP, HTTP_STATUS.BAD_REQUEST);
+      throw new BadRequestError(MESSAGES.AUTH.INVALID_OTP);
     }
 
     const verified = await this._otpService.verifyOtp({
@@ -38,7 +38,7 @@ export class VerifyPasswordResetOtpUseCase {
     });
 
     if (verified.userId !== user.id) {
-      throw new AppError(MESSAGES.AUTH.INVALID_OTP, HTTP_STATUS.BAD_REQUEST);
+      throw new BadRequestError(MESSAGES.AUTH.INVALID_OTP);
     }
 
     await this._otpService.createPasswordResetSession(user.email, user.id);

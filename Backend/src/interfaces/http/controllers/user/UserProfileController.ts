@@ -1,33 +1,34 @@
 import { Request, Response, NextFunction } from "express";
 import { inject, injectable } from "tsyringe";
 import { TOKENS } from "../../../../shared/tokens";
-import { ApiResponse } from "../../../../shared/ApiResponse";
+import { ResponseHandler } from "../../../../shared/ResponseHandler";
 import { HTTP_STATUS } from "../../../../shared/constants/httpStatus";
 import { MESSAGES } from "../../../../shared/constants/messages";
-import { AppError } from "../../../../shared/errors/AppError";
-import { GetUserProfileUseCase } from "../../../../application/user/use-cases/GetUserProfileUseCase";
-import { UpdateUserProfileUseCase } from "../../../../application/user/use-cases/UpdateUserProfileUseCase";
-import { UpdateProfilePhotoUseCase } from "../../../../application/user/use-cases/UpdateProfilePhotoUseCase";
-import { ChangeUserPasswordUseCase } from "../../../../application/user/use-cases/ChangeUserPasswordUseCase";
+import { IGetUserProfileUseCase } from "../../../../application/interface/user/IGetUserProfileUseCase";
+import { IUpdateUserProfileUseCase } from "../../../../application/interface/user/IUpdateUserProfileUseCase";
+import { IUpdateProfilePhotoUseCase } from "../../../../application/interface/user/IUpdateProfilePhotoUseCase";
+import { IChangeUserPasswordUseCase } from "../../../../application/interface/user/IChangeUserPasswordUseCase";
 import {
   updateUserProfileSchema,
   changePasswordSchema,
 } from "../../validators/userProfileValidator";
+import { UnauthorizedError } from "../../../../shared/errors/UnauthorizedError";
+import { BadRequestError } from "../../../../shared/errors/BadRequestError";
 
 @injectable()
 export class UserProfileController {
     constructor(
         @inject(TOKENS.GetUserProfileUseCase)
-        private readonly _getUserProfileUseCase: GetUserProfileUseCase,
+        private readonly _getUserProfileUseCase: IGetUserProfileUseCase,
 
         @inject(TOKENS.UpdateUserProfileUseCase)
-        private readonly _updateUserProfileUseCase: UpdateUserProfileUseCase,
+        private readonly _updateUserProfileUseCase: IUpdateUserProfileUseCase,
 
         @inject(TOKENS.UpdateProfilePhotoUseCase)
-        private readonly _updateProfilePhotoUseCase: UpdateProfilePhotoUseCase,
+        private readonly _updateProfilePhotoUseCase: IUpdateProfilePhotoUseCase,
 
         @inject(TOKENS.ChangeUserPasswordUseCase)
-        private readonly _changeUserPasswordUseCase: ChangeUserPasswordUseCase
+        private readonly _changeUserPasswordUseCase: IChangeUserPasswordUseCase
     ){}
 
     getProfile = async(
@@ -37,14 +38,17 @@ export class UserProfileController {
     ): Promise<void> =>{
         try {
             if(!req.user?.id){
-                throw new AppError(MESSAGES.USER.NOT_AUTHENTICATED, HTTP_STATUS.UNAUTHORIZED)
+                throw new UnauthorizedError(MESSAGES.USER.NOT_AUTHENTICATED)
             }
 
             const result = await this._getUserProfileUseCase.execute(req.user.id)
 
-            res
-                .status(HTTP_STATUS.OK)
-                .json(ApiResponse.success(result, MESSAGES.USER.PROFILE_FETCHED))
+            ResponseHandler.success(
+                res,
+                HTTP_STATUS.OK,
+                MESSAGES.USER.PROFILE_FETCHED,
+                result
+            )
 
         } catch (error) {
             next(error)
@@ -58,7 +62,7 @@ export class UserProfileController {
     ): Promise<void> =>{
         try {
             if(!req.user?.id){
-                throw new AppError(MESSAGES.USER.NOT_AUTHENTICATED, HTTP_STATUS.UNAUTHORIZED);
+                throw new UnauthorizedError(MESSAGES.USER.NOT_AUTHENTICATED);
             }
 
             const payload = updateUserProfileSchema.parse(req.body)
@@ -69,9 +73,12 @@ export class UserProfileController {
                 ...payload
             })
 
-            res
-                .status(HTTP_STATUS.OK)
-                .json(ApiResponse.success(result,MESSAGES.USER.PROFILE_UPDATED))
+            ResponseHandler.success(
+                res,
+                HTTP_STATUS.OK,
+                MESSAGES.USER.PROFILE_UPDATED,
+                result
+            )
         } catch (error) {
          next(error)   
         }
@@ -84,11 +91,11 @@ export class UserProfileController {
     ):Promise<void> =>{
         try {
             if (!req.user?.id) {
-                throw new AppError(MESSAGES.USER.NOT_AUTHENTICATED, HTTP_STATUS.UNAUTHORIZED);
+                throw new UnauthorizedError(MESSAGES.USER.NOT_AUTHENTICATED);
             }
 
             if(!req.file){
-                throw new AppError(MESSAGES.USER.PROFILE_PHOTO_REQUIRED,HTTP_STATUS.BAD_REQUEST)
+                throw new BadRequestError(MESSAGES.USER.PROFILE_PHOTO_REQUIRED)
             }
 
             const result = await this._updateProfilePhotoUseCase.execute({
@@ -100,9 +107,12 @@ export class UserProfileController {
                 },
             })
 
-            res
-                .status(HTTP_STATUS.OK)
-                .json(ApiResponse.success(result,MESSAGES.USER.PROFILE_PHOTO_UPDATED))
+            ResponseHandler.success(
+                res,
+                HTTP_STATUS.OK,
+                MESSAGES.USER.PROFILE_PHOTO_UPDATED,
+                result
+            )
         } catch (error) {
             next(error)
         }
@@ -115,7 +125,7 @@ export class UserProfileController {
     ): Promise<void> =>{
         try {
              if (!req.user?.id) {
-                throw new AppError(MESSAGES.USER.NOT_AUTHENTICATED, HTTP_STATUS.UNAUTHORIZED);
+                throw new UnauthorizedError(MESSAGES.USER.NOT_AUTHENTICATED);
             }
 
             const payload = changePasswordSchema.parse(req.body)
@@ -126,9 +136,12 @@ export class UserProfileController {
                 newPassword: payload.newPassword,
             })
             
-            res
-                .status(HTTP_STATUS.OK)
-                .json(ApiResponse.success(result,MESSAGES.AUTH.PASSWORD_UPDATED))
+            ResponseHandler.success(
+                res,
+                HTTP_STATUS.OK,
+                MESSAGES.AUTH.PASSWORD_UPDATED,
+                result
+            )
         } catch (error) {
             next(error)
         }

@@ -1,18 +1,20 @@
 import { inject, injectable } from "tsyringe";
 import { TOKENS } from "../../../shared/tokens";
 import { IUserRepository } from "../../../domain/repositories/IUserRepository";
-import { AppError } from "../../../shared/errors/AppError";
-import { HTTP_STATUS } from "../../../shared/constants/httpStatus";
 import { MESSAGES } from "../../../shared/constants/messages";
 import {
   UpdateProfileDto,
   UpdateProfileResponseDto,
   toUserProfileDto,
 } from "../dto/ProfileDto";
+import { IUpdateUserProfileUseCase } from "../../interface/user/IUpdateUserProfileUseCase";
+import { NotFoundError } from "../../../shared/errors/NotFoundError";
+import { ConflictError } from "../../../shared/errors/ConflictError";
+import { InternalServerError } from "../../../shared/errors/InternalServerError";
 
 
 @injectable()
-export class UpdateUserProfileUseCase {
+export class UpdateUserProfileUseCase implements IUpdateUserProfileUseCase {
     constructor(
         @inject(TOKENS.UserRepository)
         private readonly _userRepository: IUserRepository
@@ -22,7 +24,7 @@ export class UpdateUserProfileUseCase {
      const user = await this._userRepository.findById(input.userId)   
 
       if (!user) {
-      throw new AppError(MESSAGES.USER.NOT_FOUND, HTTP_STATUS.NOT_FOUND);
+      throw new NotFoundError(MESSAGES.USER.NOT_FOUND);
         }
 
         const normalizedEmail = input.email?.toLocaleLowerCase().trim()
@@ -32,7 +34,7 @@ export class UpdateUserProfileUseCase {
             const existingUser = await this._userRepository.findByEmail(normalizedEmail)
 
             if(existingUser && existingUser.id !== user.id){
-                throw new AppError(MESSAGES.AUTH.EMAIL_ALREADY_REGISTERED,HTTP_STATUS.CONFLICT)
+                throw new ConflictError(MESSAGES.AUTH.EMAIL_ALREADY_REGISTERED)
             }
         }
 
@@ -44,7 +46,7 @@ export class UpdateUserProfileUseCase {
         })
 
         if (!updatedUser) {
-        throw new AppError(MESSAGES.USER.PROFILE_UPDATE_FAILED, HTTP_STATUS.INTERNAL_SERVER_ERROR);
+        throw new InternalServerError(MESSAGES.USER.PROFILE_UPDATE_FAILED);
         }
 
         return {

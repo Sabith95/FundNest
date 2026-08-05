@@ -4,13 +4,14 @@ import { GoogleLoginDto, GoogleResponseDto } from '../dto/GoogleLoginDto'
 import { IUserRepository } from '../../../domain/repositories/IUserRepository'
 import { IJwtService } from '../../../infrastructure/auth/interfaces/IJwtService'
 import { IGoogleAuthService } from '../../../infrastructure/auth/interfaces/IGoogleAuthService'
-import { AppError } from '../../../shared/errors/AppError'
-import { HTTP_STATUS } from '../../../shared/constants/httpStatus'
+import { ForbiddenError } from '../../../shared/errors/ForbiddenError'
+import { ConflictError } from '../../../shared/errors/ConflictError'
 import { MESSAGES } from '../../../shared/constants/messages'
 import { ROLES } from '../../../shared/constants/roles'
+import { IGoogleUserLoginUseCase } from '../../interface/auth/IGoogleUserLoginUseCase'
 
 @injectable()
-export class GoogleUserLoginUseCase {
+export class GoogleUserLoginUseCase implements IGoogleUserLoginUseCase {
     constructor (
         @inject(TOKENS.UserRepository)
         private readonly _userRepository: IUserRepository,
@@ -29,7 +30,7 @@ export class GoogleUserLoginUseCase {
             const existingUserEmail = await this._userRepository.findByEmail(googleUser.email)
 
             if(existingUserEmail && existingUserEmail.authProvider !== "GOOGLE"){
-                throw new AppError(MESSAGES.AUTH.EMAIL_ALREADY_REGISTERED_WITH_PASSWORD, HTTP_STATUS.CONFLICT)
+                throw new ConflictError(MESSAGES.AUTH.EMAIL_ALREADY_REGISTERED_WITH_PASSWORD)
             }
 
             user = await this._userRepository.create({
@@ -47,7 +48,7 @@ export class GoogleUserLoginUseCase {
         }
 
         if(!user.isActive){
-            throw new AppError(MESSAGES.AUTH.ACCOUNT_INACTIVE, HTTP_STATUS.FORBIDDEN)
+            throw new ForbiddenError(MESSAGES.AUTH.ACCOUNT_INACTIVE)
         }
 
         const tokens = this._jwtService.generateTokenPair({

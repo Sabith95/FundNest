@@ -9,13 +9,15 @@ import {
   RequestPasswordResetOtpDto,
   RequestPasswordResetOtpResponseDto,
 } from '../dto/PasswordResetDto';
-import { AppError } from '../../../shared/errors/AppError';
-import { HTTP_STATUS } from '../../../shared/constants/httpStatus'
 import { MESSAGES } from '../../../shared/constants/messages'
 import { OtpPurpose } from '../../../shared/constants/enums/OtpPurpose';
+import { IRequestPasswordResetOtpUseCase } from '../../interface/auth/IRequestPasswordResetOtpUseCase';
+import { NotFoundError } from '../../../shared/errors/NotFoundError';
+import { ForbiddenError } from '../../../shared/errors/ForbiddenError';
+import { BadRequestError } from '../../../shared/errors/BadRequestError';
 
 @injectable()
-export class RequestPasswordResetOtpUseCase {
+export class RequestPasswordResetOtpUseCase implements IRequestPasswordResetOtpUseCase {
   constructor(
     @inject(TOKENS.UserRepository)
     private readonly _userRepository: IUserRepository,
@@ -34,15 +36,15 @@ export class RequestPasswordResetOtpUseCase {
     const user = await this._userRepository.findByEmail(normalizedEmail);
 
     if(!user){
-      throw new AppError(MESSAGES.USER.NOT_FOUND,HTTP_STATUS.NOT_FOUND)
+      throw new NotFoundError(MESSAGES.USER.NOT_FOUND)
     }
 
     if(user.authProvider !== "LOCAL"){
-      throw new AppError(MESSAGES.AUTH.GOOGLE_LOGIN,HTTP_STATUS.BAD_REQUEST)
+      throw new BadRequestError(MESSAGES.AUTH.GOOGLE_LOGIN)
     }
 
     if(!user.isActive){
-      throw new AppError(MESSAGES.AUTH.ACCOUNT_INACTIVE,HTTP_STATUS.FORBIDDEN)
+      throw new ForbiddenError(MESSAGES.AUTH.ACCOUNT_INACTIVE)
     }
 
     

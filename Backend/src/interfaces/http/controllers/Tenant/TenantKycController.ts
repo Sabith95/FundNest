@@ -1,19 +1,20 @@
 import { Request, Response, NextFunction } from "express";
 import { inject, injectable } from "tsyringe";
 
-import { UploadKycDocumentsUseCase } from "../../../../application/tenant/use-cases/UploadKycDocumentsUseCase";
-import { ApiResponse } from "../../../../shared/ApiResponse";
-import { AppError } from "../../../../shared/errors/AppError";
+import { IUploadKycDocumentsUseCase } from "../../../../application/interface/tenant/IUploadKycDocumentsUseCase";
 import { HTTP_STATUS } from "../../../../shared/constants/httpStatus";
 import { MESSAGES } from "../../../../shared/constants/messages";
 import { TOKENS } from "../../../../shared/tokens";
+import { ResponseHandler } from "../../../../shared/ResponseHandler";
+import { UnauthorizedError } from "../../../../shared/errors/UnauthorizedError";
+import { BadRequestError } from "../../../../shared/errors/BadRequestError";
 
 
 @injectable()
 export class TenantKycController {
     constructor(
         @inject(TOKENS.UploadKycDocumentsUseCase)
-        private readonly _uploadKycDocumentsUseCase: UploadKycDocumentsUseCase
+        private readonly _uploadKycDocumentsUseCase: IUploadKycDocumentsUseCase
     ) {}
 
     uploadKycDocuments = async (
@@ -24,9 +25,8 @@ export class TenantKycController {
         try {
             const tenantId = req.tenantId || (req.user as any)?.id;
             if (!tenantId) {
-                throw new AppError(
-                    MESSAGES.TENANT.NOT_AUTHENTICATED,
-                    HTTP_STATUS.UNAUTHORIZED
+                throw new UnauthorizedError(
+                    MESSAGES.TENANT.NOT_AUTHENTICATED
                 );
             }
 
@@ -42,9 +42,8 @@ export class TenantKycController {
                 files?.ownerIdProof?.[0];
 
             if (!businessCertificate || !ownerIdProof) {
-                throw new AppError(
-                    MESSAGES.TENANT.KYC_DOCUMENTS_REQUIRED,
-                    HTTP_STATUS.BAD_REQUEST
+                throw new BadRequestError(
+                    MESSAGES.TENANT.KYC_DOCUMENTS_REQUIRED
                 );
             }
 
@@ -64,14 +63,12 @@ export class TenantKycController {
                 }
             );
 
-            res
-                .status(HTTP_STATUS.OK)
-                .json(
-                    ApiResponse.success(
-                        result,
-                        MESSAGES.TENANT.KYC_UPLOADED_SUCCESSFULLY
-                    )
-                );
+            ResponseHandler.success(
+                res,
+                HTTP_STATUS.OK,
+                MESSAGES.TENANT.KYC_UPLOADED_SUCCESSFULLY,
+                result
+            )
         } catch (error) {
             next(error);
         }

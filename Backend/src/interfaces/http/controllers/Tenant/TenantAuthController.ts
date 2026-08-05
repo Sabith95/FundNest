@@ -1,24 +1,24 @@
 import { Request, Response, NextFunction } from "express";
 import { inject, injectable } from 'tsyringe'
 import { TOKENS } from "../../../../shared/tokens";
-import { ApiResponse } from "../../../../shared/ApiResponse";
+import { ResponseHandler } from "../../../../shared/ResponseHandler";
 import { HTTP_STATUS } from "../../../../shared/constants/httpStatus";
 import { MESSAGES } from "../../../../shared/constants/messages";
 import { registerTenantSchema, resendTenantOtpSchema, verifyTenantOtpSchema } from "../../validators/tenant/tenantAuthValidators";
-import { RegisterTenantUseCase } from "../../../../application/auth/use-cases/RegisterTenantUseCase";
-import { VerifyTenantOtpUseCase } from "../../../../application/auth/use-cases/VerifyTenantOtpUseCase";
-import { ResendTenantOtpUseCase } from "../../../../application/auth/use-cases/ResendTenantOtpUseCase";
+import { IRegisterTenantUseCase } from "../../../../application/interface/tenant/IRegisterTenantUseCase";
+import { IVerifyTenantOtpUseCase } from "../../../../application/interface/tenant/IVerifyTenantOtpUseCase";
+import { IResendTenantOtpUseCase } from "../../../../application/interface/tenant/IResendTenantOtpUseCase";
 import { REFRESH_TOKEN_COOKIE_NAMES, refreshTokenCookieOptions } from "../../../../shared/cookies";
 
 @injectable()
 export class TenantAuthController {
     constructor(
         @inject(TOKENS.RegisterTenantUseCase)
-        private readonly _registerTenantUseCase: RegisterTenantUseCase,
+        private readonly _registerTenantUseCase: IRegisterTenantUseCase,
         @inject(TOKENS.VerifyTenantOtpUseCase)
-        private readonly _verifyTenantOtpUseCase: VerifyTenantOtpUseCase,
+        private readonly _verifyTenantOtpUseCase: IVerifyTenantOtpUseCase,
         @inject(TOKENS.ResendTenantOtpUseCase)
-        private readonly _resendTenantOtpUseCase: ResendTenantOtpUseCase
+        private readonly _resendTenantOtpUseCase: IResendTenantOtpUseCase
     ) { }
 
     registerTenant = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
@@ -26,9 +26,17 @@ export class TenantAuthController {
             const payload = registerTenantSchema.parse(req.body)
             const result = await this._registerTenantUseCase.execute(payload)
 
-            res
-                .status(HTTP_STATUS.CREATED)
-                .json(ApiResponse.success(result, MESSAGES.TENANT.CREATED, HTTP_STATUS.CREATED))
+            // res
+            //     .status(HTTP_STATUS.CREATED)
+            //     .json(ApiResponse.success(result, MESSAGES.TENANT.CREATED, HTTP_STATUS.CREATED))
+
+            ResponseHandler.success(
+                res,
+                HTTP_STATUS.OK,
+                MESSAGES.TENANT.CREATED,
+                result
+            )
+
         } catch (error) {
             next(error)
         }
@@ -45,13 +53,24 @@ export class TenantAuthController {
                 refreshTokenCookieOptions
             )
 
-            res
-                .status(HTTP_STATUS.OK)
-                .json(ApiResponse.success({
+            // res
+            //     .status(HTTP_STATUS.OK)
+            //     .json(ApiResponse.success({
+            //         email: result.email,
+            //         isEmailVerified: result.isEmailVerified,
+            //         accessToken: result.accessToken,
+            //     }, MESSAGES.AUTH.OTP_VERIFIED))
+
+            ResponseHandler.success(
+                res,
+                HTTP_STATUS.OK,
+                MESSAGES.AUTH.OTP_VERIFIED,
+                {
                     email: result.email,
                     isEmailVerified: result.isEmailVerified,
-                    accessToken: result.accessToken,
-                }, MESSAGES.AUTH.OTP_VERIFIED))
+                    accessToken: result.accessToken
+                }
+            )
         } catch (error) {
             next(error)
         }
@@ -62,9 +81,12 @@ export class TenantAuthController {
             const payload = resendTenantOtpSchema.parse(req.body)
             const result = await this._resendTenantOtpUseCase.execute(payload)
 
-            res
-                .status(HTTP_STATUS.OK)
-                .json(ApiResponse.success(result, MESSAGES.AUTH.OTP_VERIFIED))
+            ResponseHandler.success(
+                res,
+                HTTP_STATUS.OK,
+                MESSAGES.AUTH.OTP_VERIFIED,
+                result
+            )
         } catch (error) {
             next(error)
         }

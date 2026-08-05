@@ -1,13 +1,14 @@
 import {inject, injectable} from 'tsyringe'
 import { TOKENS } from '../../../shared/tokens'
 import { IUserRepository } from '../../../domain/repositories/IUserRepository'
-import { AppError } from '../../../shared/errors/AppError'
-import { HTTP_STATUS } from "../../../shared/constants/httpStatus";
 import { MESSAGES } from "../../../shared/constants/messages";
 import { toUserProfileDto, UserProfileDto } from '../dto/ProfileDto'
+import { IGetUserProfileUseCase } from '../../interface/user/IGetUserProfileUseCase';
+import { NotFoundError } from '../../../shared/errors/NotFoundError';
+import { ForbiddenError } from '../../../shared/errors/ForbiddenError';
 
 @injectable()
-export class GetUserProfileUseCase {
+export class GetUserProfileUseCase implements IGetUserProfileUseCase {
     constructor(
         @inject(TOKENS.UserRepository)
         private readonly _userRepository: IUserRepository
@@ -17,11 +18,11 @@ export class GetUserProfileUseCase {
         const user = await this._userRepository.findById(userId)
 
         if(!user){
-            throw new AppError(MESSAGES.USER.NOT_FOUND,HTTP_STATUS.NOT_FOUND)
+            throw new NotFoundError(MESSAGES.USER.NOT_FOUND)
         }
 
         if(!user.isActive){
-            throw new AppError(MESSAGES.AUTH.ACCOUNT_INACTIVE, HTTP_STATUS.FORBIDDEN);
+            throw new ForbiddenError(MESSAGES.AUTH.ACCOUNT_INACTIVE);
         }
 
         return toUserProfileDto(user)

@@ -4,6 +4,7 @@ import { UserModel } from "../database/models/UserModel";
 import { CreateUserData, IUserRepository, UpdateUserProfileData } from "../../domain/repositories/IUserRepository";
 import { Role } from "../../shared/constants/roles";
 import { MongoBaseRepository } from "./MongoBaseRepository";
+import { UserRecord,UserPersistenceMapper } from "../database/mapper/UserPersistenceMapper";
 
 @injectable()
 export class UserRepository extends MongoBaseRepository<User> implements IUserRepository {
@@ -102,34 +103,38 @@ export class UserRepository extends MongoBaseRepository<User> implements IUserRe
       return doc ? this.toEntity(doc) : null
   }
 
-  protected toEntity(user: any): User {
-    return {
-      id: user._id.toString(),
-      name: user.name,
-      email: user.email,
-      phone: user.phone,
-      password: user.password,
-      authProvider: user.authProvider,
-      googleId: user.googleId,
-      isEmailVerified: user.isEmailVerified,
-      profile: {
-        avatarUrl: user.profile?.avatarUrl,
-        avatarPublicId: user.profile?.avatarPublicId,
-        address: {
-          line1: user.profile?.address?.line1,
-          line2: user.profile?.address?.line2,
-          city: user.profile?.address?.city,
-          state: user.profile?.address?.state,
-          pincode: user.profile?.address?.pincode,
-          country: user.profile?.address?.country,
-        },
-        kycStatus: user.profile?.kycStatus || "PENDING",
-      },
-      role: user.role,
-      isActive: user.isActive,
-      tenantId: user.tenantId?.toString(),
-      createdAt: user.createdAt,
-      updatedAt: user.updatedAt,
-    };
+  // protected toEntity(user: any): User {
+  //   return {
+  //     id: user._id.toString(),
+  //     name: user.name,
+  //     email: user.email,
+  //     phone: user.phone,
+  //     password: user.password,
+  //     authProvider: user.authProvider,
+  //     googleId: user.googleId,
+  //     isEmailVerified: user.isEmailVerified,
+  //     profile: {
+  //       avatarUrl: user.profile?.avatarUrl,
+  //       avatarPublicId: user.profile?.avatarPublicId,
+  //       address: {
+  //         line1: user.profile?.address?.line1,
+  //         line2: user.profile?.address?.line2,
+  //         city: user.profile?.address?.city,
+  //         state: user.profile?.address?.state,
+  //         pincode: user.profile?.address?.pincode,
+  //         country: user.profile?.address?.country,
+  //       },
+  //       kycStatus: user.profile?.kycStatus || "PENDING",
+  //     },
+  //     role: user.role,
+  //     isActive: user.isActive,
+  //     tenantId: user.tenantId?.toString(),
+  //     createdAt: user.createdAt,
+  //     updatedAt: user.updatedAt,
+  //   };
+  // }
+
+  protected toEntity(user: UserRecord): User {
+    return UserPersistenceMapper.toEntity(user)
   }
 }

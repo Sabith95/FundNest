@@ -1,21 +1,21 @@
 import { Request, Response, NextFunction } from "express";
 import {inject, injectable} from 'tsyringe'
 import { TOKENS } from "../../../../shared/tokens";
-import { LoginSuperAdminUseCase } from "../../../../application/auth/use-cases/LoginSuperAdminUseCase";
-import { ApiResponse } from "../../../../shared/ApiResponse";
+import { ILoginSuperAdminUseCase } from "../../../../application/interface/auth/ILoginSuperAdminUseCase";
+import { ResponseHandler } from "../../../../shared/ResponseHandler";
 import { HTTP_STATUS } from "../../../../shared/constants/httpStatus";
 import { MESSAGES } from "../../../../shared/constants/messages";
 import { loginSchema, registerUserSchema, googleLoginSchema, verifyOtpSchema } from "../../validators/authValidator";
-import { RegisterUserUseCase } from "../../../../application/auth/use-cases/RegisterUserUseCase";
-import { GoogleUserLoginUseCase } from "../../../../application/auth/use-cases/GoogleUserLoginUseCase";
-import { VerifyUserOtpUseCase } from "../../../../application/auth/use-cases/VerifyUserOtpUseCase";
-import { ResendUserOtpUseCase } from "../../../../application/auth/use-cases/ResendUserOtpUseCase";
+import { IRegisterUserUseCase } from "../../../../application/interface/auth/IRegisterUseCase";
+import { IGoogleUserLoginUseCase } from "../../../../application/interface/auth/IGoogleUserLoginUseCase";
+import { IVerifyUserOtpUseCase } from "../../../../application/interface/auth/IVerifyUserOtpUseCase";
+import { IResendUserOtpUseCase } from "../../../../application/interface/auth/IResendUserOtpUseCase";
 import { resendOtpSchema, forgotPasswordSchema,resetPasswordSchema } from "../../validators/authValidator";
-import { RequestPasswordResetOtpUseCase } from "../../../../application/auth/use-cases/RequestPasswordResetOtpUseCase";
-import { VerifyPasswordResetOtpUseCase } from "../../../../application/auth/use-cases/VerifyPasswordResetOtpUseCase";
-import { ResetUserPasswordUseCase } from "../../../../application/auth/use-cases/ResetUserPasswordUseCase";
-import { LoginUserUseCase } from "../../../../application/auth/use-cases/LoginUserUseCase";
-import { RefreshTokenUseCase } from "../../../../application/auth/use-cases/RefreshTokenUseCase";
+import { IRequestPasswordResetOtpUseCase } from "../../../../application/interface/auth/IRequestPasswordResetOtpUseCase";
+import { IVerifyPasswordResetOtpUseCase } from "../../../../application/interface/auth/IVerifyPasswordResetOtpUseCase";
+import { IResetUserPasswordUseCase } from "../../../../application/interface/auth/IResetUserPasswordUseCase";
+import { ILoginUserUseCase } from "../../../../application/interface/auth/ILoginUserUseCase";
+import { IRefreshTokenUseCase } from "../../../../application/interface/auth/IRefreshTokenUseCase";
 import { LEGACY_REFRESH_TOKEN_COOKIE_NAME, REFRESH_TOKEN_COOKIE_NAMES, refreshTokenCookieOptions } from "../../../../shared/cookies";
 
 @injectable()
@@ -23,25 +23,25 @@ export class AuthController {
   constructor(
 
     @inject(TOKENS.LoginSuperAdminUseCase)
-    private readonly _loginSuperAdminUseCase: LoginSuperAdminUseCase,
+    private readonly _loginSuperAdminUseCase: ILoginSuperAdminUseCase,
     @inject(TOKENS.RegisterUserUseCase)
-    private readonly _registerUserUserCase: RegisterUserUseCase,
+    private readonly _registerUserUserCase: IRegisterUserUseCase,
     @inject(TOKENS.GoogleUserLoginUseCase)
-    private readonly _googleUserLoginUseCase: GoogleUserLoginUseCase,
+    private readonly _googleUserLoginUseCase: IGoogleUserLoginUseCase,
     @inject(TOKENS.VerifyUserOtpUseCase)
-    private readonly _verifyUserOtpUseCase: VerifyUserOtpUseCase,
+    private readonly _verifyUserOtpUseCase: IVerifyUserOtpUseCase,
     @inject(TOKENS.ResendUserOtpUseCase)
-    private readonly _resendUserOtpUseCase: ResendUserOtpUseCase,
+    private readonly _resendUserOtpUseCase: IResendUserOtpUseCase,
     @inject(TOKENS.RequestPasswordResetOtpUseCase)
-    private readonly _requestPasswordResetOtpUseCase: RequestPasswordResetOtpUseCase,
+    private readonly _requestPasswordResetOtpUseCase: IRequestPasswordResetOtpUseCase,
     @inject(TOKENS.VerifyPasswordResetOtpUseCase)
-    private readonly _verifyPasswordResetOtpUseCase: VerifyPasswordResetOtpUseCase,
+    private readonly _verifyPasswordResetOtpUseCase: IVerifyPasswordResetOtpUseCase,
     @inject(TOKENS.ResetUserPasswordUseCase)
-    private readonly _resetUserPasswordUseCase: ResetUserPasswordUseCase,
+    private readonly _resetUserPasswordUseCase: IResetUserPasswordUseCase,
     @inject(TOKENS.LoginUserUseCase)
-    private readonly _loginUserUseCase: LoginUserUseCase,
+    private readonly _loginUserUseCase: ILoginUserUseCase,
     @inject(TOKENS.RefreshTokenUseCase)
-    private readonly _refreshTokenUseCase: RefreshTokenUseCase,
+    private readonly _refreshTokenUseCase: IRefreshTokenUseCase,
   ){}
 
   loginSuperAdmin = async(
@@ -54,9 +54,6 @@ export class AuthController {
       const payload = loginSchema.parse(req.body)
       const result = await this._loginSuperAdminUseCase.execute(payload)
 
-      // res.status(HTTP_STATUS.OK)
-      // .json(ApiResponse.success(result, 'Super admin logged in successfully'))
-
       res.cookie(
         REFRESH_TOKEN_COOKIE_NAMES.SUPER_ADMIN,
         result.tokens.refreshToken,
@@ -64,15 +61,15 @@ export class AuthController {
       )
       res.clearCookie(LEGACY_REFRESH_TOKEN_COOKIE_NAME, refreshTokenCookieOptions)
 
-      res
-        .status(HTTP_STATUS.OK)
-        .json(ApiResponse.success(
-          {
-            user: result.user,
-            accessToken: result.tokens.accessToken,
-          },
-          MESSAGES.SUPER_ADMIN.LOGGED_IN
-        ))
+      ResponseHandler.success(
+        res,
+        HTTP_STATUS.OK,
+        MESSAGES.SUPER_ADMIN.LOGGED_IN,
+        {
+          user: result.user,
+          accessToken: result.tokens.accessToken
+        }
+      )
     } catch (error) {
       next(error)
     }
@@ -83,9 +80,12 @@ export class AuthController {
       const payload = registerUserSchema.parse(req.body)
       const result = await this._registerUserUserCase.execute(payload)
 
-      res
-        .status(HTTP_STATUS.CREATED)
-        .json(ApiResponse.success(result, MESSAGES.USER.CREATED, HTTP_STATUS.CREATED))
+      ResponseHandler.success(
+        res,
+        HTTP_STATUS.CREATED,
+        MESSAGES.USER.CREATED,
+        result
+      )
     } catch (error) {
       next(error)
     }
@@ -103,15 +103,15 @@ export class AuthController {
       )
       res.clearCookie(LEGACY_REFRESH_TOKEN_COOKIE_NAME, refreshTokenCookieOptions)
 
-      res
-        .status(HTTP_STATUS.OK)
-        .json(ApiResponse.success(
-          {
-            user: result.user,
-            accessToken: result.tokens.accessToken,
-          },
-          MESSAGES.AUTH.GOOGLE_LOGIN_SUCCESSFULL
-        ))
+      ResponseHandler.success(
+        res,
+        HTTP_STATUS.OK,
+        MESSAGES.AUTH.GOOGLE_LOGIN_SUCCESSFULL,
+        {
+          user: result.user,
+          accessToken: result.tokens.accessToken
+        }
+      )
     } catch (error) {
         next(error)      
     }
@@ -122,9 +122,12 @@ export class AuthController {
       const payload = verifyOtpSchema.parse(req.body)
       const result = await this._verifyUserOtpUseCase.execute(payload)
 
-      res
-        .status(HTTP_STATUS.OK)
-        .json(ApiResponse.success(result, MESSAGES.AUTH.OTP_VERIFIED))
+      ResponseHandler.success(
+        res,
+        HTTP_STATUS.OK,
+        MESSAGES.AUTH.OTP_VERIFIED,
+        result
+      )
     } catch (error) {
       next(error)
     }
@@ -135,9 +138,12 @@ export class AuthController {
       const payload = resendOtpSchema.parse(req.body)
       const result = await this._resendUserOtpUseCase.execute(payload)
 
-      res
-        .status(HTTP_STATUS.OK)
-        .json(ApiResponse.success(result,MESSAGES.AUTH.OTP_RESENT))
+      ResponseHandler.success(
+        res,
+        HTTP_STATUS.OK,
+        MESSAGES.AUTH.OTP_RESENT,
+        result
+      )
     } catch (error) {
       next(error)
     }
@@ -148,9 +154,12 @@ export class AuthController {
     const payload = forgotPasswordSchema.parse(req.body);
     const result = await this._requestPasswordResetOtpUseCase.execute(payload);
 
-    res.status(HTTP_STATUS.OK).json(
-      ApiResponse.success(result, MESSAGES.AUTH.PASSWORD_RESET_OTP_SENT)
-    );
+    ResponseHandler.success(
+      res,
+      HTTP_STATUS.OK,
+      MESSAGES.AUTH.PASSWORD_RESET_OTP_SENT,
+      result
+    )
   } catch (error) {
     next(error);
   }
@@ -165,9 +174,12 @@ export class AuthController {
       const payload = verifyOtpSchema.parse(req.body);
       const result = await this._verifyPasswordResetOtpUseCase.execute(payload);
 
-      res.status(HTTP_STATUS.OK).json(
-        ApiResponse.success(result, MESSAGES.AUTH.PASSWORD_RESET_OTP_VERIFIED)
-      );
+      ResponseHandler.success(
+        res,
+        HTTP_STATUS.OK,
+        MESSAGES.AUTH.PASSWORD_RESET_OTP_VERIFIED,
+        result
+      )
     } catch (error) {
       next(error);
     }
@@ -178,9 +190,12 @@ resetUserPassword = async (req: Request, res: Response, next: NextFunction): Pro
     const payload = resetPasswordSchema.parse(req.body);
     const result = await this._resetUserPasswordUseCase.execute(payload);
 
-    res.status(HTTP_STATUS.OK).json(
-      ApiResponse.success(result, MESSAGES.AUTH.PASSWORD_UPDATED)
-    );
+    ResponseHandler.success(
+      res,
+      HTTP_STATUS.OK,
+      MESSAGES.AUTH.PASSWORD_UPDATED,
+      result
+    )
   } catch (error) {
     next(error);
   }
@@ -191,10 +206,6 @@ loginUser = async(req: Request, res: Response, next: NextFunction): Promise<void
     const payload = loginSchema.parse(req.body)
     const result = await this._loginUserUseCase.execute(payload)
 
-    // res
-    //   .status(HTTP_STATUS.OK)
-    //   .json(ApiResponse.success(result,'User logged in successfully'))
-
     res.cookie(
       REFRESH_TOKEN_COOKIE_NAMES.USER,
       result.tokens.refreshToken,
@@ -202,16 +213,15 @@ loginUser = async(req: Request, res: Response, next: NextFunction): Promise<void
     )
     res.clearCookie(LEGACY_REFRESH_TOKEN_COOKIE_NAME, refreshTokenCookieOptions)
 
-    res
-      .status(HTTP_STATUS.OK )
-      .json(
-        ApiResponse.success({
-          user: result.user,
-          accessToken: result.tokens.accessToken,
-        },
-        MESSAGES.USER.LOGGED_IN
-      )
-      )
+    ResponseHandler.success(
+      res,
+      HTTP_STATUS.OK,
+      MESSAGES.USER.LOGGED_IN,
+      {
+        user: result.user,
+        accessToken: result.tokens.accessToken
+      }
+    )
   } catch (error) {
     next(error)
   }
@@ -230,9 +240,12 @@ private handleRefreshToken = async(
 
     const result = await this._refreshTokenUseCase.execute(refreshToken)
 
-    res
-      .status(HTTP_STATUS.OK)
-      .json(ApiResponse.success(result, MESSAGES.AUTH.REFRESH_TOKEN_CREATED))
+    ResponseHandler.success(
+      res,
+      HTTP_STATUS.OK,
+      MESSAGES.AUTH.REFRESH_TOKEN_CREATED,
+      result
+    )
   } catch (error) {
     next(error)
   }
@@ -255,9 +268,13 @@ private handleLogout = async(res: Response, next: NextFunction, cookieName: stri
     res.clearCookie(cookieName, refreshTokenCookieOptions)
     res.clearCookie(LEGACY_REFRESH_TOKEN_COOKIE_NAME, refreshTokenCookieOptions)
 
-    res
-      .status(HTTP_STATUS.OK)
-      .json(ApiResponse.success(null, MESSAGES.COMMON.LOGGED_OUT))
+
+    ResponseHandler.success(
+      res,
+      HTTP_STATUS.OK,
+      MESSAGES.COMMON.LOGGED_OUT,
+      null
+    )
   } catch (error) {
     next(error)
   }

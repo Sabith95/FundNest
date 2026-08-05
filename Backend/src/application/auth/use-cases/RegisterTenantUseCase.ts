@@ -7,19 +7,18 @@ import { IBcryptService } from "../../../infrastructure/auth/interfaces/IBcryptS
 import { IEmailService } from "../../../infrastructure/notification/interfaces/IEmailService";
 import { IOtpService } from "../../../infrastructure/cache/interfaces/IOtpService";
 
-import { AppError } from "../../../shared/errors/AppError";
-
 import { RegisterTenantDto, RegisterTenantResponseDto } from "../dto/RegisterTenantDto";
 import { generateOtp } from "../../../shared/utils/generateOtp";
-import { HTTP_STATUS } from "../../../shared/constants/httpStatus";
 import { MESSAGES } from "../../../shared/constants/messages";
 import { OtpPurpose } from "../../../shared/constants/enums/OtpPurpose";
 
 import { ROLES } from "../../../shared/constants/roles";
+import { IRegisterTenantUseCase } from "../../interface/tenant/IRegisterTenantUseCase";
+import { ConflictError } from "../../../shared/errors/ConflictError";
 
 
 @injectable()
-export class RegisterTenantUseCase {
+export class RegisterTenantUseCase implements IRegisterTenantUseCase {
     constructor(
         @inject(TOKENS.TenantRepository)
         private readonly _tenantRepository: ITenantRepository,
@@ -35,9 +34,8 @@ export class RegisterTenantUseCase {
         
         const existingTenant = await this._tenantRepository.findByEmail(input.email)
         if(existingTenant){
-            throw new AppError(
-                MESSAGES.AUTH.EMAIL_ALREADY_REGISTERED,
-                HTTP_STATUS.CONFLICT
+            throw new ConflictError(
+                MESSAGES.AUTH.EMAIL_ALREADY_REGISTERED
             )
         }
 

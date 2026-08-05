@@ -3,14 +3,15 @@ import { ITenantRepository } from "../../../domain/repositories/ITenantRepositor
 import { UpdateBankDetailsDto } from "../dto/UpdateBankDetailsDto";
 import { Tenant } from "../../../domain/entities/Tenant";
 import { TOKENS } from "../../../shared/tokens";
-import { AppError } from "../../../shared/errors/AppError";
 import { MESSAGES } from "../../../shared/constants/messages";
-import { HTTP_STATUS } from "../../../shared/constants/httpStatus";
 import { OnboardingStep } from "../../../shared/constants/enums/OnboardingStep";
 import { VerificationStatus } from "../../../shared/constants/enums/VerificationStatus";
+import { IUpdateBankDetailsUseCase } from "../../interface/tenant/IUpdateBankDetailsUseCase";
+import { NotFoundError } from "../../../shared/errors/NotFoundError";
+import { ForbiddenError } from "../../../shared/errors/ForbiddenError";
 
 @injectable()
-export class UpdateBankDetailsUseCase {
+export class UpdateBankDetailsUseCase implements IUpdateBankDetailsUseCase {
     constructor(
         @inject(TOKENS.TenantRepository)
         private readonly _tenantRepository: ITenantRepository
@@ -24,25 +25,22 @@ export class UpdateBankDetailsUseCase {
         const tenant = await this._tenantRepository.findById(tenantId);
 
         if (!tenant) {
-            throw new AppError(
-                MESSAGES.TENANT.NOT_FOUND,
-                HTTP_STATUS.NOT_FOUND
+            throw new NotFoundError(
+                MESSAGES.TENANT.NOT_FOUND
             );
         }
 
         if (!tenant.isEmailVerified) {
-            throw new AppError(
-                MESSAGES.TENANT.REGISTER_WITH_EMAIL,
-                HTTP_STATUS.FORBIDDEN
+            throw new ForbiddenError(
+                MESSAGES.TENANT.REGISTER_WITH_EMAIL
             );
         }
 
         if (
             tenant.onboardingStep !== OnboardingStep.KYC_COMPLETED
         ) {
-            throw new AppError(
-                "Complete KYC before adding bank details.",
-                HTTP_STATUS.FORBIDDEN
+            throw new ForbiddenError(
+                MESSAGES.TENANT.COMPLETE_KYC
             );
         }
 
@@ -61,9 +59,8 @@ export class UpdateBankDetailsUseCase {
             );
 
         if (!updatedTenant) {
-            throw new AppError(
-                MESSAGES.TENANT.NOT_FOUND,
-                HTTP_STATUS.NOT_FOUND
+            throw new NotFoundError(
+                MESSAGES.TENANT.NOT_FOUND
             );
         }
 

@@ -62,6 +62,8 @@ export const MESSAGES = {
     KYC_UPLOADED_SUCCESSFULLY: "KYC documents uploaded successfully.",
     NOT_AUTHENTICATED: "Tenant is not authenticated.",
     BANKING_DETAILS_UPDATED: "Banking details updated successfully",
+    COMPLETE_KYC: "Complete KYC before adding bank details.",
+    COMPLETE_BUSINESS_INFO: "Complete business information before uploading KYC documents.",
     
   },
 

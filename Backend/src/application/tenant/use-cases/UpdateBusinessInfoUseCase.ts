@@ -3,13 +3,14 @@ import { ITenantRepository } from "../../../domain/repositories/ITenantRepositor
 import { UpdateBusinessInfoDto } from "../dto/UpdateBusinessInfoDto";
 import { Tenant } from "../../../domain/entities/Tenant";
 import { TOKENS } from "../../../shared/tokens";
-import { AppError } from "../../../shared/errors/AppError";
 import { MESSAGES } from "../../../shared/constants/messages";
-import { HTTP_STATUS } from "../../../shared/constants/httpStatus";
 import { OnboardingStep } from "../../../shared/constants/enums/OnboardingStep";
+import { IUpdateBusinessInfoUseCase } from "../../interface/tenant/IUpdateBusinessInfoUseCase";
+import { NotFoundError } from "../../../shared/errors/NotFoundError";
+import { ForbiddenError } from "../../../shared/errors/ForbiddenError";
 
 @injectable()
-export class UpdateBusinessInfoUseCase {
+export class UpdateBusinessInfoUseCase implements IUpdateBusinessInfoUseCase {
     constructor(
         @inject(TOKENS.TenantRepository)
         private readonly _tenantRepository: ITenantRepository
@@ -20,11 +21,11 @@ export class UpdateBusinessInfoUseCase {
         const tenant = await this._tenantRepository.findById(tenantId)
 
         if (!tenant) {
-            throw new AppError(MESSAGES.TENANT.NOT_FOUND, HTTP_STATUS.NOT_FOUND)
+            throw new NotFoundError(MESSAGES.TENANT.NOT_FOUND)
         }
 
         if(!tenant.isEmailVerified){
-            throw new AppError(MESSAGES.TENANT.REGISTER_WITH_EMAIL,HTTP_STATUS.FORBIDDEN)
+            throw new ForbiddenError(MESSAGES.TENANT.REGISTER_WITH_EMAIL)
         }
 
         const updatedTenant = await this._tenantRepository.updateBusinessInfo(
@@ -38,7 +39,7 @@ export class UpdateBusinessInfoUseCase {
         )
 
         if (!updatedTenant) {
-            throw new AppError(MESSAGES.TENANT.NOT_FOUND, HTTP_STATUS.NOT_FOUND)
+            throw new NotFoundError(MESSAGES.TENANT.NOT_FOUND)
         }
 
         return updatedTenant

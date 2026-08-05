@@ -4,13 +4,14 @@ import { LoginDto, LoginResponseDto } from "../dto/LoginDto";
 import { IJwtService } from "../../../infrastructure/auth/interfaces/IJwtService";
 import { IBcryptService } from "../../../infrastructure/auth/interfaces/IBcryptService";
 import { IUserRepository } from "../../../domain/repositories/IUserRepository";
-import { AppError } from "../../../shared/errors/AppError";
-import { HTTP_STATUS } from '../../../shared/constants/httpStatus'
 import { MESSAGES } from '../../../shared/constants/messages'
 import { ROLES } from "../../../shared/constants/roles";
+import { ILoginSuperAdminUseCase } from "../../interface/auth/ILoginSuperAdminUseCase";
+import { UnauthorizedError } from "../../../shared/errors/UnauthorizedError";
+
 
 @injectable()
-export class LoginSuperAdminUseCase {
+export class LoginSuperAdminUseCase implements ILoginSuperAdminUseCase {
   constructor(
     @inject(TOKENS.UserRepository)
     private readonly _userRepository: IUserRepository,
@@ -27,11 +28,11 @@ export class LoginSuperAdminUseCase {
     )
 
     if(!user){
-      throw new AppError(MESSAGES.AUTH.INVALID_CREDENTIALS, HTTP_STATUS.UNAUTHORIZED)
+      throw new UnauthorizedError(MESSAGES.AUTH.INVALID_CREDENTIALS)
     }
 
     if(!user.password){
-      throw new AppError(MESSAGES.AUTH.INVALID_CREDENTIALS,HTTP_STATUS.UNAUTHORIZED)
+      throw new UnauthorizedError(MESSAGES.AUTH.INVALID_CREDENTIALS)
     }
 
     const isPasswordValid = await this._bcryptService.comparePassword(
@@ -40,7 +41,7 @@ export class LoginSuperAdminUseCase {
     )
 
     if(!isPasswordValid){
-      throw new AppError(MESSAGES.AUTH.INVALID_CREDENTIALS, HTTP_STATUS.UNAUTHORIZED)
+      throw new UnauthorizedError(MESSAGES.AUTH.INVALID_CREDENTIALS)
     }
 
     const tokens = this._jwtService.generateTokenPair({
