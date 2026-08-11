@@ -1,6 +1,12 @@
 import React, { useState, useCallback } from "react";
-
-
+import { useNavigate } from "react-router-dom";
+import { useAppDispatch } from "../../../store/hooks";
+import { loginSuccess } from "../../../store/slices/authSlice";
+import { tenantAuthService } from "../../../services/tenantAuthService";
+// import { getTenantDestination } from "../../../services/tenantSession";
+import { setTenant } from "../../../store/slices/tenantSlice";
+import type { ITenantProfile } from "../../../types/tenant.types";
+import { getTenantDestination } from "../../../utitls/tenantRouting";
 
 interface LoginFormValues {
   email: string;
@@ -165,6 +171,8 @@ const PageFooter: React.FC = () => (
 // ---------------------------------------------------------------------------
 
 const LoginPage: React.FC = () => {
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const [values, setValues] = useState<LoginFormValues>({
     email: "",
     password: "",
@@ -218,11 +226,53 @@ const LoginPage: React.FC = () => {
     setSubmitting(true);
     setSubmitError(undefined);
     try {
-      // Replace with your real authentication call, e.g.:
-      // await authClient.login({ email: values.email, password: values.password });
-      await new Promise((resolve) => setTimeout(resolve, 900));
+      const result = await tenantAuthService.loginTenant({
+        email: values.email.trim(),
+        password: values.password,
+      });
+
+      const tenantProfile: ITenantProfile = {
+        id: result.tenant.id,
+        companyName: result.tenant.companyName,
+        ownerName: result.tenant.ownerName,
+        email: result.tenant.email,
+        status: result.tenant.status,
+        onboardingStep: result.tenant.onboardingStep,
+      };
+
+      // setTenantSession(result.tenant);
+      // dispatch(loginSuccess({
+      //   user: {
+      //     id: result.tenant.id,
+      //     name: result.tenant.ownerName,
+      //     email: result.tenant.email,
+      //     role: "TENANT_ADMIN",
+      //     tenantId: result.tenant.id,
+      //     isActive: true,
+      //     createdAt: "",
+      //   },
+      //   accessToken: result.accessToken,
+      // }));
+
+        dispatch(setTenant(tenantProfile));
+        dispatch(
+          loginSuccess({
+            user: {
+              id: result.tenant.id,
+              name: result.tenant.ownerName,
+              email: result.tenant.email,
+              role: "TENANT_ADMIN",
+              tenantId: result.tenant.id,
+              isActive: true,
+              createdAt: "",
+            },
+            accessToken: result.accessToken,
+          })
+        );
+
+      navigate(getTenantDestination(result.tenant.onboardingStep), { replace: true });
     } catch (err) {
-      setSubmitError("We couldn't sign you in. Check your details and try again.");
+      setSubmitError(err instanceof Error ? err.message : "We couldn't sign you in. Check your details and try again.");
     } finally {
       setSubmitting(false);
     }

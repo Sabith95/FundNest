@@ -8,9 +8,11 @@ import { IBcryptService } from "../../../infrastructure/auth/interfaces/IBcryptS
 import { ITenantRepository } from "../../../domain/repositories/ITenantRepository";
 import { UnauthorizedError } from "../../../shared/errors/UnauthorizedError";
 import { ForbiddenError } from "../../../shared/errors/ForbiddenError";
+import { TenantResponseMapper } from "../../mapper/TenantResponseMapper";
+import { ILoginTenantUseCase } from "../../interface/auth/ILoginTenantUseCase";
 
 @injectable()
-export class LoginTenantUseCase {
+export class LoginTenantUseCase implements ILoginTenantUseCase {
     constructor(
         @inject(TOKENS.TenantRepository)
         private readonly _tenantRepository: ITenantRepository,
@@ -57,16 +59,10 @@ export class LoginTenantUseCase {
         role: ROLES.TENANT_ADMIN,
         });
 
+
         return {
-        tenant: {
-            id: tenant.id,
-            companyName: tenant.companyName,
-            ownerName: tenant.ownerName,
-            email: tenant.email,
-            status: tenant.status,
-            onboardingStep: tenant.onboardingStep,
-        },
-        tokens,
-        };
+            tenant: TenantResponseMapper.toLoginTenant(tenant),
+            tokens
+        }
     }
 }

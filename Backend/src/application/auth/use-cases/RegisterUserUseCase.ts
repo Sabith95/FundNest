@@ -11,6 +11,7 @@ import { MESSAGES } from '../../../shared/constants/messages'
 import { OtpPurpose } from "../../../shared/constants/enums/OtpPurpose";
 import { IRegisterUserUseCase } from "../../interface/auth/IRegisterUseCase";
 import { ConflictError } from "../../../shared/errors/ConflictError";
+import { UserResponseMapper } from "../../mapper/UserResponseMapper";
 
 
 @injectable()
@@ -63,18 +64,23 @@ export class RegisterUserUseCase implements IRegisterUserUseCase {
 
         await this._emailService.sendOtp(user.email, otp)
 
-        return {
-            user: {
-            id: user.id,
-            name: user.name,
-            email: user.email,
-            phone: user.phone,
-            role: user.role,
-            isActive: user.isActive,
-            isEmailVerified: user.isEmailVerified,
-            profile: user.profile,
-      },
-      verificationRequired: true,
-        }
+    //     return {
+    //         user: {
+    //         id: user.id,
+    //         name: user.name,
+    //         email: user.email,
+    //         phone: user.phone,
+    //         role: user.role,
+    //         isActive: user.isActive,
+    //         isEmailVerified: user.isEmailVerified,
+    //         profile: user.profile,
+    //   },
+    //   verificationRequired: true,
+    //     }
+
+    return {
+        user: UserResponseMapper.toDto(user),
+        verificationRequired: true
+    }
     }
 }

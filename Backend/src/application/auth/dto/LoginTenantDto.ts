@@ -1,3 +1,4 @@
+
 export interface LoginTenantDto {
   email: string;
   password: string;

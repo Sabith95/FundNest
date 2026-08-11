@@ -5,13 +5,12 @@ import { MESSAGES } from "../../../shared/constants/messages";
 import {
   UpdateProfileDto,
   UpdateProfileResponseDto,
-  toUserProfileDto,
 } from "../dto/ProfileDto";
 import { IUpdateUserProfileUseCase } from "../../interface/user/IUpdateUserProfileUseCase";
 import { NotFoundError } from "../../../shared/errors/NotFoundError";
 import { ConflictError } from "../../../shared/errors/ConflictError";
 import { InternalServerError } from "../../../shared/errors/InternalServerError";
-
+import { UserResponseMapper } from "../../mapper/UserResponseMapper";
 
 @injectable()
 export class UpdateUserProfileUseCase implements IUpdateUserProfileUseCase {
@@ -50,7 +49,7 @@ export class UpdateUserProfileUseCase implements IUpdateUserProfileUseCase {
         }
 
         return {
-            user: toUserProfileDto(updatedUser),
+            user: UserResponseMapper.toUserProfileDto(updatedUser),
             emailChanged
         }
     }

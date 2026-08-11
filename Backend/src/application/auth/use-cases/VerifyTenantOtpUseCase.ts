@@ -29,7 +29,7 @@ export class VerifyTenantOtpUseCase implements IVerifyTenantOtpUseCase {
             purpose: OtpPurpose.TENANT_REGISTRATION
         })
 
-        const tenant = await this._tenantRepository.markEmailAsVerified(verifiedOtp.userId)
+        await this._tenantRepository.markEmailAsVerified(verifiedOtp.userId)
 
         const tokens = this._jwtService.generateTokenPair({
             id: verifiedOtp.userId,

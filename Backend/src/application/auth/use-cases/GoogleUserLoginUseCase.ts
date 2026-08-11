@@ -9,6 +9,7 @@ import { ConflictError } from '../../../shared/errors/ConflictError'
 import { MESSAGES } from '../../../shared/constants/messages'
 import { ROLES } from '../../../shared/constants/roles'
 import { IGoogleUserLoginUseCase } from '../../interface/auth/IGoogleUserLoginUseCase'
+import { UserResponseMapper } from '../../mapper/UserResponseMapper'
 
 @injectable()
 export class GoogleUserLoginUseCase implements IGoogleUserLoginUseCase {
@@ -57,13 +58,18 @@ export class GoogleUserLoginUseCase implements IGoogleUserLoginUseCase {
             role: user.role,
         })
 
+        // return {
+        //     user:{
+        //         id: user.id,
+        //         name: user.name,
+        //         email: user.email,
+        //         role: user.role
+        //     },
+        //     tokens
+        // }
+
         return {
-            user:{
-                id: user.id,
-                name: user.name,
-                email: user.email,
-                role: user.role
-            },
+            user: UserResponseMapper.toAuthUserDto(user),
             tokens
         }
 

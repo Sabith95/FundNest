@@ -9,6 +9,8 @@ import { VerificationStatus } from "../../../shared/constants/enums/Verification
 import { IUpdateBankDetailsUseCase } from "../../interface/tenant/IUpdateBankDetailsUseCase";
 import { NotFoundError } from "../../../shared/errors/NotFoundError";
 import { ForbiddenError } from "../../../shared/errors/ForbiddenError";
+import { TenantResponseMapper } from "../../mapper/TenantResponseMapper";
+import { UpdateBankDetailsResponseDto } from "../dto/UpdateBankDetailsResponseDto";
 
 @injectable()
 export class UpdateBankDetailsUseCase implements IUpdateBankDetailsUseCase {
@@ -20,7 +22,7 @@ export class UpdateBankDetailsUseCase implements IUpdateBankDetailsUseCase {
     async execute(
         tenantId: string,
         input: UpdateBankDetailsDto
-    ): Promise<Tenant> {
+    ): Promise<UpdateBankDetailsResponseDto> {
 
         const tenant = await this._tenantRepository.findById(tenantId);
 
@@ -64,6 +66,8 @@ export class UpdateBankDetailsUseCase implements IUpdateBankDetailsUseCase {
             );
         }
 
-        return updatedTenant;
+        return {
+           tenant: TenantResponseMapper.toUpdateBankDetailsResponse(updatedTenant)
+        }
     }
 }

@@ -361,7 +361,7 @@ const TenantRegisterPage: React.FC = () => {
     setLoading(true);
 
     try {
-      await tenantAuthService.registerTenant({
+      const response = await tenantAuthService.registerTenant({
         companyName: values.companyName,
         ownerName: values.ownerName,
         phone: values.phone,
@@ -374,6 +374,7 @@ const TenantRegisterPage: React.FC = () => {
         state: {
           email: values.email,
           phone: values.phone,
+          tenant: response.tenant
         },
       });
     } catch (error) {

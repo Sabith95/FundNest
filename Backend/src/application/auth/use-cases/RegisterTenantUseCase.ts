@@ -15,6 +15,7 @@ import { OtpPurpose } from "../../../shared/constants/enums/OtpPurpose";
 import { ROLES } from "../../../shared/constants/roles";
 import { IRegisterTenantUseCase } from "../../interface/tenant/IRegisterTenantUseCase";
 import { ConflictError } from "../../../shared/errors/ConflictError";
+import { TenantResponseMapper } from "../../mapper/TenantResponseMapper";
 
 
 @injectable()
@@ -64,19 +65,23 @@ export class RegisterTenantUseCase implements IRegisterTenantUseCase {
 
         await this._emailService.sendOtp(tenant.email,otp)
 
-        return {
-            tenant: {
-            id: tenant.id,
-            companyName: tenant.companyName,
-            ownerName: tenant.ownerName,
-            email: tenant.email,
-            phone: tenant.phone,
-            isActive: tenant.isActive,
-            isEmailVerified: tenant.isEmailVerified,
-            status: tenant.status,
-            onboardingStep: tenant.onboardingStep,
-            },
+        // return {
+        //     tenant: {
+        //     id: tenant.id,
+        //     companyName: tenant.companyName,
+        //     ownerName: tenant.ownerName,
+        //     email: tenant.email,
+        //     phone: tenant.phone,
+        //     isActive: tenant.isActive,
+        //     isEmailVerified: tenant.isEmailVerified,
+        //     status: tenant.status,
+        //     onboardingStep: tenant.onboardingStep,
+        //     },
 
+        // }
+
+        return {
+            tenant: TenantResponseMapper.toDto(tenant)
         }
     }
 }

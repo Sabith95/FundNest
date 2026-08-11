@@ -29,6 +29,8 @@ import BusinessSetup from '../pages/Tenant/Business/BusinessSetup';
 import KycUpload from '../pages/Tenant/Kyc/KycUpload';
 import BankingDetails from '../pages/Tenant/Banking/BankingDetails';
 import LoginPage from '../pages/Tenant/login/LoginPage';
+import TenantDashboardPage from '../pages/Tenant/Dashboard/TenantDashboardPage';
+import TenantGuard from './TenantGuard';
 
 
 const AppRouter = () => {
@@ -56,7 +58,7 @@ const AppRouter = () => {
             path={ROUTES.TENANT.VERIFY_OTP}
             element={<OtpVerificationPage />} />
 
-          <Route 
+          {/* <Route 
           path = {ROUTES.TENANT.BUSINESS_INFO}
           element = {<BusinessSetup />}
           />
@@ -70,7 +72,7 @@ const AppRouter = () => {
           <Route
           path={ROUTES.TENANT.BANKING}
           element = {<BankingDetails />}
-          />
+          /> */}
 
           <Route 
           path={ROUTES.TENANT.LOGIN}
@@ -155,7 +157,46 @@ const AppRouter = () => {
           />
 
         </Route>
+        
 
+    {/* tenant protected route */}
+        <Route
+        
+        element = {
+          <ProtectedRoute
+          allowedRoles={[ROLES.TENANT]}
+          redirectTo={ROUTES.TENANT.LOGIN}
+          />
+        }
+        >
+
+          {/* <Route
+          path={ROUTES.TENANT.DASHBOARD}
+          element= {<TenantDashboardPage />}
+          /> */}
+
+            <Route element={<TenantGuard requireOnboardingComplete={false} />}>
+
+            <Route
+              path={ROUTES.TENANT.BUSINESS_INFO}
+              element={<BusinessSetup />}
+            />
+            <Route
+              path={ROUTES.TENANT.KYC_UPLOAD}
+              element={<KycUpload />}
+            />
+            <Route
+              path={ROUTES.TENANT.BANKING}
+              element={<BankingDetails />}
+            />
+          </Route>
+
+          <Route element={<TenantGuard requireOnboardingComplete={true} />}>
+            <Route path={ROUTES.TENANT.DASHBOARD} element={<TenantDashboardPage />} />
+          </Route>
+
+
+        </Route>
 
       </Routes>
     </BrowserRouter>

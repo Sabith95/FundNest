@@ -68,7 +68,8 @@ export const removeAccessToken = (roleOrScope?: Role | AuthScope): void => {
 }
 
 const getRefreshTokenEndpoint = (scope: AuthScope): string => {
-    return `/auth/${scope}/refresh-token`
+    const endpointScope = scope === AUTH_SCOPE.TENANT ? "tenants" : scope
+    return `/auth/${endpointScope}/refresh-token`
 }
 
 const getLoginRedirectPath = (): string => {

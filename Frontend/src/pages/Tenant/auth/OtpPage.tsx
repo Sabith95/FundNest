@@ -2,9 +2,14 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { tenantAuthService } from '../../../services/tenantAuthService';
 import axios from 'axios';
-import { ROUTES } from '../../../shared/constants';
-import { setAccessToken } from '../../../services/api';
-
+import { ONBOARDING_STEP, ROUTES } from '../../../shared/constants';
+// import { setAccessToken } from '../../../services/api';
+import { useAppDispatch } from '../../../store/hooks';
+import { loginSuccess } from '../../../store/slices/authSlice';
+import { setTenant } from '../../../store/slices/tenantSlice';
+import { decodeAccessToken } from '../../../utitls/jwt';
+import type { OnboardingStep } from '../../../shared/constants';
+import type { ITenant } from '../../../types/tenant.types';
 // ─── Config ───────────────────────────────────────────────
 const OTP_LENGTH = 6;
 const RESEND_SECONDS = 60;
@@ -149,8 +154,11 @@ const OtpBox: React.FC<IOtpBoxProps> = ({ value, index, error, inputRef, onChang
 // ─── Main Page ────────────────────────────────────────────
 const OtpVerificationPage: React.FC = () => {
   const navigate = useNavigate();
-  const location = useLocation() as { state?: { email?: string; phone?: string } };
+  const dispatch = useAppDispatch()
+  const location = useLocation() as { state?: { email?: string; phone?: string; tenant?: ITenant} };
+
   const email = location.state?.email;
+  const registrationTenant = location.state?.tenant;
 
   const [digits, setDigits] = useState<string[]>(Array(OTP_LENGTH).fill(''));
   const [error, setError] = useState<string | undefined>(undefined);
@@ -248,7 +256,33 @@ const OtpVerificationPage: React.FC = () => {
     setError(undefined);
     try {
       const result = await tenantAuthService.verifyTenantOtp({ email, otp: code });
-      setAccessToken(result.accessToken, 'tenant');
+      const payload = decodeAccessToken(result.accessToken)
+      // setAccessToken(result.accessToken, 'tenant');
+        dispatch(
+    loginSuccess({
+      user: {
+        id: payload.id,
+        name: registrationTenant?.ownerName ?? payload.email,
+        email: result.email,
+        role: "TENANT_ADMIN",
+        tenantId: payload.id,
+        isActive: true,
+        createdAt: "",
+        isEmailVerified: true,
+      },
+      accessToken: result.accessToken,
+    })
+  );
+    dispatch(
+      setTenant({
+        id: payload.id,
+        companyName: registrationTenant?.companyName ?? "",
+        ownerName: registrationTenant?.ownerName ?? "",
+        email: result.email,
+        status: registrationTenant?.status ?? "PENDING",
+        onboardingStep:ONBOARDING_STEP.OTP_VERIFIED,
+      })
+    );
       navigate(ROUTES.TENANT.BUSINESS_INFO);
     } catch (err) {
       if (axios.isAxiosError(err)) {

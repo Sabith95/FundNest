@@ -3,7 +3,10 @@ import { ArrowLeft, ArrowRight, Landmark } from "lucide-react";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { tenantBankService } from "../../../services/tenantBankService";
-import { ROUTES } from "../../../shared/constants";
+import { ROUTES, TENANT_STATUS } from "../../../shared/constants";
+// import { updateTenantSessionStep } from "../../../services/tenantSession";
+import { useAppDispatch } from "../../../store/hooks";
+import { updateOnboardingStep, updateTenantStatus } from "../../../store/slices/tenantSlice";
 
 /**
  * BankingDetails
@@ -62,6 +65,7 @@ const validateField = (
 
 const BankingDetails: React.FC = () => {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch()
   const [formData, setFormData] = useState<BankingFormData>({
     accountHolderName: "",
     accountNumber: "",
@@ -109,7 +113,10 @@ const BankingDetails: React.FC = () => {
 
     setIsSubmitting(true);
     try {
-      await tenantBankService.updateBankDetails(formData);
+      const result = await tenantBankService.updateBankDetails(formData);
+     dispatch(updateOnboardingStep(result.tenant.onboardingStep))
+     dispatch(updateTenantStatus(TENANT_STATUS.PENDING))
+      // updateTenantSessionStep(result.tenant.onboardingStep as import("../../../services/tenantSession").TenantOnboardingStep);
       toast.success("Bank details saved successfully.");
       navigate(ROUTES.TENANT.LOGIN);
     } catch (err) {

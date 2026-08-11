@@ -8,6 +8,7 @@ import { MESSAGES } from '../../../shared/constants/messages'
 import { ROLES } from "../../../shared/constants/roles";
 import { ILoginUserUseCase } from "../../interface/auth/ILoginUserUseCase";
 import { UnauthorizedError } from "../../../shared/errors/UnauthorizedError";
+import { UserResponseMapper } from "../../mapper/UserResponseMapper";
 
 @injectable()
 export class LoginUserUseCase implements ILoginUserUseCase {
@@ -53,14 +54,19 @@ export class LoginUserUseCase implements ILoginUserUseCase {
       role: user.role,
     });
 
+    // return {
+    //   user: {
+    //     id: user.id,
+    //     name: user.name,
+    //     email: user.email,
+    //     role: user.role,
+    //   },
+    //   tokens,
+    // };
+
     return {
-      user: {
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        role: user.role,
-      },
-      tokens,
-    };
+      user: UserResponseMapper.toAuthUserDto(user),
+      tokens
+    }
   }
 }

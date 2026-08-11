@@ -4,7 +4,9 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { tenantKycService } from "../../../services/tenantKycService";
 import { ROUTES } from "../../../shared/constants";
-
+// import { updateTenantSessionStep } from "../../../services/tenantSession";
+import { useAppDispatch } from "../../../store/hooks";
+import { updateOnboardingStep } from "../../../store/slices/tenantSlice";
 /**
  * KycUpload
  *
@@ -144,6 +146,7 @@ const UploadDropzone: React.FC<{
 
 const KycUpload: React.FC = () => {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch()
   const [documents, setDocuments] =
     useState<DocumentItem[]>(INITIAL_DOCUMENTS);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -194,10 +197,12 @@ const KycUpload: React.FC = () => {
 
     setIsSubmitting(true);
     try {
-      await tenantKycService.uploadKyc({
+      const result = await tenantKycService.uploadKyc({
         businessRegistrationCertificate,
         ownerIdProof,
       });
+      dispatch(updateOnboardingStep(result.onboardingStep))
+      // updateTenantSessionStep(result.onboardingStep as import("../../../services/tenantSession").TenantOnboardingStep);
       toast.success("KYC documents uploaded successfully.");
       navigate(ROUTES.TENANT.BANKING);
     } catch (err) {

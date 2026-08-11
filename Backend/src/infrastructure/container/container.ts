@@ -36,6 +36,7 @@ import { RequestPasswordResetOtpUseCase } from "../../application/auth/use-cases
 import { VerifyPasswordResetOtpUseCase } from "../../application/auth/use-cases/VerifyPasswordResetOtpUseCase";
 import { ResetUserPasswordUseCase } from "../../application/auth/use-cases/ResetUserPasswordUseCase";
 import { LoginUserUseCase } from "../../application/auth/use-cases/LoginUserUseCase";
+import { LoginTenantUseCase } from "../../application/auth/use-cases/LoginTenantUseCase";
 import { GetUserProfileUseCase } from "../../application/user/use-cases/GetUserProfileUseCase";
 import { UpdateUserProfileUseCase } from "../../application/user/use-cases/UpdateUserProfileUseCase";
 import { UpdateProfilePhotoUseCase } from "../../application/user/use-cases/UpdateProfilePhotoUseCase";
@@ -53,6 +54,7 @@ import { IRequestPasswordResetOtpUseCase } from "../../application/interface/aut
 import { IVerifyPasswordResetOtpUseCase } from "../../application/interface/auth/IVerifyPasswordResetOtpUseCase";
 import { IResetUserPasswordUseCase } from "../../application/interface/auth/IResetUserPasswordUseCase";
 import { ILoginUserUseCase } from "../../application/interface/auth/ILoginUserUseCase";
+import { ILoginTenantUseCase } from "../../application/interface/auth/ILoginTenantUseCase";
 import { IRefreshTokenUseCase } from "../../application/interface/auth/IRefreshTokenUseCase";
 import { IRegisterTenantUseCase } from "../../application/interface/tenant/IRegisterTenantUseCase";
 import { IVerifyTenantOtpUseCase } from "../../application/interface/tenant/IVerifyTenantOtpUseCase";
@@ -127,6 +129,9 @@ container.register<ILoginUserUseCase>(TOKENS.LoginUserUseCase, {
   useClass: LoginUserUseCase,
 });
 
+container.register<ILoginTenantUseCase>(TOKENS.LoginTenantUseCase, {
+  useClass: LoginTenantUseCase,
+});
 container.register<IGetUserProfileUseCase>(TOKENS.GetUserProfileUseCase, {
   useClass: GetUserProfileUseCase,
 });

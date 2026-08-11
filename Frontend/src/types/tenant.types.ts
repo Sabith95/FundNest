@@ -1,4 +1,18 @@
 import type { TenantStatus, OnboardingStep } from "../shared/constants";
+import type { ComponentType, SVGProps } from "react";
+
+
+export interface ITenantProfile {
+  id: string;
+  companyName: string;
+  ownerName: string;
+  email: string;
+  status: TenantStatus;
+  onboardingStep: OnboardingStep;
+}
+export interface ITenantState {
+  tenant: ITenantProfile | null;
+}
 
 export interface ITenant {
   id: string;
@@ -53,7 +67,7 @@ export interface ITenantLoginRequest {
 }
 
 export interface ITenantLoginResponse {
-  tenant: ITenant;
+  tenant: Pick<ITenant, "id" | "companyName" | "ownerName" | "email" | "status" | "onboardingStep">;
   accessToken: string;
 }
 
@@ -64,5 +78,21 @@ export interface IUpdateBusinessInfoRequest {
 }
 
 export interface IUpdateBusinessInfoResponse {
-  tenant: ITenant;
+  tenant: { id: string; onboardingStep: OnboardingStep };
+}
+
+export type TenantVerificationStatus = "pending" | "active" | "rejected";
+ 
+export interface TenantUser {
+  name: string;
+  role: string;
+  avatarUrl?: string;
+  verificationStatus: TenantVerificationStatus;
+  submittedAt?: string; // ISO date string - when KYC/docs were submitted
+}
+ 
+export interface NavItem {
+  label: string;
+  href: string;
+  icon: ComponentType<SVGProps<SVGSVGElement>>;
 }

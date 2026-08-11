@@ -8,6 +8,7 @@ import { MESSAGES } from '../../../shared/constants/messages'
 import { ROLES } from "../../../shared/constants/roles";
 import { ILoginSuperAdminUseCase } from "../../interface/auth/ILoginSuperAdminUseCase";
 import { UnauthorizedError } from "../../../shared/errors/UnauthorizedError";
+import { UserResponseMapper } from "../../mapper/UserResponseMapper";
 
 
 @injectable()
@@ -50,13 +51,18 @@ export class LoginSuperAdminUseCase implements ILoginSuperAdminUseCase {
       role: user.role,
     })
 
+    // return {
+    //   user: {
+    //     id: user.id,
+    //     name: user.name,
+    //     email: user.email,
+    //     role: user.role
+    //   },
+    //   tokens
+    // }
+
     return {
-      user: {
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        role: user.role
-      },
+      user: UserResponseMapper.toAuthUserDto(user),
       tokens
     }
   }

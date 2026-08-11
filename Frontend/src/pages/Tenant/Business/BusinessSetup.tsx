@@ -5,6 +5,9 @@ import { useNavigate } from "react-router-dom";
 import { tenantAuthService } from "../../../services/tenantAuthService";
 import { isAxiosError } from "axios";
 import { ROUTES } from "../../../shared/constants";
+// import { updateTenantSessionStep } from "../../../services/tenantSession";
+import { useAppDispatch } from "../../../store/hooks";
+import { updateOnboardingStep } from "../../../store/slices/tenantSlice";
 
 const ENTITY_TYPES = [
   "Sole Proprietorship",
@@ -26,6 +29,7 @@ const PROGRESS_PERCENT = Math.round((CURRENT_STEP / TOTAL_STEPS) * 100);
 
 const BusinessSetup: React.FC = () => {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch()
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState<Partial<BusinessSetupFormData>>({});
 
@@ -63,11 +67,13 @@ const BusinessSetup: React.FC = () => {
 
     setIsLoading(true);
     try {
-      await tenantAuthService.updateBusinessInfo({
+      const result = await tenantAuthService.updateBusinessInfo({
         businessType: formData.entityType,
         registeredBusinessAddress: formData.registeredAddress,
         registrationId: formData.registrationId
       });
+      // updateTenantSessionStep(result.tenant.onboardingStep);
+      dispatch(updateOnboardingStep(result.tenant.onboardingStep))
       toast.success("Business information updated successfully", { position: "top-center" });
       navigate(ROUTES.TENANT.KYC_UPLOAD);
     } catch (error: any) {

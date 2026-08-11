@@ -19,6 +19,7 @@ export const TOKENS = {
     VerifyPasswordResetOtpUseCase: Symbol.for('VerifyPasswordResetOtpUseCase'),
     ResetUserPasswordUseCase: Symbol.for('ResetUserPasswordUseCase'),
     LoginUserUseCase: Symbol.for("LoginUserUseCase"),
+    LoginTenantUseCase: Symbol.for("LoginTenantUseCase"),
     GetUserProfileUseCase: Symbol.for("GetUserProfileUseCase"),
     UpdateUserProfileUseCase: Symbol.for("UpdateUserProfileUseCase"),
     UpdateProfilePhotoUseCase: Symbol.for("UpdateProfilePhotoUseCase"),

@@ -8,6 +8,8 @@ import { OnboardingStep } from "../../../shared/constants/enums/OnboardingStep";
 import { IUpdateBusinessInfoUseCase } from "../../interface/tenant/IUpdateBusinessInfoUseCase";
 import { NotFoundError } from "../../../shared/errors/NotFoundError";
 import { ForbiddenError } from "../../../shared/errors/ForbiddenError";
+import { TenantResponseMapper } from "../../mapper/TenantResponseMapper";
+import { UpdateBusinessInfoResponseDto } from "../dto/UpdateBusinessInfoResponseDto";
 
 @injectable()
 export class UpdateBusinessInfoUseCase implements IUpdateBusinessInfoUseCase {
@@ -17,7 +19,7 @@ export class UpdateBusinessInfoUseCase implements IUpdateBusinessInfoUseCase {
 
     ) { }
 
-    async execute(tenantId: string, input: UpdateBusinessInfoDto): Promise<Tenant> {
+    async execute(tenantId: string, input: UpdateBusinessInfoDto): Promise<UpdateBusinessInfoResponseDto> {
         const tenant = await this._tenantRepository.findById(tenantId)
 
         if (!tenant) {
@@ -42,6 +44,6 @@ export class UpdateBusinessInfoUseCase implements IUpdateBusinessInfoUseCase {
             throw new NotFoundError(MESSAGES.TENANT.NOT_FOUND)
         }
 
-        return updatedTenant
+        return {tenant: TenantResponseMapper.toUpdateBusinessInfoResponse(updatedTenant)}
     }
 }
