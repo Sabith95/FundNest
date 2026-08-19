@@ -91,6 +91,12 @@ export const errorHandler = (
   res: Response,
   _next: NextFunction
 ): void => {
+
+  //   console.log("ERROR OBJECT:", err);
+  // console.log(
+  //   "ERROR STACK:",
+  //   err instanceof Error ? err.stack : err
+  // );
   logger.error(`${req.method} ${req.path} — ${err.message}`);
 
   // Find first strategy that can handle this error

@@ -54,15 +54,6 @@ export interface IUserRegisterRequest {
 }
 
 export interface IUserRegisterResponse {
-  user: {
-    id: string;
-    name: string;
-    email: string;
-    phone?: string;
-    role: Role;
-    isActive: boolean;
-    isEmailVerified: boolean;
-  };
   verificationRequired: boolean;
 }
 

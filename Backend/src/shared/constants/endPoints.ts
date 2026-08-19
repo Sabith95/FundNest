@@ -45,7 +45,8 @@ export const ENDPOINTS = {
     AUTH: {
       REGISTER: '/register',
       VERIFY_OTP: '/register/verify-otp',
-      RESEND_OTP: '/register/resend-otp',      
+      RESEND_OTP: '/register/resend-otp',
+      LOGIN: '/login',
     },
 
     BUSINESS: {

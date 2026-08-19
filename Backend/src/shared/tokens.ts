@@ -19,6 +19,7 @@ export const TOKENS = {
     VerifyPasswordResetOtpUseCase: Symbol.for('VerifyPasswordResetOtpUseCase'),
     ResetUserPasswordUseCase: Symbol.for('ResetUserPasswordUseCase'),
     LoginUserUseCase: Symbol.for("LoginUserUseCase"),
+    LoginTenantUseCase: Symbol.for("LoginTenantUseCase"),
     GetUserProfileUseCase: Symbol.for("GetUserProfileUseCase"),
     UpdateUserProfileUseCase: Symbol.for("UpdateUserProfileUseCase"),
     UpdateProfilePhotoUseCase: Symbol.for("UpdateProfilePhotoUseCase"),
@@ -29,7 +30,10 @@ export const TOKENS = {
     ResendTenantOtpUseCase: Symbol.for("ResendTenantOtpUseCase"),
     UpdateBusinessInfoUseCase: Symbol.for("UpdateBusinessInfoUseCase"),
     UploadKycDocumentsUseCase: Symbol.for("UploadKycDocumentsUseCase"),
-    UpdateBankDetailsUseCase: Symbol.for("UpdateBankDetailsUseCase"),    
+    UpdateBankDetailsUseCase: Symbol.for("UpdateBankDetailsUseCase"),
+    GetAllTenantsUseCase: Symbol.for("GetAllTenantsUseCase"),
+    GetTenantByIdUseCase: Symbol.for("GetTenantByIdUseCase"),
+    UpdateTenantStatusUseCase: Symbol.for("UpdateTenantStatusUseCase"),
     //repositories
 
     TenantRepository: Symbol.for("TenantRepository"),

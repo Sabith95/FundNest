@@ -64,20 +64,3 @@ export interface ChangePasswordResponseDto {
   passwordChanged: boolean;
 }
 
-export const toUserProfileDto = (user: User): UserProfileDto => ({
-  id: user.id,
-  name: user.name,
-  email: user.email,
-  phone: user.phone,
-  role: user.role,
-  authProvider: user.authProvider,
-  isActive: user.isActive,
-  isEmailVerified: user.isEmailVerified,
-  profile: {
-    avatarUrl: user.profile?.avatarUrl,
-    address: user.profile?.address,
-    kycStatus: user.profile?.kycStatus ?? "PENDING",
-  },
-  createdAt: user.createdAt,
-  updatedAt: user.updatedAt,
-});

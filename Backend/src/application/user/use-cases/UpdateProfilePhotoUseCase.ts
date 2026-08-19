@@ -6,11 +6,11 @@ import { MESSAGES } from "../../../shared/constants/messages";
 import {
   UpdateProfilePhotoDto,
   UserProfileDto,
-  toUserProfileDto,
 } from "../dto/ProfileDto";
 import { IUpdateProfilePhotoUseCase } from "../../interface/user/IUpdateProfilePhotoUseCase";
 import { NotFoundError } from "../../../shared/errors/NotFoundError";
 import { InternalServerError } from "../../../shared/errors/InternalServerError";
+import { UserResponseMapper } from "../../mapper/UserResponseMapper";
 
 @injectable()
 export class UpdateProfilePhotoUseCase implements IUpdateProfilePhotoUseCase {
@@ -53,6 +53,6 @@ export class UpdateProfilePhotoUseCase implements IUpdateProfilePhotoUseCase {
         .catch(() => undefined);
     }
 
-    return toUserProfileDto(updatedUser);
+    return UserResponseMapper.toUserProfileDto(updatedUser);
   }
 }

@@ -36,6 +36,7 @@ import { RequestPasswordResetOtpUseCase } from "../../application/auth/use-cases
 import { VerifyPasswordResetOtpUseCase } from "../../application/auth/use-cases/VerifyPasswordResetOtpUseCase";
 import { ResetUserPasswordUseCase } from "../../application/auth/use-cases/ResetUserPasswordUseCase";
 import { LoginUserUseCase } from "../../application/auth/use-cases/LoginUserUseCase";
+import { LoginTenantUseCase } from "../../application/auth/use-cases/LoginTenantUseCase";
 import { GetUserProfileUseCase } from "../../application/user/use-cases/GetUserProfileUseCase";
 import { UpdateUserProfileUseCase } from "../../application/user/use-cases/UpdateUserProfileUseCase";
 import { UpdateProfilePhotoUseCase } from "../../application/user/use-cases/UpdateProfilePhotoUseCase";
@@ -53,6 +54,7 @@ import { IRequestPasswordResetOtpUseCase } from "../../application/interface/aut
 import { IVerifyPasswordResetOtpUseCase } from "../../application/interface/auth/IVerifyPasswordResetOtpUseCase";
 import { IResetUserPasswordUseCase } from "../../application/interface/auth/IResetUserPasswordUseCase";
 import { ILoginUserUseCase } from "../../application/interface/auth/ILoginUserUseCase";
+import { ILoginTenantUseCase } from "../../application/interface/auth/ILoginTenantUseCase";
 import { IRefreshTokenUseCase } from "../../application/interface/auth/IRefreshTokenUseCase";
 import { IRegisterTenantUseCase } from "../../application/interface/tenant/IRegisterTenantUseCase";
 import { IVerifyTenantOtpUseCase } from "../../application/interface/tenant/IVerifyTenantOtpUseCase";
@@ -64,6 +66,12 @@ import { IChangeUserPasswordUseCase } from "../../application/interface/user/ICh
 import { IUpdateBankDetailsUseCase } from "../../application/interface/tenant/IUpdateBankDetailsUseCase";
 import { IUpdateBusinessInfoUseCase } from "../../application/interface/tenant/IUpdateBusinessInfoUseCase";
 import { IUploadKycDocumentsUseCase } from "../../application/interface/tenant/IUploadKycDocumentsUseCase";
+import { GetAllTenantUseCase } from "../../application/admin/use-cases/GetAllTenantUseCase";
+import { IGetAllTenantsUseCase } from "../../application/interface/admin/IGetAllTenantsUseCase";
+import { IGetTenantByIdUseCase } from "../../application/interface/admin/IGetTenantByIdUseCase";
+import { GetTenantByIdUseCase } from "../../application/admin/use-cases/GetTenantByIdUseCase";
+import { IUpdateTenantStatusUseCase } from "../../application/interface/admin/IUpdateTenantStatusUseCase";
+import { UpdateTenantStatusUseCase } from "../../application/admin/use-cases/UpdateTenantStatus";
 
 // Services
 container.register<IJwtService>(TOKENS.JwtService, {
@@ -127,6 +135,9 @@ container.register<ILoginUserUseCase>(TOKENS.LoginUserUseCase, {
   useClass: LoginUserUseCase,
 });
 
+container.register<ILoginTenantUseCase>(TOKENS.LoginTenantUseCase, {
+  useClass: LoginTenantUseCase,
+});
 container.register<IGetUserProfileUseCase>(TOKENS.GetUserProfileUseCase, {
   useClass: GetUserProfileUseCase,
 });
@@ -172,6 +183,18 @@ container.register<IUpdateBankDetailsUseCase>(TOKENS.UpdateBankDetailsUseCase, {
   useClass: UpdateBankDetailsUseCase
 })
 
+
+container.register<IGetAllTenantsUseCase>(TOKENS.GetAllTenantsUseCase, {
+  useClass: GetAllTenantUseCase,
+})
+
+container.register<IGetTenantByIdUseCase>(TOKENS.GetTenantByIdUseCase, {
+  useClass: GetTenantByIdUseCase
+})
+
+container.register<IUpdateTenantStatusUseCase>(TOKENS.UpdateTenantStatusUseCase, {
+  useClass: UpdateTenantStatusUseCase
+})
 
 // Respository
 container.register<IUserRepository>(TOKENS.UserRepository, {

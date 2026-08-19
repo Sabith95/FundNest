@@ -10,6 +10,8 @@ import { VerificationStatus } from "../../../shared/constants/enums/Verification
 import { IUploadKycDocumentsUseCase } from "../../interface/tenant/IUploadKycDocumentsUseCase";
 import { NotFoundError } from "../../../shared/errors/NotFoundError";
 import { ForbiddenError } from "../../../shared/errors/ForbiddenError";
+import { UploadKycDocumentsResponseDto } from "../dto/UploadKycDocumentsResponseDto";
+import { TenantResponseMapper } from "../../mapper/TenantResponseMapper";
 
 @injectable()
 export class UploadKycDocumentsUseCase implements IUploadKycDocumentsUseCase {
@@ -24,7 +26,7 @@ export class UploadKycDocumentsUseCase implements IUploadKycDocumentsUseCase {
     async execute(
         tenantId: string,
         input: UploadKycDocumentsDto
-    ): Promise<Tenant> {
+    ): Promise<UploadKycDocumentsResponseDto> {
 
         const tenant = await this._tenantRepository.findById(tenantId);
 
@@ -91,6 +93,6 @@ export class UploadKycDocumentsUseCase implements IUploadKycDocumentsUseCase {
             );
         }
 
-        return updatedTenant;
+        return {tenant: TenantResponseMapper.toUpdateKycDocumentResponseDto(updatedTenant)};
     }
 }

@@ -35,7 +35,8 @@ const getAuthScopeFromPath = (path: string = window.location.pathname): AuthScop
 }
 
 const getAuthScopeFromRequest = (url?: string): AuthScope => {
-    if (url?.includes('/auth/super-admin')) {
+    // /admin/tenants belongs to the super-admin scope despite its tenant path segment.
+    if (url?.includes('/auth/super-admin') || url?.startsWith('/admin/')) {
         return AUTH_SCOPE.SUPER_ADMIN;
     }
     if (url?.includes('/tenants') || url?.includes('/tenant/')) {
@@ -68,7 +69,8 @@ export const removeAccessToken = (roleOrScope?: Role | AuthScope): void => {
 }
 
 const getRefreshTokenEndpoint = (scope: AuthScope): string => {
-    return `/auth/${scope}/refresh-token`
+    const endpointScope = scope === AUTH_SCOPE.TENANT ? "tenants" : scope
+    return `/auth/${endpointScope}/refresh-token`
 }
 
 const getLoginRedirectPath = (): string => {

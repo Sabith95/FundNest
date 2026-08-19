@@ -260,20 +260,18 @@ const OtpPage: React.FC = () => {
   const [error, setError] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [resendTimer, setResendTimer] = useState<number>(OTP_TIMER_SECONDS);
-  const [canResend, setCanResend] = useState<boolean>(false);
   const [isResending, setIsResending] = useState<boolean>(false);
 
-
+  const canResend = resendTimer <= 0
 
   // ─── Countdown timer ──────────────────────────────────
   useEffect(() => {
-    if (resendTimer <= 0) {
-      setCanResend(true);
-      return;
-    }
+    if (resendTimer <= 0)  return;
+
     const timer = setInterval(() => {
       setResendTimer((prev) => prev - 1);
     }, 1000);
+
     return () => clearInterval(timer);
   }, [resendTimer]);
 
@@ -326,7 +324,6 @@ const OtpPage: React.FC = () => {
     await authService.resendUserOtp({ email });
 
     setOtp(['', '', '', '', '', '']);
-    setCanResend(false);
     setResendTimer(OTP_TIMER_SECONDS);
   } catch (err: any) {
     setError(

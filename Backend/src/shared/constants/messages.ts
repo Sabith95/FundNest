@@ -30,6 +30,7 @@ export const MESSAGES = {
     "New password must be different from your current password.",
     GOOGLE_LOGIN_SUCCESSFULL: "Google login successful",
     REFRESH_TOKEN_CREATED: "Access token refreshed successfully",
+    REGISTRATION_EXPIRED: "Registration expired. Please register again."
   },
 
   USER: {

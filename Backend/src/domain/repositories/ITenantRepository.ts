@@ -65,4 +65,6 @@ export interface ITenantRepository extends IBaseRepository<Tenant> {
         tenantId: string,
         hashedPassword: string
     ): Promise<void>;
+
+    updateActiveStatus(tenantId: string, isActive: boolean): Promise<Tenant | null>;
 }

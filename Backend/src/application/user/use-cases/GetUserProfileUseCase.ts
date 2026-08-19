@@ -2,10 +2,11 @@ import {inject, injectable} from 'tsyringe'
 import { TOKENS } from '../../../shared/tokens'
 import { IUserRepository } from '../../../domain/repositories/IUserRepository'
 import { MESSAGES } from "../../../shared/constants/messages";
-import { toUserProfileDto, UserProfileDto } from '../dto/ProfileDto'
+import {  UserProfileDto } from '../dto/ProfileDto'
 import { IGetUserProfileUseCase } from '../../interface/user/IGetUserProfileUseCase';
 import { NotFoundError } from '../../../shared/errors/NotFoundError';
 import { ForbiddenError } from '../../../shared/errors/ForbiddenError';
+import { UserResponseMapper } from '../../mapper/UserResponseMapper';
 
 @injectable()
 export class GetUserProfileUseCase implements IGetUserProfileUseCase {
@@ -25,6 +26,6 @@ export class GetUserProfileUseCase implements IGetUserProfileUseCase {
             throw new ForbiddenError(MESSAGES.AUTH.ACCOUNT_INACTIVE);
         }
 
-        return toUserProfileDto(user)
+        return UserResponseMapper.toUserProfileDto(user)
     }
 }

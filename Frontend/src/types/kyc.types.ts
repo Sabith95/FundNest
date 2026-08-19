@@ -1,3 +1,5 @@
+import type { OnboardingStep } from "../shared/constants";
+
 export interface IKycUploadRequest {
   businessRegistrationCertificate: File;
   ownerIdProof: File;
@@ -23,5 +25,5 @@ export interface IKycDocuments {
 export interface IKycUploadResponse {
   id: string;
   kycDocuments: IKycDocuments;
-  onboardingStep: string;
+  onboardingStep: OnboardingStep;
 }

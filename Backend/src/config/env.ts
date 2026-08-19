@@ -1,5 +1,6 @@
 import {z} from 'zod'
 import dotenv from 'dotenv'
+import { logger } from '../shared/logger'
 
 dotenv.config()
 
@@ -39,7 +40,7 @@ const envSchema = z.object({
 const parsed = envSchema.safeParse(process.env)
 
 if(!parsed.success){
-    console.log(`invalid environment variables:\n`)
+   console.error("invalid environment variables:")
     parsed.error.issues.forEach((issue) =>{
         console.error(`  ${issue.path.join('.')} : ${issue.message}`)
     })

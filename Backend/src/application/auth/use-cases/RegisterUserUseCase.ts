@@ -27,7 +27,8 @@ export class RegisterUserUseCase implements IRegisterUserUseCase {
     ){}
 
     async execute(input: RegisterUserDto): Promise<RegisterUserResponseDto> {
-        const existingUser = await this._userRepository.findByEmail(input.email)
+        const email = input.email.toLocaleLowerCase().trim()
+        const existingUser = await this._userRepository.findByEmail(email)
 
         if(existingUser){
             throw new ConflictError(MESSAGES.AUTH.EMAIL_ALREADY_REGISTERED)
@@ -35,46 +36,29 @@ export class RegisterUserUseCase implements IRegisterUserUseCase {
 
         const hashedPassword = await this._bcryptService.hashPassword(input.password)
 
-        
 
-        const user = await this._userRepository.create({
-            name:input.name,
-            email: input.email,
-            phone: input.phone,
-            password: hashedPassword,
-            role: ROLES.USER,
-            authProvider: "LOCAL",
-            isActive: true,
-            isEmailVerified: false,
-            profile: {
-            address: input.address,
-            kycStatus: "PENDING",
-      },
-        })
+    await this._otpService.storePendingUserRegistration({
+        name: input.name,
+        email: email,
+        phone: input.phone,
+        password: hashedPassword,
+        address: input.address,
+        role: ROLES.USER,
+        authProvider: "LOCAL"
+    })
 
         const otp = generateOtp()
 
         await this._otpService.storeOtp({
-            userId: user.id,
-            email: user.email,
+            email,
             otp,
             purpose: OtpPurpose.USER_REGISTRATION
         })
 
-        await this._emailService.sendOtp(user.email, otp)
+        await this._emailService.sendOtp(email, otp)
 
-        return {
-            user: {
-            id: user.id,
-            name: user.name,
-            email: user.email,
-            phone: user.phone,
-            role: user.role,
-            isActive: user.isActive,
-            isEmailVerified: user.isEmailVerified,
-            profile: user.profile,
-      },
-      verificationRequired: true,
-        }
+    return {
+        verificationRequired: true
+    }
     }
 }

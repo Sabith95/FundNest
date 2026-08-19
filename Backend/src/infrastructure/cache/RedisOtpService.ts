@@ -1,18 +1,19 @@
 import crypto from "crypto";
 import { injectable } from "tsyringe";
 import { env } from "../../config/env";
-import { AppError } from "../../shared/errors/AppError";
-import { HTTP_STATUS } from "../../shared/constants/httpStatus";
 import { redisClient } from "./RedisClient";
 import {
   IOtpService,
   StoreOtpData,
   VerifyOtpData,
   VerifiedOtpResult,
+  PendingRegistration,
+  PendingTenantRegistration
 } from "./interfaces/IOtpService";
+import { BadRequestError } from "../../shared/errors/BadRequestError";
 
 interface StoredOtpPayload {
-  userId: string;
+  userId?: string;
   email: string;
   otpHash: string;
   attempts: number;
@@ -48,16 +49,15 @@ export class RedisOtpService implements IOtpService {
     const rawOtp = await redisClient.get(key);
 
     if (!rawOtp) {
-      throw new AppError("OTP Expired or invalid", HTTP_STATUS.BAD_REQUEST);
+      throw new BadRequestError("OTP Expired or invalid");
     }
 
     const storedOtp = JSON.parse(rawOtp) as StoredOtpPayload;
 
     if (storedOtp.attempts >= env.OTP_MAX_ATTEMPTS) {
       await redisClient.del(key);
-      throw new AppError(
-        "Maximum OTP attempts exceeded",
-        HTTP_STATUS.BAD_REQUEST
+      throw new BadRequestError(
+        "Maximum OTP attempts exceeded"
       );
     }
 
@@ -72,7 +72,7 @@ export class RedisOtpService implements IOtpService {
         await redisClient.set(key, JSON.stringify(storedOtp), "EX", ttl);
       }
 
-      throw new AppError("Invalid OTP", HTTP_STATUS.BAD_REQUEST);
+      throw new BadRequestError("Invalid OTP");
     }
 
     await redisClient.del(key);
@@ -108,9 +108,8 @@ export class RedisOtpService implements IOtpService {
     const raw = await redisClient.get(key);
 
     if (!raw) {
-      throw new AppError(
-        "Password reset session expired. Please verify OTP again.",
-        HTTP_STATUS.BAD_REQUEST
+      throw new BadRequestError(
+        "Password reset session expired. Please verify OTP again."
       );
     }
 
@@ -124,6 +123,83 @@ export class RedisOtpService implements IOtpService {
     };
   }
 
+  async storePendingUserRegistration(
+    data: PendingRegistration
+  ): Promise<void> {
+    const key = this.getPendingRegistrationKey(data.email)
+    
+    await redisClient.set(
+      key,
+      JSON.stringify(data),
+      'EX',
+      env.OTP_EXPIRES_IN_SECONDS
+    )
+  }
+
+  async getPendingUserRegistration(
+    email: string
+  ): Promise<PendingRegistration | null> {
+
+      const key = this.getPendingRegistrationKey(email);
+
+      const raw = await redisClient.get(key);
+
+      if (!raw) {
+          return null;
+      }
+
+      return JSON.parse(raw) as PendingRegistration;
+  }
+
+  async deletePendingUserRegistration(
+        email: string
+    ): Promise<void> {
+
+        const key = this.getPendingRegistrationKey(email);
+
+        await redisClient.del(key);
+  }
+
+  async storePendingTenantRegistration(
+    data: PendingTenantRegistration
+    ): Promise<void> {
+
+        const key = this.getPendingTenantRegistrationKey(data.email);
+
+        await redisClient.set(
+            key,
+            JSON.stringify(data),
+            "EX",
+            env.OTP_EXPIRES_IN_SECONDS
+        );
+    }
+  
+  async getPendingTenantRegistration(
+      email: string
+  ): Promise<PendingTenantRegistration | null> {
+
+      const key = this.getPendingTenantRegistrationKey(email);
+
+      const raw = await redisClient.get(key);
+
+      if (!raw) {
+          return null;
+      }
+
+      return JSON.parse(raw) as PendingTenantRegistration;
+  }
+
+  async deletePendingTenantRegistration(
+    email: string
+  ): Promise<void> {
+
+      const key = this.getPendingTenantRegistrationKey(email);
+
+      await redisClient.del(key);
+  }
+
+
+
   private getOtpKey(purpose: string, email: string): string {
     return `otp:${purpose}:${email.toLowerCase().trim()}`;
   }
@@ -134,5 +210,13 @@ export class RedisOtpService implements IOtpService {
 
   private hashOtp(otp: string): string {
     return crypto.createHash("sha256").update(otp).digest("hex");
+  }
+
+  private getPendingRegistrationKey(email: string): string {
+      return `pending_registration:user:${email.toLowerCase().trim()}`;
+  }
+
+  private getPendingTenantRegistrationKey(email: string): string {
+    return `pending_registration:tenant:${email.toLowerCase().trim()}`;
   }
 }

@@ -51,6 +51,15 @@ export class TenantRepository extends MongoBaseRepository<Tenant> implements ITe
         )
     }
 
+    async updateActiveStatus(tenantId: string, isActive: boolean): Promise<Tenant | null> {
+        const doc = await TenantModel.findByIdAndUpdate(
+            tenantId,
+            { $set: { isActive } },
+            { new: true, runValidators: true }
+        ).lean();
+
+        return doc ? this.toEntity(doc) : null;
+    }
     async updateBusinessInfo(tenantId: string, data: UpdateBusinessInfoData, onboardingStep: OnboardingStep): Promise<Tenant | null> {
         const doc = await TenantModel.findByIdAndUpdate(
             tenantId,{
@@ -130,40 +139,6 @@ export class TenantRepository extends MongoBaseRepository<Tenant> implements ITe
 
     return doc ? this.toEntity(doc) : null;
   }
-
-//   protected toEntity(tenant: any): Tenant {
-//     return {
-//       id: tenant._id.toString(),
-
-//       companyName: tenant.companyName,
-//       ownerName: tenant.ownerName,
-
-//       email: tenant.email,
-//       phone: tenant.phone,
-//       password: tenant.password,
-
-//       role: tenant.role,
-
-//       isEmailVerified: tenant.isEmailVerified,
-//       isActive: tenant.isActive,
-
-//       status: tenant.status,
-//       onboardingStep: tenant.onboardingStep,
-
-//       businessInfo: tenant.businessInfo,
-
-//       kycDocuments: tenant.kycDocuments,
-
-//       bankDetails: tenant.bankDetails,
-
-//       rejectionReason: tenant.rejectionReason,
-
-//       approvedAt: tenant.approvedAt,
-
-//       createdAt: tenant.createdAt,
-//       updatedAt: tenant.updatedAt,
-//     };
-//   }
 
 protected toEntity(tenant: TenantRecord): Tenant {
     return TenantPersistenceMapper.toEntity(tenant)

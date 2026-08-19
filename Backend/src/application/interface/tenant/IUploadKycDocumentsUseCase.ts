@@ -1,6 +1,6 @@
 import { UploadKycDocumentsDto } from "../../tenant/dto/UploadKycDocumentsDto";
-import { Tenant } from "../../../domain/entities/Tenant";
+import { UploadKycDocumentsResponseDto } from "../../tenant/dto/UploadKycDocumentsResponseDto";
 
 export interface IUploadKycDocumentsUseCase {
-    execute(tenantId: string, input: UploadKycDocumentsDto): Promise<Tenant>
+    execute(tenantId: string, input: UploadKycDocumentsDto): Promise<UploadKycDocumentsResponseDto>
 }

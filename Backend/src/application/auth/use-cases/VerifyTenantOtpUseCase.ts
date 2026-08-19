@@ -8,6 +8,8 @@ import { IJwtService } from "../../../infrastructure/auth/interfaces/IJwtService
 import { ROLES } from "../../../shared/constants/roles";
 import { IVerifyTenantOtpUseCase } from "../../interface/tenant/IVerifyTenantOtpUseCase";
 import {VerifyTenantOtpResponseDto} from '../dto/VerifyTenantOtpResponseDto'
+import { BadRequestError } from "../../../shared/errors/BadRequestError";
+import { MESSAGES } from "../../../shared/constants/messages";
 
 
 @injectable()
@@ -23,22 +25,38 @@ export class VerifyTenantOtpUseCase implements IVerifyTenantOtpUseCase {
 
 
     async execute(input: verifyOtpDto): Promise<VerifyTenantOtpResponseDto> {
-        const verifiedOtp = await this._otpService.verifyOtp({
+         await this._otpService.verifyOtp({
             email: input.email,
             otp: input.otp,
             purpose: OtpPurpose.TENANT_REGISTRATION
         })
 
-        const tenant = await this._tenantRepository.markEmailAsVerified(verifiedOtp.userId)
+    const pendingTenant = await this._otpService.getPendingTenantRegistration(input.email)
+
+    if(!pendingTenant){
+        throw new BadRequestError(MESSAGES.AUTH.REGISTRATION_EXPIRED)
+    }
+
+        const tenant = await this._tenantRepository.create({
+            companyName: pendingTenant.companyName,
+            ownerName: pendingTenant.ownerName,
+            email: pendingTenant.email,
+            phone: pendingTenant.phone,
+            password: pendingTenant.password,
+            role: pendingTenant.role,
+            isEmailVerified: true
+        });
+
+
 
         const tokens = this._jwtService.generateTokenPair({
-            id: verifiedOtp.userId,
-            email: verifiedOtp.email,
+            id: tenant.id,
+            email: tenant.email,
             role: ROLES.TENANT_ADMIN,
         })
 
         return {
-            email: verifiedOtp.email,
+            email: tenant.email,
             isEmailVerified: true,
             accessToken: tokens.accessToken,
             refreshToken: tokens.refreshToken,

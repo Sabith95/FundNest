@@ -1,17 +1,17 @@
-import { OnboardingStep } from "../../../shared/constants/enums/OnboardingStep";
-import { TenantStatus } from "../../../shared/constants/enums/TenantStatus";
+// import { OnboardingStep } from "../../../shared/constants/enums/OnboardingStep";
+// import { TenantStatus } from "../../../shared/constants/enums/TenantStatus";
 
-export interface TenantDto {
-  id: string;
-  companyName: string;
-  ownerName: string;
-  email: string;
-  phone: string;
-  isActive: boolean;
-  isEmailVerified: boolean;
-  status: TenantStatus;
-  onboardingStep: OnboardingStep;
-}
+// export interface TenantDto {
+//   id: string;
+//   companyName: string;
+//   ownerName: string;
+//   email: string;
+//   phone: string;
+//   isActive: boolean;
+//   isEmailVerified: boolean;
+//   status: TenantStatus;
+//   onboardingStep: OnboardingStep;
+// }
 
 export interface RegisterTenantDto {
   companyName: string;
@@ -23,5 +23,6 @@ export interface RegisterTenantDto {
 }
 
 export interface RegisterTenantResponseDto {
-  tenant: TenantDto;
+  verificationRequired: boolean
+  email: string
 }

@@ -1,5 +1,6 @@
 import { Model } from "mongoose";
 import { IBaseRepository } from "../../domain/repositories/IBaseRepository";
+import { PaginatedResult } from "../../domain/repositories/types/Pagination";
 
 export abstract class MongoBaseRepository<TEntity>  implements IBaseRepository<TEntity> {
     constructor(protected readonly model: Model<any>){}
@@ -43,6 +44,33 @@ export abstract class MongoBaseRepository<TEntity>  implements IBaseRepository<T
         return result !== null
     }
 
+      async findPaginated(
+    page: number,
+    limit: number,
+    filter?: Partial<TEntity>
+  ): Promise<PaginatedResult<TEntity>> {
+
+    const skip = (page - 1) * limit;
+
+    const query = (filter as any) ?? {};
+
+    const [docs, total] = await Promise.all([
+      this.model
+        .find(query)
+        .skip(skip)
+        .limit(limit)
+        .lean(),
+
+      this.model.countDocuments(query),
+    ]);
+
+    return {
+      data: docs.map((doc: any) => this.toEntity(doc)),
+      total,
+      page,
+      limit,
+    };
+  }
 
     protected abstract toEntity(doc: any): TEntity;
 }
