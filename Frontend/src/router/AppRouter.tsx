@@ -31,6 +31,9 @@ import BankingDetails from '../pages/Tenant/Banking/BankingDetails';
 import LoginPage from '../pages/Tenant/login/LoginPage';
 import TenantDashboardPage from '../pages/Tenant/Dashboard/TenantDashboardPage';
 import TenantGuard from './TenantGuard';
+import TenantManagement from '../pages/superAdmin/Tenant/TenantManagement';
+import TenantDetailsPage from '../pages/superAdmin/Tenant/TenantDetailsPage';
+import UserManagement from '../pages/superAdmin/user/UserManagement';
 
 
 const AppRouter = () => {
@@ -49,6 +52,11 @@ const AppRouter = () => {
             element={<PricingPage />}
           />
 
+          <Route path='/superadmin/users'
+          element = {<UserManagement />} 
+          />
+
+
           <Route
             path={ROUTES.TENANT.REGISTER}
             element={<TenantRegisterPage />}
@@ -57,22 +65,6 @@ const AppRouter = () => {
           <Route
             path={ROUTES.TENANT.VERIFY_OTP}
             element={<OtpVerificationPage />} />
-
-          {/* <Route 
-          path = {ROUTES.TENANT.BUSINESS_INFO}
-          element = {<BusinessSetup />}
-          />
-
-          <Route 
-          path={ROUTES.TENANT.KYC_UPLOAD}
-          element = {<KycUpload />}
-          
-          />
-
-          <Route
-          path={ROUTES.TENANT.BANKING}
-          element = {<BankingDetails />}
-          /> */}
 
           <Route 
           path={ROUTES.TENANT.LOGIN}
@@ -128,6 +120,8 @@ const AppRouter = () => {
             path={ROUTES.SUPER_ADMIN.DASHBOARD}
             element={<SuperAdminDashboardPage />}
           />
+          <Route path="/superadmin/tenants" element={<TenantManagement />} />
+          <Route path="/superadmin/tenants/:tenantId" element={<TenantDetailsPage />} />
         </Route>
 
 

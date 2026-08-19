@@ -35,7 +35,8 @@ const getAuthScopeFromPath = (path: string = window.location.pathname): AuthScop
 }
 
 const getAuthScopeFromRequest = (url?: string): AuthScope => {
-    if (url?.includes('/auth/super-admin')) {
+    // /admin/tenants belongs to the super-admin scope despite its tenant path segment.
+    if (url?.includes('/auth/super-admin') || url?.startsWith('/admin/')) {
         return AUTH_SCOPE.SUPER_ADMIN;
     }
     if (url?.includes('/tenants') || url?.includes('/tenant/')) {

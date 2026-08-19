@@ -44,44 +44,29 @@ export class RegisterTenantUseCase implements IRegisterTenantUseCase {
             input.password
         )
 
-        const tenant = await this._tenantRepository.create({
+        await this._otpService.storePendingTenantRegistration({
             companyName: input.companyName,
             ownerName: input.ownerName,
             email: input.email,
             phone: input.phone,
             password: hashedPassword,
-            role: ROLES.TENANT_ADMIN,
-            isEmailVerified: false,
-        })
+            role: ROLES.TENANT_ADMIN
+        });
 
         const otp = generateOtp()
         
         await this._otpService.storeOtp({
-            userId: tenant.id,
-            email:  tenant.email,
+            email:  input.email,
             otp,
             purpose: OtpPurpose.TENANT_REGISTRATION
         })
 
-        await this._emailService.sendOtp(tenant.email,otp)
-
-        // return {
-        //     tenant: {
-        //     id: tenant.id,
-        //     companyName: tenant.companyName,
-        //     ownerName: tenant.ownerName,
-        //     email: tenant.email,
-        //     phone: tenant.phone,
-        //     isActive: tenant.isActive,
-        //     isEmailVerified: tenant.isEmailVerified,
-        //     status: tenant.status,
-        //     onboardingStep: tenant.onboardingStep,
-        //     },
-
-        // }
+        await this._emailService.sendOtp(input.email,otp)
 
         return {
-            tenant: TenantResponseMapper.toDto(tenant)
+            // tenant: TenantResponseMapper.toDto(tenant)
+            verificationRequired: true,
+            email: input.email
         }
     }
 }

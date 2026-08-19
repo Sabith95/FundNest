@@ -8,7 +8,6 @@ import { useAppDispatch } from '../../../store/hooks';
 import { loginSuccess } from '../../../store/slices/authSlice';
 import { setTenant } from '../../../store/slices/tenantSlice';
 import { decodeAccessToken } from '../../../utitls/jwt';
-import type { OnboardingStep } from '../../../shared/constants';
 import type { ITenant } from '../../../types/tenant.types';
 // ─── Config ───────────────────────────────────────────────
 const OTP_LENGTH = 6;

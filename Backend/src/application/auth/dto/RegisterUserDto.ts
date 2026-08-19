@@ -42,6 +42,6 @@ export interface RegisterUserDto {
 // }
 
 export interface RegisterUserResponseDto {
-  user: UserDto
+  // user: UserDto
   verificationRequired: boolean 
 }

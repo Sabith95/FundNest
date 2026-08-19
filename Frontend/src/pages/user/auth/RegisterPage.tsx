@@ -340,7 +340,7 @@ const UserRegisterPage: React.FC = () => {
         navigate(ROUTES.USER.VERIFY_OTP,{
           state:{
             phone: `${values.countryCode}${values.phone}`,
-            email: response.user.email,
+            email: values.email,
           }
         })
       }

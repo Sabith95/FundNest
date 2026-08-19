@@ -38,7 +38,8 @@ export interface ITenantRegisterRequest {
 }
 
 export interface ITenantRegisterResponse {
-  tenant: ITenant;
+  verificationRequired: boolean
+  email:string
 }
 
 export interface IVerifyTenantOtpRequest {

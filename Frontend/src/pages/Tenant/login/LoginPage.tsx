@@ -7,6 +7,8 @@ import { tenantAuthService } from "../../../services/tenantAuthService";
 import { setTenant } from "../../../store/slices/tenantSlice";
 import type { ITenantProfile } from "../../../types/tenant.types";
 import { getTenantDestination } from "../../../utitls/tenantRouting";
+import { toast } from "react-toastify";
+import { isAxiosError } from "axios";
 
 interface LoginFormValues {
   email: string;
@@ -92,9 +94,7 @@ const NavBar: React.FC = () => (
   <header className="border-b border-slate-200 bg-white/80 backdrop-blur">
     <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
       <a href="#" className="flex items-center gap-2 text-lg font-bold text-[#1a1f6e]">
-        <span className="text-xl leading-none" role="img" aria-label="FundNest logo">
-          🥥
-        </span>
+        <span className="text-xl leading-none" role="img" aria-label="FundNest logo">{"\u{1F965}"}</span>
         FundNest
       </a>
 
@@ -132,7 +132,7 @@ const PageFooter: React.FC = () => (
   <footer className="mx-auto max-w-6xl px-6 py-8 text-sm text-slate-500">
     <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
       <p className="max-w-xs">
-        © 2026 FundNest. The Digital Vault for your Capital.
+        Ã‚Â© 2026 FundNest. The Digital Vault for your Capital.
       </p>
 
       <div className="flex flex-col gap-2">
@@ -183,7 +183,6 @@ const LoginPage: React.FC = () => {
     password: false,
   });
   const [submitting, setSubmitting] = useState(false);
-  const [submitError, setSubmitError] = useState<string | undefined>();
 
   const handleChange = useCallback(
     (name: FieldName) => (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -198,10 +197,8 @@ const LoginPage: React.FC = () => {
         }
         return prevTouched;
       });
-
-      if (submitError) setSubmitError(undefined);
     },
-    [submitError]
+    []
   );
 
   const handleBlur = useCallback(
@@ -224,7 +221,6 @@ const LoginPage: React.FC = () => {
     if (emailError || passwordError) return;
 
     setSubmitting(true);
-    setSubmitError(undefined);
     try {
       const result = await tenantAuthService.loginTenant({
         email: values.email.trim(),
@@ -272,7 +268,10 @@ const LoginPage: React.FC = () => {
 
       navigate(getTenantDestination(result.tenant.onboardingStep), { replace: true });
     } catch (err) {
-      setSubmitError(err instanceof Error ? err.message : "We couldn't sign you in. Check your details and try again.");
+      const message = isAxiosError(err)
+        ? err.response?.data?.message ?? "We couldn't sign you in. Check your details and try again."
+        : "We couldn't sign you in. Check your details and try again.";
+      toast.error(message, { position: "top-center" });
     } finally {
       setSubmitting(false);
     }
@@ -359,7 +358,7 @@ const LoginPage: React.FC = () => {
                   name="password"
                   type="password"
                   autoComplete="current-password"
-                  placeholder="••••••••"
+                  placeholder={"\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022"}
                   value={values.password}
                   onChange={handleChange("password")}
                   onBlur={handleBlur("password")}
@@ -376,13 +375,6 @@ const LoginPage: React.FC = () => {
               )}
             </div>
 
-            {submitError && (
-              <p role="alert" className="flex items-center gap-1.5 text-sm font-medium text-red-600">
-                <ErrorIcon />
-                {submitError}
-              </p>
-            )}
-
             {/* Submit */}
             <button
               type="submit"
@@ -390,7 +382,7 @@ const LoginPage: React.FC = () => {
               className="flex w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-[#1e1b6e] to-[#4338ca] py-3.5 text-sm font-semibold text-white shadow-md shadow-indigo-900/20 transition hover:brightness-110 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#3730a3] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-70"
             >
               {submitting ? (
-                "Signing in…"
+                "Signing inÃ¢â‚¬Â¦"
               ) : (
                 <>
                   Login

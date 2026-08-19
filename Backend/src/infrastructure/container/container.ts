@@ -66,6 +66,12 @@ import { IChangeUserPasswordUseCase } from "../../application/interface/user/ICh
 import { IUpdateBankDetailsUseCase } from "../../application/interface/tenant/IUpdateBankDetailsUseCase";
 import { IUpdateBusinessInfoUseCase } from "../../application/interface/tenant/IUpdateBusinessInfoUseCase";
 import { IUploadKycDocumentsUseCase } from "../../application/interface/tenant/IUploadKycDocumentsUseCase";
+import { GetAllTenantUseCase } from "../../application/admin/use-cases/GetAllTenantUseCase";
+import { IGetAllTenantsUseCase } from "../../application/interface/admin/IGetAllTenantsUseCase";
+import { IGetTenantByIdUseCase } from "../../application/interface/admin/IGetTenantByIdUseCase";
+import { GetTenantByIdUseCase } from "../../application/admin/use-cases/GetTenantByIdUseCase";
+import { IUpdateTenantStatusUseCase } from "../../application/interface/admin/IUpdateTenantStatusUseCase";
+import { UpdateTenantStatusUseCase } from "../../application/admin/use-cases/UpdateTenantStatus";
 
 // Services
 container.register<IJwtService>(TOKENS.JwtService, {
@@ -177,6 +183,18 @@ container.register<IUpdateBankDetailsUseCase>(TOKENS.UpdateBankDetailsUseCase, {
   useClass: UpdateBankDetailsUseCase
 })
 
+
+container.register<IGetAllTenantsUseCase>(TOKENS.GetAllTenantsUseCase, {
+  useClass: GetAllTenantUseCase,
+})
+
+container.register<IGetTenantByIdUseCase>(TOKENS.GetTenantByIdUseCase, {
+  useClass: GetTenantByIdUseCase
+})
+
+container.register<IUpdateTenantStatusUseCase>(TOKENS.UpdateTenantStatusUseCase, {
+  useClass: UpdateTenantStatusUseCase
+})
 
 // Respository
 container.register<IUserRepository>(TOKENS.UserRepository, {

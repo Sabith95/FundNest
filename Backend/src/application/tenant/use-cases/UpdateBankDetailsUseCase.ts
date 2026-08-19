@@ -1,7 +1,6 @@
 import { inject, injectable } from "tsyringe";
 import { ITenantRepository } from "../../../domain/repositories/ITenantRepository";
 import { UpdateBankDetailsDto } from "../dto/UpdateBankDetailsDto";
-import { Tenant } from "../../../domain/entities/Tenant";
 import { TOKENS } from "../../../shared/tokens";
 import { MESSAGES } from "../../../shared/constants/messages";
 import { OnboardingStep } from "../../../shared/constants/enums/OnboardingStep";
