@@ -4,7 +4,6 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { tenantBankService } from "../../../services/tenantBankService";
 import { ROUTES, TENANT_STATUS } from "../../../shared/constants";
-// import { updateTenantSessionStep } from "../../../services/tenantSession";
 import { useAppDispatch } from "../../../store/hooks";
 import { updateOnboardingStep, updateTenantStatus } from "../../../store/slices/tenantSlice";
 
@@ -116,7 +115,6 @@ const BankingDetails: React.FC = () => {
       const result = await tenantBankService.updateBankDetails(formData);
      dispatch(updateOnboardingStep(result.tenant.onboardingStep))
      dispatch(updateTenantStatus(TENANT_STATUS.PENDING))
-      // updateTenantSessionStep(result.tenant.onboardingStep as import("../../../services/tenantSession").TenantOnboardingStep);
       toast.success("Bank details saved successfully.");
       navigate(ROUTES.TENANT.LOGIN);
     } catch (err) {

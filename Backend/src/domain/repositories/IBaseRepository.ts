@@ -10,6 +10,6 @@ export interface IBaseRepository<TEntity> {
     findPaginated(
     page: number,
     limit: number,
-    filter?: Partial<TEntity>
+    filterOrSearch?: Partial<TEntity> | string
   ): Promise<PaginatedResult<TEntity>>;
 }
