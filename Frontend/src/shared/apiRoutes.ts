@@ -19,7 +19,6 @@ export const API_ROUTES = {
         UPDATE_PROFILE: '/users/me/profile',
         UPDATE_PROFILE_PHOTO: '/users/me/photo',
         CHANGE_PASSWORD: '/users/me/password'
-
     },
 
     TENANTS: {

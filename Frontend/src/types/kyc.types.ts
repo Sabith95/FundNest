@@ -23,7 +23,9 @@ export interface IKycDocuments {
 }
 
 export interface IKycUploadResponse {
-  id: string;
-  kycDocuments: IKycDocuments;
-  onboardingStep: OnboardingStep;
+  tenant: {
+    id: string;
+    kycDocuments: IKycDocuments;
+    onboardingStep: OnboardingStep;
+  };
 }

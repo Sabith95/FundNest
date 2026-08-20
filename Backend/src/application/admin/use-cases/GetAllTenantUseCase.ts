@@ -17,10 +17,12 @@ async execute(
   ) {
     const page = data.page ?? 1;
     const limit = data.limit ?? 10;
+    const search = data.search
 
     const result = await this._tenantRepository.findPaginated(
       page,
-      limit
+      limit,
+      search
     );
 
     return {

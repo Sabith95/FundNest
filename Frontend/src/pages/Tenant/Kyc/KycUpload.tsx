@@ -201,7 +201,7 @@ const KycUpload: React.FC = () => {
         businessRegistrationCertificate,
         ownerIdProof,
       });
-      dispatch(updateOnboardingStep(result.onboardingStep))
+      dispatch(updateOnboardingStep(result.tenant.onboardingStep))
       // updateTenantSessionStep(result.onboardingStep as import("../../../services/tenantSession").TenantOnboardingStep);
       toast.success("KYC documents uploaded successfully.");
       navigate(ROUTES.TENANT.BANKING);

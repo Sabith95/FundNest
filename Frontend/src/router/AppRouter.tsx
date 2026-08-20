@@ -33,7 +33,7 @@ import TenantDashboardPage from '../pages/Tenant/Dashboard/TenantDashboardPage';
 import TenantGuard from './TenantGuard';
 import TenantManagement from '../pages/superAdmin/Tenant/TenantManagement';
 import TenantDetailsPage from '../pages/superAdmin/Tenant/TenantDetailsPage';
-import UserManagement from '../pages/superAdmin/user/UserManagement';
+// import UserManagement from '../pages/superAdmin/user/UserManagement';
 
 
 const AppRouter = () => {
@@ -52,9 +52,9 @@ const AppRouter = () => {
             element={<PricingPage />}
           />
 
-          <Route path='/superadmin/users'
+          {/* <Route path='/superadmin/users'
           element = {<UserManagement />} 
-          />
+          /> */}
 
 
           <Route
