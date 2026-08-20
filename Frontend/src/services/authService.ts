@@ -17,7 +17,7 @@ import type {
     IResetPasswordResponse,
 
 } from '../types/auth.types'
-
+import { API_ROUTES } from '../shared/apiRoutes'
 
 export interface IAuthService {
     loginSuperAdmin(credentials: ILoginRequest): Promise<ILoginResponse>
@@ -37,7 +37,7 @@ export interface IAuthService {
 class AuthService implements IAuthService {
     async loginSuperAdmin(credentials: ILoginRequest): Promise<ILoginResponse> {
         const response = await api.post<{data: ILoginResponse}>(
-            '/auth/super-admin/login',
+            API_ROUTES.SUPER_ADMIN.LOGIN,
             credentials
         )
 
@@ -46,7 +46,7 @@ class AuthService implements IAuthService {
 
     async registerUser(data: IUserRegisterRequest): Promise<IUserRegisterResponse> {
         const response = await api.post<{data: IUserRegisterResponse}>(
-            '/users/register',
+            API_ROUTES.USERS.REGISTER,
             data
         )
 
@@ -55,7 +55,7 @@ class AuthService implements IAuthService {
 
     async loginUser(credentials: ILoginRequest): Promise<ILoginResponse> {
         const response = await api.post<{data: ILoginResponse}>(
-            '/users/login',
+            API_ROUTES.USERS.LOGIN,
             credentials
         )
 
@@ -64,7 +64,7 @@ class AuthService implements IAuthService {
 
     async verifyUserOtp(data: IVerifyOtpRequest): Promise<IVerifyOtpResponse> {
         const response = await api.post<{data: IVerifyOtpResponse}>(
-            '/users/register/verify-otp',
+            API_ROUTES.USERS.VERIFY_OTP,
             data
         )
 
@@ -73,7 +73,7 @@ class AuthService implements IAuthService {
 
     async requestPasswordResetOtp(data: IForgotPasswordRequest): Promise<IForgotPasswordResponse> {
   const response = await api.post<{ data: IForgotPasswordResponse }>(
-    '/users/forgot-password/send-otp',
+    API_ROUTES.USERS.REQUEST_PASSWORD_RESET_OTP,
     data
   );
 
@@ -82,7 +82,7 @@ class AuthService implements IAuthService {
 
 async resendPasswordResetOtp(data: IForgotPasswordRequest): Promise<IForgotPasswordResponse> {
   const response = await api.post<{ data: IForgotPasswordResponse }>(
-    '/users/forgot-password/resend-otp',
+    API_ROUTES.USERS.RESEND_PASSWORD_RESET_OTP,
     data
   );
 
@@ -93,7 +93,7 @@ async verifyPasswordResetOtp(
   data: IVerifyPasswordResetOtpRequest
 ): Promise<IVerifyPasswordResetOtpResponse> {
   const response = await api.post<{ data: IVerifyPasswordResetOtpResponse }>(
-    '/users/forgot-password/verify-otp',
+    API_ROUTES.USERS.VERIFY_PASSWORD_RESET_OTP,
     data
   );
 
@@ -102,7 +102,7 @@ async verifyPasswordResetOtp(
 
 async resetUserPassword(data: IResetPasswordRequest): Promise<IResetPasswordResponse> {
   const response = await api.post<{ data: IResetPasswordResponse }>(
-    '/users/forgot-password/reset',
+    API_ROUTES.USERS.RESET_PASSWORD,
     data
   );
 
@@ -112,7 +112,7 @@ async resetUserPassword(data: IResetPasswordRequest): Promise<IResetPasswordResp
     //google login
     async googleLogin(idToken: string): Promise<ILoginResponse> {
         const response = await api.post<{data: ILoginResponse}>(
-            '/users/google',
+            API_ROUTES.USERS.GOOGLE_LOGIN,
             {idToken}
         )
         return response.data.data
@@ -120,7 +120,7 @@ async resetUserPassword(data: IResetPasswordRequest): Promise<IResetPasswordResp
 
     async resendUserOtp(data: IResendOtpRequest): Promise<IResendOtpResponse> {
         const response = await api.post<{data: IResendOtpResponse}>(
-            '/users/register/resend-otp',
+            API_ROUTES.USERS.RESEND_OTP,
             data
         )
         return response.data.data
@@ -128,7 +128,7 @@ async resetUserPassword(data: IResetPasswordRequest): Promise<IResetPasswordResp
 
     async logout(): Promise<void> {
         const isSuperAdminSession = window.location.pathname.startsWith('/superadmin')
-        await api.post(isSuperAdminSession ? '/auth/super-admin/logout' : '/auth/user/logout')
+        await api.post(isSuperAdminSession ? API_ROUTES.SUPER_ADMIN.LOGOUT : API_ROUTES.USERS.LOGOUT)
         removeAccessToken(isSuperAdminSession ? 'SUPER_ADMIN' : 'USER')
     }
 }

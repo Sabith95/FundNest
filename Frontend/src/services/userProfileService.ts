@@ -10,6 +10,7 @@ import type {
   IUserProfile,
   IUserProfileApiDto,
 } from '../types/profile.types';
+import { API_ROUTES } from '../shared/apiRoutes';
 
 interface IApiResponse<T> {
   success: boolean;
@@ -62,13 +63,13 @@ export const mapProfileDto = (user: IUserProfileApiDto): IUserProfile => ({
 
 class UserProfileService {
   async getProfile(): Promise<IUserProfile> {
-    const response = await api.get<IApiResponse<IUserProfileApiDto>>('/users/me');
+    const response = await api.get<IApiResponse<IUserProfileApiDto>>(API_ROUTES.USERS.GET_PROFILE);
     return mapProfileDto(response.data.data);
   }
 
   async updateProfile(data: IUpdateProfileRequest): Promise<IUpdateProfileResponse> {
     const response = await api.patch<IApiResponse<IUpdateProfileResponse>>(
-      '/users/me/profile',
+      API_ROUTES.USERS.UPDATE_PROFILE,
       data
     );
 
@@ -84,7 +85,7 @@ class UserProfileService {
     formData.append('profilePhoto', file);
 
     const response = await api.patch<IApiResponse<IUserProfileApiDto>>(
-      '/users/me/photo',
+      API_ROUTES.USERS.UPDATE_PROFILE_PHOTO,
       formData,
       { headers: { 'Content-Type': 'multipart/form-data' } }
     );
@@ -94,7 +95,7 @@ class UserProfileService {
 
   async changePassword(data: IChangePasswordRequest): Promise<IChangePasswordResponse> {
     const response = await api.patch<IApiResponse<IChangePasswordResponse>>(
-      '/users/me/password',
+      API_ROUTES.USERS.CHANGE_PASSWORD,
       data
     );
 

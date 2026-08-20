@@ -3,6 +3,7 @@ import type {
     IUpdateBankDetailsRequest,
     IUpdateBankDetailsResponse,
 } from "../types/bankingDetails.types";
+import { API_ROUTES } from "../shared/apiRoutes";
 
 interface IApiResponse<T> {
     success: boolean;
@@ -16,7 +17,7 @@ class TenantBankService {
         data: IUpdateBankDetailsRequest
     ): Promise<IUpdateBankDetailsResponse> {
         const response = await api.post<IApiResponse<IUpdateBankDetailsResponse>>(
-            "/tenants/bank-details",
+            API_ROUTES.TENANTS.UPDATE_BANK_DETAILS,
             data
         );
 

@@ -3,6 +3,7 @@ import type {
   IKycUploadRequest,
   IKycUploadResponse,
 } from "../types/kyc.types";
+import { API_ROUTES } from "../shared/apiRoutes";
 
 interface IApiResponse<T> {
   success: boolean;
@@ -35,7 +36,7 @@ class TenantKycService implements ITenantKycService {
 
     const response =
       await api.post<IApiResponse<IKycUploadResponse>>(
-        "/tenants/kyc",
+        API_ROUTES.TENANTS.UPDATE_KYC,
         formData,
         {
           headers: {
