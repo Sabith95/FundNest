@@ -9,7 +9,6 @@ import { JwtService } from "../../../../infrastructure/auth/JwtService";
 import { TenantKycController } from "../../controllers/Tenant/TenantKycController";
 import { authorize } from "../../middleware/authorize";
 import { ROLES } from "../../../../shared/constants/roles";
-import upload from "../../middleware/upload";
 import { TenantBankDetailsController } from "../../controllers/Tenant/TenantBankDetailsController";
 
 const router = Router()
@@ -27,13 +26,8 @@ router.post(ENDPOINTS.TENANT.AUTH.RESEND_OTP, tenantAuthcontroller.resendTenantO
 router.post(ENDPOINTS.TENANT.AUTH.LOGIN, tenantAuthcontroller.loginTenant)
 
 router.post(ENDPOINTS.TENANT.BUSINESS.BUSINESS_INFO, authenticate, authorize(ROLES.TENANT_ADMIN), tenantBusinessInfoController.updateBusinessInfo)
-router.post(ENDPOINTS.TENANT.KYC.KYC_UPLOAD, authenticate,authorize(ROLES.TENANT_ADMIN),upload.fields([
-        { name: "businessRegistrationCertificate", maxCount: 1 },
-        { name: "ownerIdProof", maxCount: 1 },
-        
-]),
-    tenantKycController.uploadKycDocuments
-)
+
+router.post(ENDPOINTS.TENANT.KYC.KYC_UPLOAD, authenticate, authorize(ROLES.TENANT_ADMIN),tenantKycController.uploadKycDocuments)
 
 router.post(ENDPOINTS.TENANT.BANKING.BANK_DETAILS,authenticate, authorize(ROLES.TENANT_ADMIN), tenantBankDetailsController.updateBankingDetails)
 

@@ -7,6 +7,7 @@ export const TOKENS = {
     OtpService: Symbol.for('OtpService'),
     EmailService: Symbol.for('EmailService'),
     ImageStorageService: Symbol.for("ImageStorageService"),
+    S3StorageService: Symbol.for("S3StorageService"),
 
 
     //use cases
@@ -34,6 +35,16 @@ export const TOKENS = {
     GetAllTenantsUseCase: Symbol.for("GetAllTenantsUseCase"),
     GetTenantByIdUseCase: Symbol.for("GetTenantByIdUseCase"),
     UpdateTenantStatusUseCase: Symbol.for("UpdateTenantStatusUseCase"),
+    GetAllUsersUseCase: Symbol.for("GetAllUsersUseCase"),
+    UpdateUserStatusUseCase: Symbol.for("UpdateUserStatusUseCase"),    
+    GetUserByIdUseCase: Symbol.for("GetUserByIdUseCase"),
+    VerifyBusinessDetailsUseCase: Symbol.for("VerifyBusinessDetailsUseCase"),
+    VerifyKycDocumentsUseCase: Symbol.for("VerifyKycDocumentsUseCase"),
+    VerifyBankDetailsUseCase: Symbol.for("VerifyBankDetailsUseCase"),
+    GenerateUploadUrlUseCase: Symbol.for("GenerateUploadUrlUseCase"),
+    GenerateDownloadUrlUseCase: Symbol.for("GenerateDownloadUrlUseCase"),
+    CompleteTenantVerificationUseCase: Symbol.for("CompleteTenantVerificationUseCase"),
+
     //repositories
 
     TenantRepository: Symbol.for("TenantRepository"),

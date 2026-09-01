@@ -14,7 +14,8 @@ import { IEmailService } from "../notification/interfaces/IEmailService";
 import { EmailService } from "../notification/EmailService";
 import { IImageStorageService } from "../storage/interfaces/IImageStorageService";
 import { CloudinaryImageStorageService } from "../storage/CloudinaryImageStorageService";
-
+import { IS3StorageService } from "../storage/interfaces/IS3StorageService";
+import { S3StorageService } from "../storage/S3StorageService";
 
 //Repository
 import { IUserRepository } from "../../domain/repositories/IUserRepository";
@@ -71,7 +72,26 @@ import { IGetAllTenantsUseCase } from "../../application/interface/admin/IGetAll
 import { IGetTenantByIdUseCase } from "../../application/interface/admin/IGetTenantByIdUseCase";
 import { GetTenantByIdUseCase } from "../../application/admin/use-cases/GetTenantByIdUseCase";
 import { IUpdateTenantStatusUseCase } from "../../application/interface/admin/IUpdateTenantStatusUseCase";
-import { UpdateTenantStatusUseCase } from "../../application/admin/use-cases/UpdateTenantStatus";
+import { UpdateTenantStatusUseCase } from "../../application/admin/use-cases/UpdateTenantStatusUseCase";
+import { IGetAllUsersUseCase } from "../../application/interface/admin/IGetAllUserUseCase";
+import { GetAllUserUseCase } from "../../application/admin/use-cases/GetAllUserUseCase";
+import { IUpdateUserStatusUseCase } from "../../application/interface/admin/IUpdateUserStatus";
+import { UpdateUserStatusUseCase } from "../../application/admin/use-cases/UpdateUserStatusUseCase";
+import { GetUserByIdUseCase } from "../../application/admin/use-cases/GetUserByIdUseCase";
+import { IGetUserByIdUseCase } from "../../application/interface/admin/IGetUserByIdUseCase";
+import { IVerifyBusinessDetailsUseCase } from "../../application/interface/admin/IVerifyBusinessDetailsUseCase";
+import { VerifyBusinessDetailsUseCase } from "../../application/admin/use-cases/VerifyBusinessDetailsUseCase";
+import { IVerifyKycDocumentsUseCase } from "../../application/interface/admin/IVerifyKycDocumentsUseCase";
+import { VerifyKycDocumentsUseCase } from "../../application/admin/use-cases/VerifyKycDocumentsUseCase";
+import { IVerifyBankDetailsUseCase } from "../../application/interface/admin/IVerifyBankDetailsUseCase";
+import { VerifyBankDetailsUseCase } from "../../application/admin/use-cases/VerifyBankDetailsUseCase";
+import { IGenerateUploadUrlUseCase } from "../../application/interface/storage/IGenerateUploadUrlUseCase";
+import { GenerateUploadUrlUseCase } from "../../application/storage/use-cases/GenerateUploadUrlUseCase";
+import { IGenerateDownloadUrlUseCase } from "../../application/interface/storage/IGenerateDownloadUrlUseCase";
+import { GenerateDownloadUrlUseCase } from "../../application/storage/use-cases/GenerateDownloadUrlUseCase";
+import { ICompleteTenantVerificationUseCase } from "../../application/interface/admin/ICompleteTenantVerificationUseCase";
+import { CompleteTenantVerificationUseCase } from "../../application/admin/use-cases/CompleteTenantVerificationUseCase";
+
 
 // Services
 container.register<IJwtService>(TOKENS.JwtService, {
@@ -97,6 +117,10 @@ container.register<IOtpService>(TOKENS.OtpService, {
 container.register<IImageStorageService>(TOKENS.ImageStorageService, {
   useClass: CloudinaryImageStorageService,
 });
+
+container.register<IS3StorageService>(TOKENS.S3StorageService, {
+  useClass: S3StorageService,
+})
 
 //use cases
 container.register<ILoginSuperAdminUseCase>(TOKENS.LoginSuperAdminUseCase, {
@@ -195,6 +219,40 @@ container.register<IGetTenantByIdUseCase>(TOKENS.GetTenantByIdUseCase, {
 container.register<IUpdateTenantStatusUseCase>(TOKENS.UpdateTenantStatusUseCase, {
   useClass: UpdateTenantStatusUseCase
 })
+
+container.register<IGetAllUsersUseCase>(TOKENS.GetAllUsersUseCase, {
+  useClass: GetAllUserUseCase
+})
+
+container.register<IUpdateUserStatusUseCase>(TOKENS.UpdateUserStatusUseCase, {
+  useClass: UpdateUserStatusUseCase
+});
+
+container.register<IGetUserByIdUseCase>(TOKENS.GetUserByIdUseCase, {
+  useClass: GetUserByIdUseCase
+})
+
+container.register<IVerifyBusinessDetailsUseCase>(TOKENS.VerifyBusinessDetailsUseCase, {
+  useClass: VerifyBusinessDetailsUseCase,
+});
+container.register<IVerifyKycDocumentsUseCase>(TOKENS.VerifyKycDocumentsUseCase, {
+  useClass: VerifyKycDocumentsUseCase,
+});
+container.register<IVerifyBankDetailsUseCase>(TOKENS.VerifyBankDetailsUseCase, {
+  useClass: VerifyBankDetailsUseCase,
+});
+
+container.register<IGenerateUploadUrlUseCase>(TOKENS.GenerateUploadUrlUseCase, {
+  useClass: GenerateUploadUrlUseCase,
+});
+
+container.register<IGenerateDownloadUrlUseCase>(TOKENS.GenerateDownloadUrlUseCase, {
+  useClass: GenerateDownloadUrlUseCase,
+});
+
+container.register<ICompleteTenantVerificationUseCase>(TOKENS.CompleteTenantVerificationUseCase, {
+  useClass: CompleteTenantVerificationUseCase,
+});
 
 // Respository
 container.register<IUserRepository>(TOKENS.UserRepository, {

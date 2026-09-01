@@ -33,7 +33,10 @@ import TenantDashboardPage from '../pages/Tenant/Dashboard/TenantDashboardPage';
 import TenantGuard from './TenantGuard';
 import TenantManagement from '../pages/superAdmin/Tenant/TenantManagement';
 import TenantDetailsPage from '../pages/superAdmin/Tenant/TenantDetailsPage';
-// import UserManagement from '../pages/superAdmin/user/UserManagement';
+import UserManagement from '../pages/superAdmin/user/UserManagement';
+import KycReview from '../pages/superAdmin/Tenant/KycReview';
+import UserLandingPage from '../pages/landing/UserLandingPage';
+import TenantLandingPage from '../pages/landing/TenantLandingPage';
 
 
 const AppRouter = () => {
@@ -46,17 +49,13 @@ const AppRouter = () => {
         <Route element={<PublicRoute />}>
 
           <Route path={ROUTES.COMMON.LANDING} element={<LandingPage />} />
+          <Route path={ROUTES.USER.LANDING} element = {<UserLandingPage />} />
+          <Route path={ROUTES.TENANT.LANDING} element = {<TenantLandingPage />} />
 
           <Route
             path={ROUTES.COMMON.PRICING}
             element={<PricingPage />}
           />
-
-          {/* <Route path='/superadmin/users'
-          element = {<UserManagement />} 
-          /> */}
-
-
           <Route
             path={ROUTES.TENANT.REGISTER}
             element={<TenantRegisterPage />}
@@ -120,8 +119,12 @@ const AppRouter = () => {
             path={ROUTES.SUPER_ADMIN.DASHBOARD}
             element={<SuperAdminDashboardPage />}
           />
-          <Route path="/superadmin/tenants" element={<TenantManagement />} />
-          <Route path="/superadmin/tenants/:tenantId" element={<TenantDetailsPage />} />
+          <Route path={ROUTES.SUPER_ADMIN.TENANT_MANAGEMENT} element={<TenantManagement />} />
+          <Route path={ROUTES.SUPER_ADMIN.TENANT_DETAILS} element={<TenantDetailsPage />} />
+          <Route path={ROUTES.SUPER_ADMIN.USER_MANAGEMENT} element = {<UserManagement />} />
+          <Route path={ROUTES.SUPER_ADMIN.KYC} element = {<KycReview />}
+          
+          />
         </Route>
 
 

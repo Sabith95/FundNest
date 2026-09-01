@@ -48,9 +48,7 @@ export class TenantPersistenceMapper {
       kycDocuments: tenant.kycDocuments
         ? {
             businessRegistrationCertificate: {
-              url: tenant.kycDocuments.businessRegistrationCertificate.url,
-              publicId:
-                tenant.kycDocuments.businessRegistrationCertificate.publicId,
+              objectKey: tenant.kycDocuments.businessRegistrationCertificate.objectKey,
               verification: {
                 status:
                   tenant.kycDocuments.businessRegistrationCertificate
@@ -65,8 +63,7 @@ export class TenantPersistenceMapper {
             },
 
             ownerIdProof: {
-              url: tenant.kycDocuments.ownerIdProof.url,
-              publicId: tenant.kycDocuments.ownerIdProof.publicId,
+              objectKey: tenant.kycDocuments.businessRegistrationCertificate.objectKey,
               verification: {
                 status:
                   tenant.kycDocuments.ownerIdProof.verification

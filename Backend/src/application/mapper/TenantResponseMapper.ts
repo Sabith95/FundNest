@@ -1,6 +1,6 @@
 import { Tenant } from "../../domain/entities/Tenant";
 import { LoginTenantResponseDto } from "../auth/dto/LoginTenantDto";
-import { RegisterTenantResponseDto } from "../auth/dto/RegisterTenantDto";
+import { RegisterTenantResponseDto, TenantDto } from "../auth/dto/RegisterTenantDto";
 import { UpdateBankDetailsResponseDto } from "../tenant/dto/UpdateBankDetailsResponseDto";
 import { UpdateBusinessInfoResponseDto } from "../tenant/dto/UpdateBusinessInfoResponseDto";
 import { UploadKycDocumentsResponseDto } from "../tenant/dto/UploadKycDocumentsResponseDto";
@@ -17,7 +17,7 @@ export class TenantResponseMapper {
         }
     }
 
-    static toDto(tenant: Tenant): RegisterTenantResponseDto["tenant"] {
+    static toDto(tenant: Tenant): TenantDto {
         return {
             id: tenant.id,
             companyName: tenant.companyName,
@@ -56,15 +56,13 @@ export class TenantResponseMapper {
             onboardingStep: tenant.onboardingStep,
             kycDocuments: {
                 businessRegistrationCertificate: {
-                    url: tenant.kycDocuments!.businessRegistrationCertificate.url,
-                    publicId: tenant.kycDocuments!.businessRegistrationCertificate.publicId,
+                    objectKey: tenant.kycDocuments!.businessRegistrationCertificate.objectKey,
                     verification: {
                         status: tenant.kycDocuments!.businessRegistrationCertificate.verification.status,
                     },
                 },
                 ownerIdProof: {
-                    url: tenant.kycDocuments!.ownerIdProof.url,
-                    publicId: tenant.kycDocuments!.ownerIdProof.publicId,
+                    objectKey: tenant.kycDocuments!.businessRegistrationCertificate.objectKey,
                     verification: {
                         status: tenant.kycDocuments!.ownerIdProof.verification.status,
                     },

@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { tenantKycService } from "../../../services/tenantKycService";
 import { ROUTES } from "../../../shared/constants";
-// import { updateTenantSessionStep } from "../../../services/tenantSession";
+import { getErrorMessage } from "../../../utitls/errorUtils";
 import { useAppDispatch } from "../../../store/hooks";
 import { updateOnboardingStep } from "../../../store/slices/tenantSlice";
 /**
@@ -197,19 +197,39 @@ const KycUpload: React.FC = () => {
 
     setIsSubmitting(true);
     try {
+      // 1. Fetch presigned URLs from backend
+      const busCertPresigned = await tenantKycService.getPresignedUrl(
+        businessRegistrationCertificate.name,
+        businessRegistrationCertificate.type
+      );
+      const ownerIdPresigned = await tenantKycService.getPresignedUrl(
+        ownerIdProof.name,
+        ownerIdProof.type
+      );
+      // 2. Upload raw files directly to S3 bucket
+      await Promise.all([
+        tenantKycService.uploadFileToS3(
+          busCertPresigned.uploadUrl,
+          businessRegistrationCertificate
+        ),
+        tenantKycService.uploadFileToS3(
+          ownerIdPresigned.uploadUrl,
+          ownerIdProof
+        ),
+      ]);
+      // 3. Send S3 objectKeys to backend KYC update route
       const result = await tenantKycService.uploadKyc({
-        businessRegistrationCertificate,
-        ownerIdProof,
+        businessRegistrationCertificateKey: busCertPresigned.objectKey,
+        ownerIdProofKey: ownerIdPresigned.objectKey,
       });
-      dispatch(updateOnboardingStep(result.tenant.onboardingStep))
-      // updateTenantSessionStep(result.onboardingStep as import("../../../services/tenantSession").TenantOnboardingStep);
+      dispatch(updateOnboardingStep(result.tenant.onboardingStep));
       toast.success("KYC documents uploaded successfully.");
       navigate(ROUTES.TENANT.BANKING);
     } catch (err) {
-      const message =
-        err instanceof Error
-          ? err.message
-          : "Failed to upload KYC documents. Please try again.";
+      const message = getErrorMessage(
+      err,
+      "Failed to upload KYC documents. Please try again."
+    );
       toast.error(message);
     } finally {
       setIsSubmitting(false);

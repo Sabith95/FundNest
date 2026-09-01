@@ -53,5 +53,7 @@ export interface IUserRepository extends IBaseRepository<User> {
   updatePassword(userId: string, hashedPassword: string): Promise<void>
   updateProfile(userId: string, data: UpdateUserProfileData): Promise<User | null>
   updateProfilePhoto(userId: string, avatarUrl: string, avatarPublicId: string): Promise<User | null>
+  updateActiveStatus(userId: string, isActive: boolean): Promise<User | null>;
+
 }
 

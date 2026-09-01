@@ -1,4 +1,4 @@
-import { env } from "./config/env";
+import { env } from "./infrastructure/config/env";
 import { connectDatabase, disconnectDatabase } from "./infrastructure/database/connection";
 import { logger } from "./shared/logger";
 import createApp from "./app";

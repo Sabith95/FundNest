@@ -39,6 +39,26 @@ export const ENDPOINTS = {
       LOGOUT: "/super-admin/logout",
     },
 
+    TENANT: {
+      GET_ALL: "/tenants",
+      GET_ONE: "/tenants/:id",
+      UPDATE_STATUS: "/tenants/:id/status",
+
+      VERIFICATION: {
+        BUSINESS: "/tenants/:id/verify-business",
+        KYC: "/tenants/:id/verify-kyc",
+        BANK: "/tenants/:id/verify-bank",
+        COMPLETE: "/tenants/:id/complete-verification",
+      },
+    },
+
+    USER: {
+      GET_ALL: "/users",
+      GET_ONE: "/users/:id",
+      UPDATE_STATUS: "/users/:id/status",
+    },
+    
+
   },
 
   TENANT: {

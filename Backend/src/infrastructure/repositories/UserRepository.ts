@@ -4,28 +4,28 @@ import { UserModel } from "../database/models/UserModel";
 import { CreateUserData, IUserRepository, UpdateUserProfileData } from "../../domain/repositories/IUserRepository";
 import { Role } from "../../shared/constants/roles";
 import { MongoBaseRepository } from "./MongoBaseRepository";
-import { UserRecord,UserPersistenceMapper } from "../database/mapper/UserPersistenceMapper";
+import { UserRecord, UserPersistenceMapper } from "../database/mapper/UserPersistenceMapper";
+import { PaginatedResult } from "../../domain/repositories/types/Pagination";
 
 @injectable()
 export class UserRepository extends MongoBaseRepository<User> implements IUserRepository {
-  
     constructor(){
-      super(UserModel)
+      super(UserModel);
     }
 
     async create(data: CreateUserData): Promise<User> {
         return this.save({
           ...data,
-          email:data.email.toLowerCase().trim(),
-        }as Partial<User>)
+          email: data.email.toLowerCase().trim(),
+        } as Partial<User>);
     }
 
     async findByEmail(email: string): Promise<User | null> {
         const doc = await UserModel.findOne({
           email: email.toLowerCase().trim()
-        }).lean()
+        }).lean();
 
-        return doc ? this.toEntity(doc): null
+        return doc ? this.toEntity(doc) : null;
     }
 
     async findByEmailAndRole(email: string, role: Role): Promise<User | null> {
@@ -54,15 +54,25 @@ export class UserRepository extends MongoBaseRepository<User> implements IUserRe
       await UserModel.updateOne(
         {_id: userId},
         {$set: {password: hashedPassword}}
-      )
+      );
+  }
+
+  async updateActiveStatus(userId: string, isActive: boolean): Promise<User | null> {
+    const doc = await UserModel.findByIdAndUpdate(
+      userId,
+      { $set: { isActive } },
+      { new: true, runValidators: true }
+    ).lean();
+
+    return doc ? this.toEntity(doc) : null;
   }
 
   async updateProfile(userId: string, data: UpdateUserProfileData): Promise<User | null> {
-      const updateData: Record<string, unknown> =  {}
+      const updateData: Record<string, unknown> = {};
 
-      if(data.name !== undefined) updateData.name = data.name.trim()
-      if(data.email !== undefined) updateData.email = data.email.toLowerCase().trim()
-      if(data.phone !== undefined) updateData.phone = data.phone.trim()
+      if(data.name !== undefined) updateData.name = data.name.trim();
+      if(data.email !== undefined) updateData.email = data.email.toLowerCase().trim();
+      if(data.phone !== undefined) updateData.phone = data.phone.trim();
 
       if (data.address) {
         updateData["profile.address"] = {
@@ -76,14 +86,14 @@ export class UserRepository extends MongoBaseRepository<User> implements IUserRe
       }
 
       if(Object.keys(updateData).length === 0){
-        return this.findById(userId)
+        return this.findById(userId);
       }
 
       const doc = await UserModel.findByIdAndUpdate(
         userId,
         {$set: updateData},
         {new: true, runValidators: true}
-      ).lean()
+      ).lean();
 
       return doc ? this.toEntity(doc) : null;
   }
@@ -98,43 +108,44 @@ export class UserRepository extends MongoBaseRepository<User> implements IUserRe
           },
         },
         {new: true, runValidators: true}
-      ).lean()
+      ).lean();
 
-      return doc ? this.toEntity(doc) : null
+      return doc ? this.toEntity(doc) : null;
   }
 
-  // protected toEntity(user: any): User {
-  //   return {
-  //     id: user._id.toString(),
-  //     name: user.name,
-  //     email: user.email,
-  //     phone: user.phone,
-  //     password: user.password,
-  //     authProvider: user.authProvider,
-  //     googleId: user.googleId,
-  //     isEmailVerified: user.isEmailVerified,
-  //     profile: {
-  //       avatarUrl: user.profile?.avatarUrl,
-  //       avatarPublicId: user.profile?.avatarPublicId,
-  //       address: {
-  //         line1: user.profile?.address?.line1,
-  //         line2: user.profile?.address?.line2,
-  //         city: user.profile?.address?.city,
-  //         state: user.profile?.address?.state,
-  //         pincode: user.profile?.address?.pincode,
-  //         country: user.profile?.address?.country,
-  //       },
-  //       kycStatus: user.profile?.kycStatus || "PENDING",
-  //     },
-  //     role: user.role,
-  //     isActive: user.isActive,
-  //     tenantId: user.tenantId?.toString(),
-  //     createdAt: user.createdAt,
-  //     updatedAt: user.updatedAt,
-  //   };
-  // }
+  override async findPaginated(
+    page: number,
+    limit: number,
+    filterOrSearch?: Partial<User> | string
+  ): Promise<PaginatedResult<User>> {
+    const skip = (page - 1) * limit;
+
+    let query: any = {};
+    if (typeof filterOrSearch === "string" && filterOrSearch.trim() !== "") {
+      const regex = new RegExp(filterOrSearch.trim(), "i");
+      query.$or = [
+        { name: regex },
+        { email: regex },
+        { phone: regex },
+      ];
+    } else if (typeof filterOrSearch === "object" && filterOrSearch !== null) {
+      query = filterOrSearch;
+    }
+
+    const [docs, total] = await Promise.all([
+      UserModel.find(query).sort({ createdAt: -1 }).skip(skip).limit(limit).lean(),
+      UserModel.countDocuments(query),
+    ]);
+
+    return {
+      data: docs.map((doc: any) => this.toEntity(doc)),
+      total,
+      page,
+      limit,
+    };
+  }
 
   protected toEntity(user: UserRecord): User {
-    return UserPersistenceMapper.toEntity(user)
+    return UserPersistenceMapper.toEntity(user);
   }
 }

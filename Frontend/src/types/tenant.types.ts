@@ -97,3 +97,69 @@ export interface NavItem {
   href: string;
   icon: ComponentType<SVGProps<SVGSVGElement>>;
 }
+
+
+
+export type VerificationState = "APPROVED" | "PENDING" | "REJECTED";
+
+
+
+export interface VerificationItem {
+  label: string;
+  state: VerificationState;
+}
+export interface TenantSubscriptionData {
+  planName: string;
+  priceMonthly: number;
+  isActive: boolean;
+  nextRenewalDate: string;
+}
+export interface TenantFinancialsData {
+  bankName: string;
+  accountHolder: string;
+  accountNumberLast4: string;
+  payoutsVerified: boolean;
+}
+
+export interface VerificationInfoData {
+  status: VerificationState;
+  rejectionReason?: string;
+  verifiedAt?: string;
+}
+export interface BusinessInfoData {
+  businessType?: string;
+  registrationId?: string;
+  registeredBusinessAddress?: string;
+  verification?: VerificationInfoData;
+}
+export interface DocumentInfoData {
+  objectKey: string;
+  verification?: VerificationInfoData;
+}
+export interface KycDocumentsData {
+  businessRegistrationCertificate?: DocumentInfoData;
+  ownerIdProof?: DocumentInfoData;
+}
+export interface BankDetailsData {
+  accountHolderName?: string;
+  accountNumber?: string;
+  ifscCode?: string;
+  verification?: VerificationInfoData;
+}
+
+
+export interface TenantDetailsData {
+  id: string;
+  name: string;
+  status: TenantStatus;
+  primaryOwner: string;
+  email: string;
+  phone: string;
+  registrationDate: string;
+  verification: VerificationItem[];
+  subscription?: TenantSubscriptionData | null;
+  financials?: TenantFinancialsData | null;
+  businessInfo?: BusinessInfoData | null;
+  kycDocuments?: KycDocumentsData | null;
+  bankDetails?: BankDetailsData | null;
+}

@@ -1,8 +1,8 @@
 import { injectable } from "tsyringe";
 import {Readable} from 'stream'
 import { UploadApiResponse } from "cloudinary";
-import { cloudinary } from "../../config/cloudinary";
-import { env } from "../../config/env";
+import { cloudinary } from "../config/cloudinary";
+import { env } from "../config/env";
 import { IImageStorageService, UploadImage, UploadImageInput } from "./interfaces/IImageStorageService";
 
 @injectable()

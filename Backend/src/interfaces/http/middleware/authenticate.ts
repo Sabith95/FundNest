@@ -1,10 +1,9 @@
 import { Request, Response, NextFunction } from "express";
 import { IJwtService } from "../../../infrastructure/auth/interfaces/IJwtService";
-import { AppError } from "../../../shared/errors/AppError";
 import { logger } from "../../../shared/logger";
 import { IMiddleware } from "./interfaces/IMiddleware";
 import { TokenExtracter } from "./helpers/tokenExtracter";
-import { HTTP_STATUS } from "../../../shared/constants/httpStatus";
+import { UnauthorizedError } from "../../../shared/errors/UnauthorizedError";
 
 
 
@@ -20,7 +19,7 @@ export class AuthenticateMiddleware implements IMiddleware {
             const token = TokenExtracter.fromHeader(req)
 
             if(!token){
-                throw new AppError('No token provided', HTTP_STATUS.UNAUTHORIZED)
+                throw new UnauthorizedError('No token provided')
             }
 
             const payload = this._jwtService.verifyAccessToken(token)
@@ -31,12 +30,12 @@ export class AuthenticateMiddleware implements IMiddleware {
             next()
         } catch (error: any) {
             if(error.name === 'TokenExpiredError'){
-                next(new AppError('Token expired', HTTP_STATUS.UNAUTHORIZED))
+                next(new UnauthorizedError('Token expired'))
                 return
             }
             
             if(error.name === 'JsonWebTokenError'){
-                next(new AppError('Invalid token', HTTP_STATUS.UNAUTHORIZED))
+                next(new UnauthorizedError('Invalid token'))
                 return
             }
             next(error)

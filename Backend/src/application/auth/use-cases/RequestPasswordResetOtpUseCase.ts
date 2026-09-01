@@ -4,7 +4,7 @@ import { IUserRepository } from '../../../domain/repositories/IUserRepository';
 import { IEmailService } from '../../../infrastructure/notification/interfaces/IEmailService';
 import { IOtpService } from '../../../infrastructure/cache/interfaces/IOtpService';
 import { generateOtp } from '../../../shared/utils/generateOtp';
-import { env } from '../../../config/env';
+import { env } from '../../../infrastructure/config/env';
 import {
   RequestPasswordResetOtpDto,
   RequestPasswordResetOtpResponseDto,

@@ -7,7 +7,7 @@ import { generateOtp } from '../../../shared/utils/generateOtp';
 import { MESSAGES } from '../../../shared/constants/messages'
 import { ResendOtpDto, ResendOtpResponseDto } from "../dto/resendOtpDto";
 import { OtpPurpose } from "../../../shared/constants/enums/OtpPurpose";
-import { env } from "../../../config/env";
+import { env } from "../../../infrastructure/config/env";
 import { IResendTenantOtpUseCase } from "../../interface/tenant/IResendTenantOtpUseCase";
 import { NotFoundError } from "../../../shared/errors/NotFoundError";
 import { BadRequestError } from "../../../shared/errors/BadRequestError";

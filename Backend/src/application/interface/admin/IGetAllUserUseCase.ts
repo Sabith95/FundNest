@@ -1,7 +1,7 @@
 import { AdminUsersResponseDto } from "../../admin/dto/AdminUsersResponseDto";
 import { GetAllUsersRequestDto } from "../../admin/dto/GetAllUsersRequestDto";
 
-export interface IGetAllTenantsUseCase {
+export interface IGetAllUsersUseCase {
   execute(
     data: GetAllUsersRequestDto
   ): Promise<{

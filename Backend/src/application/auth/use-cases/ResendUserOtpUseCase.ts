@@ -5,7 +5,7 @@ import { IEmailService } from '../../../infrastructure/notification/interfaces/I
 import { IOtpService } from '../../../infrastructure/cache/interfaces/IOtpService';
 import { generateOtp } from '../../../shared/utils/generateOtp';
 import { MESSAGES } from '../../../shared/constants/messages'
-import { env } from '../../../config/env';
+import { env } from '../../../infrastructure/config/env';
 import { ResendOtpDto, ResendOtpResponseDto } from '../dto/resendOtpDto';
 import { OtpPurpose } from "../../../shared/constants/enums/OtpPurpose";
 import { IResendUserOtpUseCase } from "../../interface/auth/IResendUserOtpUseCase";
