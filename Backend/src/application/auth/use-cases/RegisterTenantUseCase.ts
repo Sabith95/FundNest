@@ -15,7 +15,6 @@ import { OtpPurpose } from "../../../shared/constants/enums/OtpPurpose";
 import { ROLES } from "../../../shared/constants/roles";
 import { IRegisterTenantUseCase } from "../../interface/tenant/IRegisterTenantUseCase";
 import { ConflictError } from "../../../shared/errors/ConflictError";
-import { TenantResponseMapper } from "../../mapper/TenantResponseMapper";
 
 
 @injectable()

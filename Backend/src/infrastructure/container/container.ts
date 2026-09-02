@@ -91,7 +91,8 @@ import { IGenerateDownloadUrlUseCase } from "../../application/interface/storage
 import { GenerateDownloadUrlUseCase } from "../../application/storage/use-cases/GenerateDownloadUrlUseCase";
 import { ICompleteTenantVerificationUseCase } from "../../application/interface/admin/ICompleteTenantVerificationUseCase";
 import { CompleteTenantVerificationUseCase } from "../../application/admin/use-cases/CompleteTenantVerificationUseCase";
-
+import { GetTenantProfileUseCase } from "../../application/tenant/use-cases/GetTenantProfileUseCase";
+import { IGetTenantProfileUseCase } from "../../application/interface/tenant/IGetTenantProfileUseCase";
 
 // Services
 container.register<IJwtService>(TOKENS.JwtService, {
@@ -253,6 +254,10 @@ container.register<IGenerateDownloadUrlUseCase>(TOKENS.GenerateDownloadUrlUseCas
 container.register<ICompleteTenantVerificationUseCase>(TOKENS.CompleteTenantVerificationUseCase, {
   useClass: CompleteTenantVerificationUseCase,
 });
+
+container.register<IGetTenantProfileUseCase>(TOKENS.GetTenantProfileUseCase, {
+  useClass: GetTenantProfileUseCase
+})
 
 // Respository
 container.register<IUserRepository>(TOKENS.UserRepository, {

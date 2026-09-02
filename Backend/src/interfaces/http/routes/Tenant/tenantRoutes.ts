@@ -24,6 +24,7 @@ router.post(ENDPOINTS.TENANT.AUTH.REGISTER, tenantAuthcontroller.registerTenant)
 router.post(ENDPOINTS.TENANT.AUTH.VERIFY_OTP, tenantAuthcontroller.verifyTenantOtp)
 router.post(ENDPOINTS.TENANT.AUTH.RESEND_OTP, tenantAuthcontroller.resendTenantOtp)
 router.post(ENDPOINTS.TENANT.AUTH.LOGIN, tenantAuthcontroller.loginTenant)
+router.get(ENDPOINTS.TENANT.PROFILE.GET, authenticate, authorize(ROLES.TENANT_ADMIN), tenantAuthcontroller.getProfile)
 
 router.post(ENDPOINTS.TENANT.BUSINESS.BUSINESS_INFO, authenticate, authorize(ROLES.TENANT_ADMIN), tenantBusinessInfoController.updateBusinessInfo)
 

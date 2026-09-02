@@ -44,6 +44,7 @@ export const TOKENS = {
     GenerateUploadUrlUseCase: Symbol.for("GenerateUploadUrlUseCase"),
     GenerateDownloadUrlUseCase: Symbol.for("GenerateDownloadUrlUseCase"),
     CompleteTenantVerificationUseCase: Symbol.for("CompleteTenantVerificationUseCase"),
+    GetTenantProfileUseCase: Symbol.for("GetTenantProfileUseCase"),
 
     //repositories
 

@@ -19,6 +19,7 @@ export interface UpdateBusinessInfoData {
   businessType: BusinessType;
   registrationId: string;
   registeredBusinessAddress: string;
+  verification: VerificationInfo
 }
 
 export interface UpdateKycDocumentsData {

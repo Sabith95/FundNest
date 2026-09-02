@@ -69,6 +69,10 @@ export const ENDPOINTS = {
       LOGIN: '/login',
     },
 
+    PROFILE: {
+      GET: '/me'
+    },
+
     BUSINESS: {
       BUSINESS_INFO: '/business-info',
     },

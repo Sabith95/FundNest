@@ -39,6 +39,7 @@ export const API_ROUTES = {
         UPDATE_BUSINESS_INFO: '/tenants/business-info',
         UPDATE_BANK_DETAILS: "/tenants/bank-details",
         UPDATE_KYC: "/tenants/kyc",
+        GET_PROFILE: "/tenants/me"
 
     }
 }

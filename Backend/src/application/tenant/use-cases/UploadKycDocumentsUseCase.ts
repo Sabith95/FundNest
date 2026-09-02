@@ -1,6 +1,8 @@
+
+
+
 // import { inject, injectable } from "tsyringe";
 // import { ITenantRepository } from "../../../domain/repositories/ITenantRepository";
-// import { IImageStorageService } from "../../../infrastructure/storage/interfaces/IImageStorageService";
 // import { UploadKycDocumentsDto } from "../dto/UploadKycDocumentsDto";
 // import { TOKENS } from "../../../shared/tokens";
 // import { MESSAGES } from "../../../shared/constants/messages";
@@ -13,13 +15,12 @@
 // import { TenantResponseMapper } from "../../mapper/TenantResponseMapper";
 
 // @injectable()
-// export class UploadKycDocumentsUseCase implements IUploadKycDocumentsUseCase {
+// export class UploadKycDocumentsUseCase
+//     implements IUploadKycDocumentsUseCase {
+
 //     constructor(
 //         @inject(TOKENS.TenantRepository)
-//         private readonly _tenantRepository: ITenantRepository,
-
-//         @inject(TOKENS.ImageStorageService)
-//         private readonly _imageStorageService: IImageStorageService
+//         private readonly _tenantRepository: ITenantRepository
 //     ) {}
 
 //     async execute(
@@ -50,36 +51,21 @@
 //             );
 //         }
 
-//         const businessCertificate =
-//             await this._imageStorageService.uploadImage({
-//                 buffer: input.businessRegistrationCertificate.buffer,
-//                 filename: input.businessRegistrationCertificate.originalName,
-//                 folder: "tenants/business-registration-certificates",
-//             });
-
-//         const ownerIdProof =
-//             await this._imageStorageService.uploadImage({
-//                 buffer: input.ownerIdProof.buffer,
-//                 filename: input.ownerIdProof.originalName,
-//                 folder: "tenants/owner-id-proofs",
-//             });
-
 //         const updatedTenant =
 //             await this._tenantRepository.updateKycDocuments(
 //                 tenantId,
 //                 {
 //                     businessRegistrationCertificate: {
-//                         url: businessCertificate.url,
-//                         publicId: businessCertificate.publicId,
+//                         objectKey: input.businessRegistrationCertificateKey,
 //                         verification: {
-//                             status: VerificationStatus.PENDING
+//                             status: VerificationStatus.PENDING,
 //                         },
 //                     },
+
 //                     ownerIdProof: {
-//                         url: ownerIdProof.url,
-//                         publicId: ownerIdProof.publicId,
+//                         objectKey: input.ownerIdProofKey,
 //                         verification: {
-//                             status: VerificationStatus.PENDING
+//                             status: VerificationStatus.PENDING,
 //                         },
 //                     },
 //                 },
@@ -92,10 +78,14 @@
 //             );
 //         }
 
-//         return {tenant: TenantResponseMapper.toUpdateKycDocumentResponseDto(updatedTenant)};
+//         return {
+//             tenant:
+//                 TenantResponseMapper.toUpdateKycDocumentResponseDto(
+//                     updatedTenant
+//                 ),
+//         };
 //     }
 // }
-
 
 
 import { inject, injectable } from "tsyringe";
@@ -104,17 +94,17 @@ import { UploadKycDocumentsDto } from "../dto/UploadKycDocumentsDto";
 import { TOKENS } from "../../../shared/tokens";
 import { MESSAGES } from "../../../shared/constants/messages";
 import { OnboardingStep } from "../../../shared/constants/enums/OnboardingStep";
+import { TenantStatus } from "../../../shared/constants/enums/TenantStatus";
 import { VerificationStatus } from "../../../shared/constants/enums/VerificationStatus";
 import { IUploadKycDocumentsUseCase } from "../../interface/tenant/IUploadKycDocumentsUseCase";
 import { NotFoundError } from "../../../shared/errors/NotFoundError";
 import { ForbiddenError } from "../../../shared/errors/ForbiddenError";
 import { UploadKycDocumentsResponseDto } from "../dto/UploadKycDocumentsResponseDto";
 import { TenantResponseMapper } from "../../mapper/TenantResponseMapper";
+import { syncOverallTenantStatus } from "../../admin/services/syncOverallTenantStatus";
 
 @injectable()
-export class UploadKycDocumentsUseCase
-    implements IUploadKycDocumentsUseCase {
-
+export class UploadKycDocumentsUseCase implements IUploadKycDocumentsUseCase {
     constructor(
         @inject(TOKENS.TenantRepository)
         private readonly _tenantRepository: ITenantRepository
@@ -124,62 +114,54 @@ export class UploadKycDocumentsUseCase
         tenantId: string,
         input: UploadKycDocumentsDto
     ): Promise<UploadKycDocumentsResponseDto> {
-
         const tenant = await this._tenantRepository.findById(tenantId);
 
         if (!tenant) {
-            throw new NotFoundError(
-                MESSAGES.TENANT.NOT_FOUND
-            );
+            throw new NotFoundError(MESSAGES.TENANT.NOT_FOUND);
         }
 
         if (!tenant.isEmailVerified) {
-            throw new ForbiddenError(
-                MESSAGES.TENANT.REGISTER_WITH_EMAIL
-            );
+            throw new ForbiddenError(MESSAGES.TENANT.REGISTER_WITH_EMAIL);
         }
 
-        if (
-            tenant.onboardingStep !==
-            OnboardingStep.BUSINESS_INFO_COMPLETED
-        ) {
-            throw new ForbiddenError(
-                MESSAGES.TENANT.COMPLETE_BUSINESS_INFO
-            );
+        // Allow execution if tenant is doing initial onboarding OR re-uploading after rejection
+        const isReupload = tenant.status === TenantStatus.REJECTED;
+        const isValidStep = tenant.onboardingStep === OnboardingStep.BUSINESS_INFO_COMPLETED;
+
+        if (!isValidStep && !isReupload) {
+            throw new ForbiddenError(MESSAGES.TENANT.COMPLETE_BUSINESS_INFO);
         }
 
-        const updatedTenant =
-            await this._tenantRepository.updateKycDocuments(
-                tenantId,
-                {
-                    businessRegistrationCertificate: {
-                        objectKey: input.businessRegistrationCertificateKey,
-                        verification: {
-                            status: VerificationStatus.PENDING,
-                        },
-                    },
+        const nextStep = isReupload ? tenant.onboardingStep : OnboardingStep.KYC_COMPLETED;
 
-                    ownerIdProof: {
-                        objectKey: input.ownerIdProofKey,
-                        verification: {
-                            status: VerificationStatus.PENDING,
-                        },
+        const updatedTenant = await this._tenantRepository.updateKycDocuments(
+            tenantId,
+            {
+                businessRegistrationCertificate: {
+                    objectKey: input.businessRegistrationCertificateKey,
+                    verification: {
+                        status: VerificationStatus.PENDING,
                     },
                 },
-                OnboardingStep.KYC_COMPLETED
-            );
+                ownerIdProof: {
+                    objectKey: input.ownerIdProofKey,
+                    verification: {
+                        status: VerificationStatus.PENDING,
+                    },
+                },
+            },
+            nextStep
+        );
 
         if (!updatedTenant) {
-            throw new NotFoundError(
-                MESSAGES.TENANT.NOT_FOUND
-            );
+            throw new NotFoundError(MESSAGES.TENANT.NOT_FOUND);
         }
 
+        // Sync status: updates overall tenant status back to UNDER_REVIEW
+        const finalTenant = await syncOverallTenantStatus(updatedTenant, this._tenantRepository);
+
         return {
-            tenant:
-                TenantResponseMapper.toUpdateKycDocumentResponseDto(
-                    updatedTenant
-                ),
+            tenant: TenantResponseMapper.toUpdateKycDocumentResponseDto(finalTenant),
         };
     }
 }
