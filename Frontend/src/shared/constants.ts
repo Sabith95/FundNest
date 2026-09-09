@@ -6,7 +6,7 @@ export const ROLES = {
 
 export const TENANT_STATUS = {
   PENDING: "PENDING",
-  UNDER_REVIEW: "UNDER_REVIEW",
+  // UNDER_REVIEW: "UNDER_REVIEW",
   APPROVED: "APPROVED",
   REJECTED: "REJECTED",
 } as const;
@@ -31,13 +31,18 @@ export const ROUTES = {
 
   COMMON: {
     LANDING: '/',
-    PRICING: '/PRICING',
+    PRICING: '/pricing'
   },
   SUPER_ADMIN: {
     LOGIN: '/superadmin/login',
     DASHBOARD: '/superadmin/dashboard',
+    TENANT_MANAGEMENT: '/superadmin/tenants',
+    USER_MANAGEMENT: '/superadmin/users',
+    TENANT_DETAILS: '/superadmin/tenants/:tenantId',
+    KYC: '/superadmin/tenants/:tenantId/kyc'
   },
   TENANT: {
+    LANDING: '/tenants',
     REGISTER: '/tenants/register',
     VERIFY_OTP: '/tenants/verify-otp',
     LOGIN: '/tenants/login',
@@ -48,6 +53,7 @@ export const ROUTES = {
 
   },
   USER: {
+    LANDING:'/users',
     LOGIN: '/login',
     REGISTER: '/register',
     VERIFY_OTP: '/user/verify-otp',

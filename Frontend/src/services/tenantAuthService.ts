@@ -9,7 +9,8 @@ import type {
     IUpdateBusinessInfoRequest,
     IUpdateBusinessInfoResponse,
     ITenantLoginRequest,
-    ITenantLoginResponse
+    ITenantLoginResponse,
+    ITenantProfile
 } from "../types/tenant.types";
 import { API_ROUTES } from "../shared/apiRoutes";
 
@@ -19,6 +20,7 @@ export interface ITenantAuthService {
     resendTenantOtp(data: IResendTenantOtpRequest): Promise<IResendTenantOtpResponse>
     updateBusinessInfo(data: IUpdateBusinessInfoRequest): Promise<IUpdateBusinessInfoResponse>
     loginTenant(data: ITenantLoginRequest): Promise<ITenantLoginResponse>
+    getTenantProfile(): Promise<ITenantProfile>;
 }
 
 class TenantAuthService implements ITenantAuthService {
@@ -57,6 +59,11 @@ class TenantAuthService implements ITenantAuthService {
             data
         )
         return response.data.data
+    }
+
+    async getTenantProfile(): Promise<ITenantProfile> {
+        const response = await api.get<{ data: { tenant: ITenantProfile } }>(API_ROUTES.TENANTS.GET_PROFILE);
+        return response.data.data.tenant;
     }
 }
 

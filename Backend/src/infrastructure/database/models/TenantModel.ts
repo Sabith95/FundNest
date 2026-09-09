@@ -25,8 +25,9 @@ export interface BusinessInfoDocument {
 }
 
 export interface DocumentInfoDocument {
-  url: string;
-  publicId: string;
+  // url: string;
+  // publicId: string;
+  objectKey:string
   verification: VerificationInfoDocument
 }
 
@@ -115,16 +116,21 @@ const businessInfoSchema = new Schema<BusinessInfoDocument>(
 
 const documentInfoSchema = new Schema<DocumentInfoDocument>(
   {
-    url: {
+    objectKey: {
       type: String,
       required: true,
       trim: true,
     },
-    publicId: {
-      type: String,
-      required: true,
-      trim: true,
-    },
+    // url: {
+    //   type: String,
+    //   required: true,
+    //   trim: true,
+    // },
+    // publicId: {
+    //   type: String,
+    //   required: true,
+    //   trim: true,
+    // },
     verification: {
     type: verificationInfoSchema,
     default: () => ({ status: VerificationStatus.PENDING }),

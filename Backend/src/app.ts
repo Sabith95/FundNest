@@ -3,7 +3,7 @@ import express, { Application } from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import cookieParser from 'cookie-parser'
-import { corsOptions } from './config/cors';
+import { corsOptions } from './infrastructure/config/cors';
 import { requestLogger } from './interfaces/http/middleware/requestLogger';
 import { errorHandler } from './interfaces/http/middleware/errorHandler';
 import { notFound } from './interfaces/http/middleware/notFound';   

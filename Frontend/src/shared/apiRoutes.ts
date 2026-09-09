@@ -1,7 +1,17 @@
 export const API_ROUTES = {
     SUPER_ADMIN: {
         LOGIN: '/auth/super-admin/login',
-        LOGOUT: '/auth/super-admin/logout'
+        LOGOUT: '/auth/super-admin/logout',
+        GET_USERS: "/admin/users",
+        GET_USER: (id: string) => `/admin/users/${id}`,
+        UPDATE_STATUS: (id: string) => `/admin/users/${id}/status`,
+        GET_TENANTS: "/admin/tenants",
+        GET_TENANT: (id: string) => `/admin/tenants/${id}`,
+        UPDATE_TENANT_STATUS: (id: string) => `/admin/tenants/${id}/status` ,
+        VERIFY_BUSINESS_DETAILS: (id: string) => `/admin/tenants/${id}/verify-business`,
+        VERIFY_BANK_DETAILS: (id: string) => `/admin/tenants/${id}/verify-bank`,
+        VERIFY_KYC_DOCUMENTS: (id: string) => `/admin/tenants/${id}/verify-kyc`,
+        COMPLETE_TENANT_VERIFICATION: (id: string) => `/admin/tenants/${id}/complete-verification`,
     },
 
     USERS: {
@@ -29,6 +39,7 @@ export const API_ROUTES = {
         UPDATE_BUSINESS_INFO: '/tenants/business-info',
         UPDATE_BANK_DETAILS: "/tenants/bank-details",
         UPDATE_KYC: "/tenants/kyc",
+        GET_PROFILE: "/tenants/me"
 
     }
 }

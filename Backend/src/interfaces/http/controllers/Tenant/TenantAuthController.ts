@@ -11,6 +11,7 @@ import { IResendTenantOtpUseCase } from "../../../../application/interface/tenan
 import { REFRESH_TOKEN_COOKIE_NAMES, refreshTokenCookieOptions } from "../../../../shared/cookies";
 import { ILoginTenantUseCase } from "../../../../application/interface/auth/ILoginTenantUseCase";
 import { loginSchema } from "../../validators/authValidator";
+import { IGetTenantProfileUseCase } from "../../../../application/interface/tenant/IGetTenantProfileUseCase";
 
 @injectable()
 export class TenantAuthController {
@@ -22,7 +23,9 @@ export class TenantAuthController {
         @inject(TOKENS.ResendTenantOtpUseCase)
         private readonly _resendTenantOtpUseCase: IResendTenantOtpUseCase,
         @inject(TOKENS.LoginTenantUseCase)
-        private readonly _loginTenantUseCase: ILoginTenantUseCase
+        private readonly _loginTenantUseCase: ILoginTenantUseCase,
+        @inject(TOKENS.GetTenantProfileUseCase)
+        private readonly _getTenantProfileUseCase: IGetTenantProfileUseCase
     ) { }
 
     loginTenant = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
@@ -43,10 +46,6 @@ export class TenantAuthController {
         try {
             const payload = registerTenantSchema.parse(req.body)
             const result = await this._registerTenantUseCase.execute(payload)
-
-            // res
-            //     .status(HTTP_STATUS.CREATED)
-            //     .json(ApiResponse.success(result, MESSAGES.TENANT.CREATED, HTTP_STATUS.CREATED))
 
             ResponseHandler.success(
                 res,
@@ -70,14 +69,6 @@ export class TenantAuthController {
                 result.refreshToken,
                 refreshTokenCookieOptions
             )
-
-            // res
-            //     .status(HTTP_STATUS.OK)
-            //     .json(ApiResponse.success({
-            //         email: result.email,
-            //         isEmailVerified: result.isEmailVerified,
-            //         accessToken: result.accessToken,
-            //     }, MESSAGES.AUTH.OTP_VERIFIED))
 
             ResponseHandler.success(
                 res,
@@ -109,4 +100,20 @@ export class TenantAuthController {
             next(error)
         }
     }
+
+    getProfile = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+        try {
+            const tenantId = (req as any).user?.id;
+            const result = await this._getTenantProfileUseCase.execute(tenantId);
+            ResponseHandler.success(
+                res,
+                HTTP_STATUS.OK,
+                MESSAGES.TENANT.TENANTS_FETCHED,
+                { tenant: result }
+            );
+        } catch (error) {
+            next(error);
+        }
+    };
+
 }

@@ -1,5 +1,5 @@
 import { createLogger, format, transports } from 'winston';
-import { env } from '../config/env';
+import { env } from '../infrastructure/config/env';
 
 const { combine, timestamp, colorize, printf, json, errors } = format;
 

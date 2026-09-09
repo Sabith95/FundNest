@@ -1,7 +1,6 @@
 import {Request, Response, NextFunction} from 'express'
-import { AppError } from '../../../shared/errors/AppError'
-import { HTTP_STATUS } from '../../../shared/constants/httpStatus'
 import { ROLES } from '../../../shared/constants/roles'
+import { BadRequestError } from '../../../shared/errors/BadRequestError'
 
 export const tenantResolver = (req: Request, res: Response, next:NextFunction): void =>{
     if(req.user?.role === ROLES.SUPER_ADMIN){
@@ -16,7 +15,7 @@ export const tenantResolver = (req: Request, res: Response, next:NextFunction): 
     }
 
     if(!tenantId){
-        next(new AppError('Tenant ID is required', HTTP_STATUS.BAD_REQUEST))
+        next(new BadRequestError('Tenant ID is required'))
         return
     }
 

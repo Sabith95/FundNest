@@ -1,6 +1,6 @@
 import crypto from "crypto";
 import { injectable } from "tsyringe";
-import { env } from "../../config/env";
+import { env } from "../config/env";
 import { redisClient } from "./RedisClient";
 import {
   IOtpService,

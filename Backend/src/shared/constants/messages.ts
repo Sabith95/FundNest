@@ -30,7 +30,8 @@ export const MESSAGES = {
     "New password must be different from your current password.",
     GOOGLE_LOGIN_SUCCESSFULL: "Google login successful",
     REFRESH_TOKEN_CREATED: "Access token refreshed successfully",
-    REGISTRATION_EXPIRED: "Registration expired. Please register again."
+    REGISTRATION_EXPIRED: "Registration expired. Please register again.",
+    NOT_AUTHENTICATED: "Not authenticated"
   },
 
   USER: {
@@ -49,6 +50,7 @@ export const MESSAGES = {
     PROFILE_PHOTO_UPDATED: "Profile photo updated successfully",
     PROFILE_PHOTO_UPDATE_FAILED: "Failed to update profile photo.",
     PROFILE_PHOTO_REQUIRED:'Profile photo is required',
+    USERS_FETCHED:  "Users fetched successfully"
   },
 
   TENANT: {
@@ -65,11 +67,19 @@ export const MESSAGES = {
     BANKING_DETAILS_UPDATED: "Banking details updated successfully",
     COMPLETE_KYC: "Complete KYC before adding bank details.",
     COMPLETE_BUSINESS_INFO: "Complete business information before uploading KYC documents.",
+    TENANTS_FETCHED: "Tenants fetched successfully"
     
   },
 
   SUPER_ADMIN: {
     LOGGED_IN: "Super admin logged in successfully",
+    BUSINESS_DETAILS_VERIFIED: "Business details verification updated successfully",
+    KYC_VERIFIED: "KYC documents verification updated successfully",
+    BANK_DETAILS_VERIFIED: "Bank details verification updated successfully",
+    ALL_DOCUMENTS_MUST_BE_VERIFIED: "All sections (Business info, KYC documents, Bank details) must be reviewed before completing verification.",
+    TENANT_NOT_SUBMITTED_REQUIRED_DOCS: "Tenant has not submitted all required details yet.",
+    UPDATE_VERIFICATION_DOCS: "Your verification documents did not meet our compliance criteria.",
+    TENANT_VERIFICATION_COMPLETED: "Tenant verification finalized successfully"
   },
 
   SUBSCRIPTION: {
@@ -90,5 +100,17 @@ export const MESSAGES = {
     FAILED: "Operation failed",
     INTERNAL_SERVER_ERROR: "Something went wrong",
     LOGGED_OUT: 'Logged out successfully',
+    INVALID_PAGINATION: "Invalid pagination values"
   },
+
+  FILE_UPLOAD: {
+    INVALID_TYPE: "Invalid file type",
+    FILE_NAME_AND_CONTENT_TYPE_ARE_REQUIRED: "fileName and contentType are required",
+    BUSINESS_REGISTRATION_CERTIFICATE_KEY_AND_OWNER_ID_PROOF_KEY_ARE_REQUIRED:  "Both businessRegistrationCertificateKey and ownerIdProofKey are required."
+  },
+
+  STORAGE: {
+    UPLOAD_URL_GENERATED: "Upload URL generated successfully",
+    OBJECT_KEY_REQUIRED: "objectKey is required"
+  }
 } as const;

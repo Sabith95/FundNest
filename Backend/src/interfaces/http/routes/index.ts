@@ -1,10 +1,11 @@
 import { Request, Response, Router } from "express";
 import { ApiResponse } from "../../../shared/ApiResponse";
-import {env} from '../../../config/env'
+import {env} from '../../../infrastructure/config/env'
 import authRoutes from './auth/authRoutes'
 import userRoutes from '../routes/user/userRoutes'
 import tenantRoutes from '../routes/Tenant/tenantRoutes'
 import adminRoutes from './admin/adminRoutes'
+import storageRoutes from './storage/storageRoutes'
 
 
 const router = Router()
@@ -13,6 +14,8 @@ router.use('/auth', authRoutes)
 router.use('/users',userRoutes)
 router.use('/tenants',tenantRoutes)
 router.use('/admin', adminRoutes)
+router.use('/storage', storageRoutes);
+
 // Health check
 
 router.get('/health',(_req: Request, res: Response) =>{

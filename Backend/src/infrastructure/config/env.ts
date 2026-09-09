@@ -1,6 +1,5 @@
 import {z} from 'zod'
 import dotenv from 'dotenv'
-import { logger } from '../shared/logger'
 
 dotenv.config()
 
@@ -35,6 +34,11 @@ const envSchema = z.object({
     CLOUDINARY_API_KEY: z.string().min(1, "CLOUDINARY_API_KEY is required"),
     CLOUDINARY_API_SECRET: z.string().min(1, "CLOUDINARY_API_SECRET is required"),
     CLOUDINARY_FOLDER: z.string().default("fundnest/profile-photos"),
+    AWS_REGION: z.string().min(1, "AWS_REGION is required"),
+    AWS_BUCKET_NAME: z.string().min(1, "AWS_S3_BUCKET_NAME is required"),
+    AWS_ACCESS_KEY: z.string().min(1, "AWS_ACCESS_KEY_ID is required"),
+    AWS_SECRET_KEY: z.string()
+        .min(1, "AWS_SECRET_ACCESS_KEY is required"),
 })
 
 const parsed = envSchema.safeParse(process.env)

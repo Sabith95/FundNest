@@ -1,5 +1,5 @@
 import multer from "multer";
-import { env } from "../../../config/env";
+import { env } from "../../../infrastructure/config/env";
 import { AppError } from "../../../shared/errors/AppError";
 import { HTTP_STATUS } from "../../../shared/constants/httpStatus";
 

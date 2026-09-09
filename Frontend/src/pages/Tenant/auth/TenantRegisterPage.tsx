@@ -44,14 +44,14 @@ const validate = (v: IRegisterForm): IRegisterErrors => {
 };
 
 // ─── SVG Icons ────────────────────────────────────────────
-const FundNestLogo = () => (
-  <svg width="28" height="28" viewBox="0 0 42 42" fill="none">
-    <ellipse cx="21" cy="27" rx="16" ry="6" fill="#1a3a6e" opacity="0.25" />
-    <ellipse cx="21" cy="24" rx="16" ry="6" fill="#f5c842" />
-    <ellipse cx="21" cy="20" rx="16" ry="6" fill="#3b8bd4" />
-    <ellipse cx="21" cy="16" rx="16" ry="6" fill="#1a3a6e" />
-  </svg>
-);
+// const FundNestLogo = () => (
+//   <svg width="28" height="28" viewBox="0 0 42 42" fill="none">
+//     <ellipse cx="21" cy="27" rx="16" ry="6" fill="#1a3a6e" opacity="0.25" />
+//     <ellipse cx="21" cy="24" rx="16" ry="6" fill="#f5c842" />
+//     <ellipse cx="21" cy="20" rx="16" ry="6" fill="#3b8bd4" />
+//     <ellipse cx="21" cy="16" rx="16" ry="6" fill="#1a3a6e" />
+//   </svg>
+// );
 
 const GridIcon = () => (
   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
@@ -111,104 +111,19 @@ const ArrowRightIcon = () => (
   </svg>
 );
 
-const MenuIcon = () => (
-  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-    <line x1="3" y1="12" x2="21" y2="12" />
-    <line x1="3" y1="6" x2="21" y2="6" />
-    <line x1="3" y1="18" x2="21" y2="18" />
-  </svg>
-);
+// const MenuIcon = () => (
+//   <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+//     <line x1="3" y1="12" x2="21" y2="12" />
+//     <line x1="3" y1="6" x2="21" y2="6" />
+//     <line x1="3" y1="18" x2="21" y2="18" />
+//   </svg>
+// );
 
-const CloseIcon = () => (
-  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-    <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
-  </svg>
-);
-
-// ─── Navbar ───────────────────────────────────────────────
-const Navbar: React.FC = () => {
-  const navigate = useNavigate();
-  const [open, setOpen] = useState(false);
-
-  const links = [
-    { label: 'Home', path: ROUTES.COMMON.LANDING },
-    { label: 'Pricing', path: ROUTES.COMMON.PRICING },
-    { label: 'Register', path: ROUTES.TENANT.REGISTER, active: true },
-    { label: 'Login', path: '/login' },
-  ];
-
-  return (
-    <nav className="bg-white border-b border-gray-100 sticky top-0 z-50">
-      <div className="max-w-[1180px] mx-auto px-6 sm:px-8 h-[60px] flex items-center justify-between">
-
-        {/* Logo */}
-        <button
-          onClick={() => navigate(ROUTES.COMMON.LANDING)}
-          className="flex items-center gap-2 flex-shrink-0"
-        >
-          <FundNestLogo />
-          <span className="text-[17px] font-black text-[#1a3a6e] tracking-tight">FundNest</span>
-        </button>
-
-        {/* Desktop nav */}
-        <div className="hidden md:flex items-center gap-8">
-          {links.map((link) => (
-            <button
-              key={link.label}
-              onClick={() => navigate(link.path)}
-              className={`text-[14px] font-medium transition-colors ${link.active
-                  ? 'text-[#1a3a6e] font-semibold border-b-2 border-[#1a3a6e] pb-0.5'
-                  : 'text-gray-600 hover:text-gray-900'
-                }`}
-            >
-              {link.label}
-            </button>
-          ))}
-        </div>
-
-        {/* Get Started + hamburger */}
-        <div className="flex items-center gap-3">
-          <button
-            onClick={() => navigate(ROUTES.TENANT.REGISTER)}
-            className="hidden md:flex items-center px-5 py-[9px] rounded-xl text-[13px] font-bold text-white shadow-md hover:shadow-lg hover:opacity-95 active:scale-[0.97] transition-all duration-150"
-            style={{ background: 'linear-gradient(135deg, #1a2f6e 0%, #1e3fa8 100%)' }}
-          >
-            Get Started
-          </button>
-          <button
-            className="md:hidden p-1 text-gray-600"
-            onClick={() => setOpen(!open)}
-          >
-            {open ? <CloseIcon /> : <MenuIcon />}
-          </button>
-        </div>
-      </div>
-
-      {/* Mobile dropdown */}
-      {open && (
-        <div className="md:hidden bg-white border-t border-gray-100 px-6 py-4 flex flex-col gap-3 shadow-lg">
-          {links.map((link) => (
-            <button
-              key={link.label}
-              onClick={() => { setOpen(false); navigate(link.path); }}
-              className={`text-[14px] font-medium text-left py-1 ${link.active ? 'text-[#1a3a6e] font-semibold' : 'text-gray-600'
-                }`}
-            >
-              {link.label}
-            </button>
-          ))}
-          <button
-            onClick={() => { setOpen(false); navigate(ROUTES.TENANT.REGISTER); }}
-            className="mt-1 py-2.5 rounded-xl text-[13px] font-bold text-white text-center"
-            style={{ background: 'linear-gradient(135deg, #1a2f6e, #1e3fa8)' }}
-          >
-            Get Started
-          </button>
-        </div>
-      )}
-    </nav>
-  );
-};
+// const CloseIcon = () => (
+//   <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+//     <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
+//   </svg>
+// );
 
 // ─── Reusable Input Field ─────────────────────────────────
 interface IFieldProps {
@@ -394,8 +309,6 @@ const TenantRegisterPage: React.FC = () => {
       className="min-h-screen flex flex-col"
       style={{ fontFamily: "'Inter', 'Segoe UI', system-ui, sans-serif" }}
     >
-      <Navbar />
-
       {/* ── Main ──────────────────────────────────────── */}
       <main className="flex-1" style={{ background: '#eef0f5' }}>
         <div className="max-w-[1180px] mx-auto px-5 sm:px-8 py-10 sm:py-14">
@@ -643,7 +556,7 @@ const TenantRegisterPage: React.FC = () => {
                       Already have an account?{' '}
                       <button
                         type="button"
-                        onClick={() => navigate('/tenant/login')}
+                        onClick={() => navigate(ROUTES.TENANT.LOGIN)}
                         className="font-bold text-[#1a3a6e] hover:underline"
                       >
                         Log In

@@ -19,8 +19,9 @@ export interface BusinessInfo {
 }
 
 export interface DocumentInfo {
-  url: string;
-  publicId: string;
+  // url: string;
+  // publicId: string;
+  objectKey: string
 
   verification: VerificationInfo
 }

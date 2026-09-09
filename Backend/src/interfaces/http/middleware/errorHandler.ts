@@ -3,7 +3,7 @@ import { ZodError } from 'zod';
 import { ApiResponse } from '../../../shared/ApiResponse';
 import { AppError } from '../../../shared/errors/AppError';
 import { logger } from '../../../shared/logger';
-import { env } from '../../../config/env';
+import { env } from '../../../infrastructure/config/env';
 import { HTTP_STATUS } from '../../../shared/constants/httpStatus';
 
 

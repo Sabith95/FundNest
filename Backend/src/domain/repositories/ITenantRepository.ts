@@ -3,6 +3,7 @@ import { IBaseRepository } from "./IBaseRepository";
 import { BusinessType } from "../../shared/constants/enums/BusinessType";
 import { OnboardingStep } from "../../shared/constants/enums/OnboardingStep";
 import { Role } from "../../shared/constants/roles";
+import { TenantStatus } from "../../shared/constants/enums/TenantStatus";
 
 export interface CreateTenantData {
     companyName: string
@@ -18,17 +19,20 @@ export interface UpdateBusinessInfoData {
   businessType: BusinessType;
   registrationId: string;
   registeredBusinessAddress: string;
+  verification: VerificationInfo
 }
 
 export interface UpdateKycDocumentsData {
   businessRegistrationCertificate: {
-    url: string;
-    publicId: string;
+    // url: string;
+    // publicId: string;
+    objectKey: string
     verification: VerificationInfo
   };
   ownerIdProof: {
-    url: string;
-    publicId: string;
+    // url: string;
+    // publicId: string;
+    objectKey: string
     verification: VerificationInfo
   };
 }
@@ -38,6 +42,11 @@ export interface UpdateBankDetailsData {
   accountNumber: string;
   ifscCode: string;
   verification: VerificationInfo
+}
+
+export interface VerifyKycDocumentsInput {
+  businessRegistrationCertificateVerification: VerificationInfo;
+  ownerIdProofVerification: VerificationInfo;
 }
 
 export interface ITenantRepository extends IBaseRepository<Tenant> {
@@ -67,4 +76,27 @@ export interface ITenantRepository extends IBaseRepository<Tenant> {
     ): Promise<void>;
 
     updateActiveStatus(tenantId: string, isActive: boolean): Promise<Tenant | null>;
+
+    verifyBusinessDetails(
+      tenanId: string,
+      verification: VerificationInfo
+    ): Promise<Tenant | null>
+
+    verifyKycDocuments(
+        tenantId: string,
+        verification: VerifyKycDocumentsInput
+    ): Promise<Tenant | null>;
+
+    verifyBankDetails(
+        tenantId: string,
+        verification: VerificationInfo
+    ): Promise<Tenant | null>;
+
+    updateOverallStatus(
+      tenantId: string,
+      status: TenantStatus,
+      rejectionReason?: string,
+      approvedAt?: Date,
+      onboardingStep?: OnboardingStep
+    ): Promise<Tenant | null>
 }

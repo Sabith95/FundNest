@@ -1,5 +1,5 @@
 import { CookieOptions } from "express";
-import { env } from "../config/env";
+import { env } from "../infrastructure/config/env";
 
 export const LEGACY_REFRESH_TOKEN_COOKIE_NAME = "refreshToken";
 
