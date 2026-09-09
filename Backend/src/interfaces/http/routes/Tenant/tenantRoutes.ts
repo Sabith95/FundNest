@@ -32,4 +32,10 @@ router.post(ENDPOINTS.TENANT.KYC.KYC_UPLOAD, authenticate, authorize(ROLES.TENAN
 
 router.post(ENDPOINTS.TENANT.BANKING.BANK_DETAILS,authenticate, authorize(ROLES.TENANT_ADMIN), tenantBankDetailsController.updateBankingDetails)
 
+
+// tenant forgot password
+router.post(ENDPOINTS.TENANT.PASSWORD.SEND_OTP, tenantAuthcontroller.requestPasswordResetOtp);
+router.post(ENDPOINTS.TENANT.PASSWORD.RESEND_OTP, tenantAuthcontroller.requestPasswordResetOtp)
+router.post(ENDPOINTS.TENANT.PASSWORD.VERIFY_OTP, tenantAuthcontroller.verifyPasswordResetOtp);
+router.post(ENDPOINTS.TENANT.PASSWORD.RESET, tenantAuthcontroller.resetPassword);
 export default router

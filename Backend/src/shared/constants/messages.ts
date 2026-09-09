@@ -20,6 +20,7 @@ export const MESSAGES = {
     INVALID_OTP: "Invalid otp",
     OTP_VERIFIED: "Otp verified successfully",
     OTP_RESENT: 'OTP resent successfully',
+    OTP_SENT: 'Otp sent successfully',
     PASSWORD_RESET_OTP_SENT: 'Password reset OTP sent successfully',
     PASSWORD_RESET_OTP_VERIFIED: 'Password reset OTP verified successfully',
     PASSWORD_CHANGE_NOT_ALLOWED:

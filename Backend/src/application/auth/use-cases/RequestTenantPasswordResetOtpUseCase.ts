@@ -28,7 +28,7 @@ export class RequestTenantPasswordResetOtpUseCase implements IRequestTenantPassw
 
     async execute(input: RequestPasswordResetOtpDto): Promise<RequestPasswordResetOtpResponseDto> {
         const normalizedEmail = input.email.toLocaleLowerCase().trim()
-        const tenant = await this._tenantRepository.findById(normalizedEmail)
+        const tenant = await this._tenantRepository.findByEmail(normalizedEmail)
 
         if(!tenant){
             throw new NotFoundError(MESSAGES.TENANT.NOT_FOUND)

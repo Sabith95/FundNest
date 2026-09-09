@@ -45,6 +45,9 @@ export const TOKENS = {
     GenerateDownloadUrlUseCase: Symbol.for("GenerateDownloadUrlUseCase"),
     CompleteTenantVerificationUseCase: Symbol.for("CompleteTenantVerificationUseCase"),
     GetTenantProfileUseCase: Symbol.for("GetTenantProfileUseCase"),
+    RequestTenantPasswordResetOtpUseCase: Symbol.for('RequestTenantPasswordResetOtpUseCase'),
+    VerifyTenantPasswordResetOtpUseCase: Symbol.for('VerifyTenantPasswordResetOtpUseCase'),
+    ResetTenantPasswordUseCase: Symbol.for('ResetTenantPasswordUseCase'),
 
     //repositories
 

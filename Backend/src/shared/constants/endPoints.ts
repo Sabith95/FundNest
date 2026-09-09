@@ -73,6 +73,14 @@ export const ENDPOINTS = {
       GET: '/me'
     },
 
+    PASSWORD: {
+      SEND_OTP: '/forgot-password/send-otp',
+      VERIFY_OTP: '/forgot-password/verify-otp',
+      RESET: '/forgot-password/reset',
+      RESEND_OTP: '/forgot-password/resend-otp',
+      CHANGE: '/me/password'    
+    },
+
     BUSINESS: {
       BUSINESS_INFO: '/business-info',
     },

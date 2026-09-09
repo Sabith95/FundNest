@@ -12,6 +12,14 @@ import type {
     ITenantLoginResponse,
     ITenantProfile
 } from "../types/tenant.types";
+import type { 
+    IForgotPasswordRequest,
+    IForgotPasswordResponse,
+    IVerifyPasswordResetOtpRequest,
+    IVerifyPasswordResetOtpResponse,
+    IResetPasswordRequest,
+    IResetPasswordResponse
+ } from "../types/auth.types";
 import { API_ROUTES } from "../shared/apiRoutes";
 
 export interface ITenantAuthService {
@@ -64,6 +72,44 @@ class TenantAuthService implements ITenantAuthService {
     async getTenantProfile(): Promise<ITenantProfile> {
         const response = await api.get<{ data: { tenant: ITenantProfile } }>(API_ROUTES.TENANTS.GET_PROFILE);
         return response.data.data.tenant;
+    }
+
+    async requestPasswordResetOtp(data: IForgotPasswordRequest): Promise<IForgotPasswordResponse> {
+    const response = await api.post<{ data: IForgotPasswordResponse }>(
+        API_ROUTES.TENANTS.REQUEST_PASSWORD_RESET_OTP,
+        data
+    );
+
+    return response.data.data;
+    }
+
+    async resendPasswordResetOtp(data: IForgotPasswordRequest): Promise<IForgotPasswordResponse> {
+    const response = await api.post<{ data: IForgotPasswordResponse }>(
+        API_ROUTES.TENANTS.RESEND_PASSWORD_RESET_OTP,
+        data
+    );
+
+    return response.data.data;
+    }
+
+    async verifyPasswordResetOtp(
+    data: IVerifyPasswordResetOtpRequest
+    ): Promise<IVerifyPasswordResetOtpResponse> {
+    const response = await api.post<{ data: IVerifyPasswordResetOtpResponse }>(
+        API_ROUTES.TENANTS.VERIFY_PASSWORD_RESET_OTP,
+        data
+    );
+
+    return response.data.data;
+    }
+
+    async resetTenantPassword(data: IResetPasswordRequest): Promise<IResetPasswordResponse> {
+    const response = await api.post<{ data: IResetPasswordResponse }>(
+        API_ROUTES.TENANTS.RESET_PASSWORD,
+        data
+    );
+
+    return response.data.data;
     }
 }
 
