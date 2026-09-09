@@ -12,6 +12,12 @@ import { REFRESH_TOKEN_COOKIE_NAMES, refreshTokenCookieOptions } from "../../../
 import { ILoginTenantUseCase } from "../../../../application/interface/auth/ILoginTenantUseCase";
 import { loginSchema } from "../../validators/authValidator";
 import { IGetTenantProfileUseCase } from "../../../../application/interface/tenant/IGetTenantProfileUseCase";
+import { forgotPasswordSchema } from "../../validators/authValidator";
+import { verifyOtpSchema } from "../../validators/authValidator";
+import { IRequestTenantPasswordResetOtpUseCase } from "../../../../application/interface/auth/IRequestTenantPasswordResetOtpUseCase";
+import { IVerifyTenantPasswordResetOtpUseCase } from "../../../../application/interface/auth/IVerifyTenantPasswordResetOtpUseCase";
+import { IResetTenantPasswordUseCase } from "../../../../application/interface/auth/IResetTenantPasswordUseCase";
+import { resetPasswordSchema } from "../../validators/authValidator";
 
 @injectable()
 export class TenantAuthController {
@@ -25,7 +31,13 @@ export class TenantAuthController {
         @inject(TOKENS.LoginTenantUseCase)
         private readonly _loginTenantUseCase: ILoginTenantUseCase,
         @inject(TOKENS.GetTenantProfileUseCase)
-        private readonly _getTenantProfileUseCase: IGetTenantProfileUseCase
+        private readonly _getTenantProfileUseCase: IGetTenantProfileUseCase,
+        @inject(TOKENS.RequestTenantPasswordResetOtpUseCase)
+        private readonly _requestTenantPasswordResetOtpUseCase: IRequestTenantPasswordResetOtpUseCase,
+        @inject(TOKENS.VerifyTenantPasswordResetOtpUseCase)
+        private readonly _verifyTenantPasswordResetOtpUseCase: IVerifyTenantPasswordResetOtpUseCase,
+        @inject(TOKENS.ResetTenantPasswordUseCase)
+        private readonly _resetTenantPasswordUseCase: IResetTenantPasswordUseCase
     ) { }
 
     loginTenant = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
@@ -111,6 +123,35 @@ export class TenantAuthController {
                 MESSAGES.TENANT.TENANTS_FETCHED,
                 { tenant: result }
             );
+        } catch (error) {
+            next(error);
+        }
+    };
+
+
+    requestPasswordResetOtp = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+        try {
+            const payload = forgotPasswordSchema.parse(req.body);
+            const result = await this._requestTenantPasswordResetOtpUseCase.execute(payload);
+            ResponseHandler.success(res, HTTP_STATUS.OK, MESSAGES.AUTH.OTP_SENT, result);
+        } catch (error) {
+            next(error);
+        }
+    };
+    verifyPasswordResetOtp = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+        try {
+            const payload = verifyOtpSchema.parse(req.body);
+            const result = await this._verifyTenantPasswordResetOtpUseCase.execute(payload);
+            ResponseHandler.success(res, HTTP_STATUS.OK, MESSAGES.AUTH.OTP_VERIFIED, result);
+        } catch (error) {
+            next(error);
+        }
+    };
+    resetPassword = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+        try {
+            const payload = resetPasswordSchema.parse(req.body);
+            const result = await this._resetTenantPasswordUseCase.execute(payload);
+            ResponseHandler.success(res, HTTP_STATUS.OK, MESSAGES.AUTH.PASSWORD_UPDATED, result);
         } catch (error) {
             next(error);
         }

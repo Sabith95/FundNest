@@ -2,12 +2,8 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { tenantAuthService } from '../../../services/tenantAuthService';
 import axios from 'axios';
-import { ONBOARDING_STEP, ROUTES } from '../../../shared/constants';
-import { useAppDispatch } from '../../../store/hooks';
-import { loginSuccess } from '../../../store/slices/authSlice';
-import { setTenant } from '../../../store/slices/tenantSlice';
-import { decodeAccessToken } from '../../../utitls/jwt';
-import type { ITenant } from '../../../types/tenant.types';
+import { ROUTES } from '../../../shared/constants';
+
 // ─── Config ───────────────────────────────────────────────
 const OTP_LENGTH = 6;
 const RESEND_SECONDS = 60;
@@ -44,11 +40,12 @@ const ArrowLeftIcon = () => (
   </svg>
 );
 
-const ShieldKeyIcon = () => (
+// Lock icon instead of shield-key, to visually differentiate "forgot password" from "verify identity"
+const LockIcon = () => (
   <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-    <circle cx="12" cy="10" r="1.6" fill="white" stroke="none" />
-    <path d="M12 11.6V15" strokeLinecap="round" />
+    <rect x="4" y="10" width="16" height="10" rx="2" />
+    <path d="M8 10V7a4 4 0 0 1 8 0v3" />
+    <line x1="12" y1="14" x2="12" y2="16.5" strokeLinecap="round" />
   </svg>
 );
 
@@ -150,13 +147,11 @@ const OtpBox: React.FC<IOtpBoxProps> = ({ value, index, error, inputRef, onChang
 );
 
 // ─── Main Page ────────────────────────────────────────────
-const OtpVerificationPage: React.FC = () => {
+const ForgotPasswordOtpPage: React.FC = () => {
   const navigate = useNavigate();
-  const dispatch = useAppDispatch()
-  const location = useLocation() as { state?: { email?: string; phone?: string; tenant?: ITenant} };
+  const location = useLocation() as { state?: { email?: string } };
 
   const email = location.state?.email;
-  const registrationTenant = location.state?.tenant;
 
   const [digits, setDigits] = useState<string[]>(Array(OTP_LENGTH).fill(''));
   const [error, setError] = useState<string | undefined>(undefined);
@@ -165,6 +160,14 @@ const OtpVerificationPage: React.FC = () => {
   const [resending, setResending] = useState(false);
 
   const inputsRef = useRef<(HTMLInputElement | null)[]>([]);
+
+  // If a user lands here directly without going through the "forgot password"
+  // email step first, send them back there so they can supply an email.
+  useEffect(() => {
+    if (!email) {
+      navigate(ROUTES.TENANT.FORGOT_PASSWORD, { replace: true });
+    }
+  }, [email, navigate]);
 
   // Countdown timer
   useEffect(() => {
@@ -241,47 +244,82 @@ const OtpVerificationPage: React.FC = () => {
   const code = digits.join('');
   const isComplete = code.length === OTP_LENGTH;
 
+//   const handleVerify = async () => {
+//     if (!isComplete) {
+//       setError('Enter the full 6-digit code');
+//       return;
+//     }
+//     if (!email) {
+//       setError('Email is missing. Please restart the password reset process.');
+//       return;
+//     }
+//     setLoading(true);
+//     setError(undefined);
+//     try {
+//       // NOTE: rename to match whatever your tenantAuthService actually exposes
+//       // for the forgot-password flow. Expected to return a short-lived
+//       // reset token that authorizes the subsequent "set new password" call.
+//       const result = await tenantAuthService.verifyPasswordResetOtp({ email, otp: code });
+
+//       navigate(ROUTES.TENANT.RESET_PASSWORD, {
+//         state: {
+//           email,
+//         },
+//       });
+//     } catch (err) {
+//       if (axios.isAxiosError(err)) {
+//         setError(err.response?.data?.message || 'Invalid or expired code. Please try again.');
+//       } else {
+//         setError('Invalid or expired code. Please try again.');
+//       }
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+//   const handleResend = async () => {
+//     if (secondsLeft > 0 || resending) return;
+//     if (!email) {
+//       setError('Email is missing. Please restart the password reset process.');
+//       return;
+//     }
+//     setResending(true);
+//     setError(undefined);
+//     try {
+//       // NOTE: rename to match your service's forgot-password resend endpoint
+//       await tenantAuthService.resendPasswordResetOtp({ email });
+//       setDigits(Array(OTP_LENGTH).fill(''));
+//       setSecondsLeft(RESEND_SECONDS);
+//       inputsRef.current[0]?.focus();
+//     } catch (err) {
+//       if (axios.isAxiosError(err)) {
+//         setError(err.response?.data?.message || 'Failed to resend OTP. Please try again.');
+//       } else {
+//         setError('Failed to resend OTP. Please try again.');
+//       }
+//     } finally {
+//       setResending(false);
+//     }
+//   };
+
+
   const handleVerify = async () => {
     if (!isComplete) {
       setError('Enter the full 6-digit code');
       return;
     }
     if (!email) {
-      setError('Email is missing. Please restart registration.');
+      setError('Email is missing. Please restart the password reset process.');
       return;
     }
     setLoading(true);
     setError(undefined);
     try {
-      const result = await tenantAuthService.verifyTenantOtp({ email, otp: code });
-      const payload = decodeAccessToken(result.accessToken)
-      // setAccessToken(result.accessToken, 'tenant');
-        dispatch(
-    loginSuccess({
-      user: {
-        id: payload.id,
-        name: registrationTenant?.ownerName ?? payload.email,
-        email: result.email,
-        role: "TENANT_ADMIN",
-        tenantId: payload.id,
-        isActive: true,
-        createdAt: "",
-        isEmailVerified: true,
-      },
-      accessToken: result.accessToken,
-    })
-  );
-    dispatch(
-      setTenant({
-        id: payload.id,
-        companyName: registrationTenant?.companyName ?? "",
-        ownerName: registrationTenant?.ownerName ?? "",
-        email: result.email,
-        status: registrationTenant?.status ?? "PENDING",
-        onboardingStep:ONBOARDING_STEP.OTP_VERIFIED,
-      })
-    );
-      navigate(ROUTES.TENANT.BUSINESS_INFO);
+      await tenantAuthService.verifyPasswordResetOtp({ email, otp: code });
+
+      navigate(ROUTES.TENANT.RESET_PASSWORD, {
+        state: { email },
+      });
     } catch (err) {
       if (axios.isAxiosError(err)) {
         setError(err.response?.data?.message || 'Invalid or expired code. Please try again.');
@@ -296,13 +334,13 @@ const OtpVerificationPage: React.FC = () => {
   const handleResend = async () => {
     if (secondsLeft > 0 || resending) return;
     if (!email) {
-      setError('Email is missing. Please restart registration.');
+      setError('Email is missing. Please restart the password reset process.');
       return;
     }
     setResending(true);
     setError(undefined);
     try {
-      await tenantAuthService.resendTenantOtp({ email });
+      await tenantAuthService.resendPasswordResetOtp({ email });
       setDigits(Array(OTP_LENGTH).fill(''));
       setSecondsLeft(RESEND_SECONDS);
       inputsRef.current[0]?.focus();
@@ -335,17 +373,17 @@ const OtpVerificationPage: React.FC = () => {
               className="w-16 h-16 rounded-full flex items-center justify-center mb-5"
               style={{ background: 'linear-gradient(135deg, #1a2f6e 0%, #1e3fa8 100%)' }}
             >
-              <ShieldKeyIcon />
+              <LockIcon />
             </div>
 
             {/* Heading */}
             <h1 className="text-[24px] sm:text-[26px] font-black text-gray-900 mb-2">
-              Verify your identity
+              Reset your password
             </h1>
             <p className="text-[13.5px] text-gray-500 leading-relaxed max-w-[300px] mb-8">
               We've sent a 6-digit security code to{' '}
               <span className="font-bold text-gray-700">{maskEmail(email) || 'your registered email'}</span>
-              . Please enter it below to continue.
+              . Enter it below to continue resetting your password.
             </p>
 
             {/* OTP boxes */}
@@ -440,4 +478,4 @@ const OtpVerificationPage: React.FC = () => {
   );
 };
 
-export default OtpVerificationPage;
+export default ForgotPasswordOtpPage;

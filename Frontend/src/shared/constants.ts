@@ -31,7 +31,8 @@ export const ROUTES = {
 
   COMMON: {
     LANDING: '/',
-    PRICING: '/pricing'
+    PRICING: '/pricing',
+    NOT_FOUND: '*'
   },
   SUPER_ADMIN: {
     LOGIN: '/superadmin/login',
@@ -49,7 +50,10 @@ export const ROUTES = {
     DASHBOARD: '/tenants/dashboard',
     BUSINESS_INFO: '/tenants/business-info',
     KYC_UPLOAD: '/tenants/kyc-upload',
-    BANKING: '/tenants/banking'
+    BANKING: '/tenants/banking',
+    FORGOT_PASSWORD: '/tenants/forgot-password',
+    RESET_PASSWORD: '/tenants/reset-password',
+    FORGOT_PASSWORD_OTP: '/tenants/forgot-password/otp'
 
   },
   USER: {

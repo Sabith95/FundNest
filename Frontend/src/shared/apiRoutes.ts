@@ -39,7 +39,12 @@ export const API_ROUTES = {
         UPDATE_BUSINESS_INFO: '/tenants/business-info',
         UPDATE_BANK_DETAILS: "/tenants/bank-details",
         UPDATE_KYC: "/tenants/kyc",
-        GET_PROFILE: "/tenants/me"
+        GET_PROFILE: "/tenants/me",
+        REQUEST_PASSWORD_RESET_OTP: '/tenants/forgot-password/send-otp',
+        RESEND_PASSWORD_RESET_OTP: '/tenants/forgot-password/resend-otp',
+        VERIFY_PASSWORD_RESET_OTP: '/tenants/forgot-password/verify-otp',
+        CHANGE_PASSWORD: '/tenants/me/password',
+        RESET_PASSWORD: '/tenants/forgot-password/reset'
 
     }
 }

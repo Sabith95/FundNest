@@ -9,6 +9,7 @@ import { getTenantDestination } from "../../../utitls/tenantRouting";
 import { toast } from "react-toastify";
 import { isAxiosError } from "axios";
 import { ROUTES } from "../../../shared/constants";
+import { Link } from 'react-router-dom';
 
 interface LoginFormValues {
   email: string;
@@ -291,9 +292,9 @@ const LoginPage: React.FC = () => {
                 <label htmlFor="password" className="block text-xs font-bold uppercase tracking-wide text-[#12163f]">
                   Password
                 </label>
-                <a href="#" className="text-xs font-bold uppercase tracking-wide text-[#3730a3] hover:text-[#2c2582]">
-                  Forgot Password?
-                </a>
+              <Link to={ROUTES.TENANT.FORGOT_PASSWORD} className="text-xs font-bold uppercase tracking-wide text-[#3730a3] hover:text-[#2c2582]">
+                Forgot Password?
+              </Link>
               </div>
               <div className="relative">
                 <span className="pointer-events-none absolute inset-y-0 left-3.5 flex items-center">

@@ -93,6 +93,12 @@ import { ICompleteTenantVerificationUseCase } from "../../application/interface/
 import { CompleteTenantVerificationUseCase } from "../../application/admin/use-cases/CompleteTenantVerificationUseCase";
 import { GetTenantProfileUseCase } from "../../application/tenant/use-cases/GetTenantProfileUseCase";
 import { IGetTenantProfileUseCase } from "../../application/interface/tenant/IGetTenantProfileUseCase";
+import { RequestTenantPasswordResetOtpUseCase } from "../../application/auth/use-cases/RequestTenantPasswordResetOtpUseCase";
+import { VerifyTenantPasswordResetOtpUseCase } from "../../application/auth/use-cases/VerifyTenantPasswordResetOtpUseCase";
+import { ResetTenantPasswordUseCase } from "../../application/auth/use-cases/ResetTenantPasswordUseCase";
+import { IRequestTenantPasswordResetOtpUseCase } from "../../application/interface/auth/IRequestTenantPasswordResetOtpUseCase";
+import { IVerifyTenantPasswordResetOtpUseCase } from "../../application/interface/auth/IVerifyTenantPasswordResetOtpUseCase";
+import { IResetTenantPasswordUseCase } from "../../application/interface/auth/IResetTenantPasswordUseCase";
 
 // Services
 container.register<IJwtService>(TOKENS.JwtService, {
@@ -258,6 +264,18 @@ container.register<ICompleteTenantVerificationUseCase>(TOKENS.CompleteTenantVeri
 container.register<IGetTenantProfileUseCase>(TOKENS.GetTenantProfileUseCase, {
   useClass: GetTenantProfileUseCase
 })
+
+container.register<IRequestTenantPasswordResetOtpUseCase>(TOKENS.RequestTenantPasswordResetOtpUseCase, {
+  useClass: RequestTenantPasswordResetOtpUseCase,
+});
+
+container.register<IVerifyTenantPasswordResetOtpUseCase>(TOKENS.VerifyTenantPasswordResetOtpUseCase, {
+  useClass: VerifyTenantPasswordResetOtpUseCase,
+});
+
+container.register<IResetTenantPasswordUseCase>(TOKENS.ResetTenantPasswordUseCase, {
+  useClass: ResetTenantPasswordUseCase,
+});
 
 // Respository
 container.register<IUserRepository>(TOKENS.UserRepository, {
