@@ -1,5 +1,5 @@
 export interface GetAllTenantsRequestDto {
   page?: number;
   limit?: number;
-  search?: string
+  search?: string;
 }

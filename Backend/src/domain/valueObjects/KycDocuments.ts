@@ -1,6 +1,6 @@
 import { DocumentInfo } from "./DocumentInfo";
 
 export interface KycDocuments {
-    businessRegistrationCertificate: DocumentInfo;
-    ownerIdProof: DocumentInfo;
+  businessRegistrationCertificate: DocumentInfo;
+  ownerIdProof: DocumentInfo;
 }

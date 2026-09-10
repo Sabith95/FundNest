@@ -34,8 +34,11 @@ export class AdminTenantResponseDtoMapper {
     // Map Document status based on KYC documents
     let docState: VerificationStatus = VerificationStatus.PENDING;
     if (tenant.kycDocuments) {
-      const busDocStatus = tenant.kycDocuments.businessRegistrationCertificate?.verification?.status;
-      const ownerDocStatus = tenant.kycDocuments.ownerIdProof?.verification?.status;
+      const busDocStatus =
+        tenant.kycDocuments.businessRegistrationCertificate?.verification
+          ?.status;
+      const ownerDocStatus =
+        tenant.kycDocuments.ownerIdProof?.verification?.status;
       if (
         busDocStatus === VerificationStatus.APPROVED &&
         ownerDocStatus === VerificationStatus.APPROVED
@@ -60,16 +63,20 @@ export class AdminTenantResponseDtoMapper {
 
     // Format Financials if bank details are available
     const financials =
-      tenant.bankDetails && (tenant.bankDetails.accountNumber || tenant.bankDetails.accountHolderName)
+      tenant.bankDetails &&
+      (tenant.bankDetails.accountNumber || tenant.bankDetails.accountHolderName)
         ? {
             bankName: tenant.bankDetails.ifscCode
               ? `Bank (${tenant.bankDetails.ifscCode})`
               : "Registered Bank",
-            accountHolder: tenant.bankDetails.accountHolderName || tenant.ownerName || "N/A",
+            accountHolder:
+              tenant.bankDetails.accountHolderName || tenant.ownerName || "N/A",
             accountNumberLast4: tenant.bankDetails.accountNumber
               ? tenant.bankDetails.accountNumber.slice(-4)
               : "••••",
-            payoutsVerified: tenant.bankDetails.verification?.status === VerificationStatus.APPROVED,
+            payoutsVerified:
+              tenant.bankDetails.verification?.status ===
+              VerificationStatus.APPROVED,
           }
         : null;
 

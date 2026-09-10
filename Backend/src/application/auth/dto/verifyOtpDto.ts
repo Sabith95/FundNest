@@ -1,9 +1,9 @@
 export interface verifyOtpDto {
-    email: string
-    otp: string
+  email: string;
+  otp: string;
 }
 
 export interface verifyOtpResponseDto {
-    email: string
-    isEmailVerified: boolean
+  email: string;
+  isEmailVerified: boolean;
 }

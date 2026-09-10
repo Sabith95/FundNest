@@ -8,8 +8,8 @@ export function confirmToast(message: string): Promise<boolean> {
     const options: ToastOptions = {
       toastId,
       position: "top-center", // 👈 Moves ONLY this confirmation toast to top-center
-      autoClose: false,       // don't auto-dismiss like normal toasts
-      closeOnClick: false,    // don't dismiss when clicking the message area
+      autoClose: false, // don't auto-dismiss like normal toasts
+      closeOnClick: false, // don't dismiss when clicking the message area
       draggable: false,
       closeButton: true,
       theme: "light",
@@ -42,7 +42,7 @@ export function confirmToast(message: string): Promise<boolean> {
           </div>
         </div>
       ),
-      options
+      options,
     );
   });
 }

@@ -7,12 +7,10 @@ import { NotFoundError } from "../../../shared/errors/NotFoundError";
 import { MESSAGES } from "../../../shared/constants/messages";
 
 @injectable()
-export class UpdateTenantStatusUseCase
-  implements IUpdateTenantStatusUseCase
-{
+export class UpdateTenantStatusUseCase implements IUpdateTenantStatusUseCase {
   constructor(
     @inject(TOKENS.TenantRepository)
-    private readonly _tenantRepository: ITenantRepository
+    private readonly _tenantRepository: ITenantRepository,
   ) {}
 
   async execute(data: {
@@ -21,7 +19,7 @@ export class UpdateTenantStatusUseCase
   }): Promise<Tenant> {
     const tenant = await this._tenantRepository.updateActiveStatus(
       data.tenantId,
-      data.isActive
+      data.isActive,
     );
 
     if (!tenant) {

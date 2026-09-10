@@ -23,18 +23,20 @@ export class AdminUserController {
     private readonly _updateUserStatusUseCase: IUpdateUserStatusUseCase,
 
     @inject(TOKENS.GetUserByIdUseCase)
-    private readonly _getUserByIdUseCase: IGetUserByIdUseCase
+    private readonly _getUserByIdUseCase: IGetUserByIdUseCase,
   ) {}
 
   getAll = async (
     req: Request,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ): Promise<void> => {
     try {
       const page = Number(req.query.page ?? 1);
       const limit = Number(req.query.limit ?? 10);
-      const search = req.query.search ? String(req.query.search).trim() : undefined;
+      const search = req.query.search
+        ? String(req.query.search).trim()
+        : undefined;
 
       if (
         !Number.isInteger(page) ||
@@ -56,7 +58,7 @@ export class AdminUserController {
         res,
         HTTP_STATUS.OK,
         MESSAGES.USER.USERS_FETCHED,
-        result
+        result,
       );
     } catch (error) {
       next(error);
@@ -66,11 +68,11 @@ export class AdminUserController {
   getOne = async (
     req: Request,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ): Promise<void> => {
     try {
       const tenant = await this._getUserByIdUseCase.execute(
-        String(req.params.id)
+        String(req.params.id),
       );
 
       ResponseHandler.success(
@@ -79,7 +81,7 @@ export class AdminUserController {
         MESSAGES.USER.USERS_FETCHED,
         {
           tenant: AdminUserResponseDtoMapper.toDto(tenant),
-        }
+        },
       );
     } catch (error) {
       next(error);
@@ -89,7 +91,7 @@ export class AdminUserController {
   updateStatus = async (
     req: Request,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ): Promise<void> => {
     try {
       if (typeof req.body.isActive !== "boolean") {
@@ -104,12 +106,10 @@ export class AdminUserController {
       ResponseHandler.success(
         res,
         HTTP_STATUS.OK,
-        user.isActive
-          ? MESSAGES.USER.UNBLOCKED
-          : MESSAGES.USER.BLOCKED,
+        user.isActive ? MESSAGES.USER.UNBLOCKED : MESSAGES.USER.BLOCKED,
         {
           user: AdminUserResponseDtoMapper.toDto(user),
-        }
+        },
       );
     } catch (error) {
       next(error);

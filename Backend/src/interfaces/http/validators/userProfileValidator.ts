@@ -3,16 +3,21 @@ import { z } from "zod";
 const strongPasswordSchema = z
   .string()
   .min(8, "Password must be at least 8 characters")
+  .max(100, "Password is too long")
   .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
   .regex(/[a-z]/, "Password must contain at least one lowercase letter")
   .regex(/\d/, "Password must contain at least one digit")
   .regex(
     /[!@#$%^&*(),.?":{}|<>_\-+=/\\[\]`;']/,
-    "Password must contain at least one special character"
+    "Password must contain at least one special character",
   );
 
 export const updateUserProfileSchema = z.object({
-  name: z.string().trim().min(2, "Name must be at least 2 characters").optional(),
+  name: z
+    .string()
+    .trim()
+    .min(2, "Name must be at least 2 characters")
+    .optional(),
   email: z.email().trim().toLowerCase().optional(),
   phone: z.string().trim().optional(),
   address: z

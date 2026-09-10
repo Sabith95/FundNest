@@ -19,6 +19,4 @@ export const updateBusinessInfoSchema = z.object({
     .max(500, "Registered business address cannot exceed 500 characters."),
 });
 
-export type UpdateBusinessInfoInput = z.infer<
-  typeof updateBusinessInfoSchema
->;
+export type UpdateBusinessInfoInput = z.infer<typeof updateBusinessInfoSchema>;

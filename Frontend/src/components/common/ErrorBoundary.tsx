@@ -1,5 +1,5 @@
-import  { Component, type ErrorInfo, type  ReactNode } from 'react';
-import { AlertTriangle, RefreshCw, Home } from 'lucide-react';
+import { Component, type ErrorInfo, type ReactNode } from "react";
+import { AlertTriangle, RefreshCw, Home } from "lucide-react";
 
 interface Props {
   children: ReactNode;
@@ -26,7 +26,7 @@ export class ErrorBoundary extends Component<Props, State> {
 
   public componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
     this.setState({ errorInfo });
-    console.error('Uncaught error caught by ErrorBoundary:', error, errorInfo);
+    console.error("Uncaught error caught by ErrorBoundary:", error, errorInfo);
   }
 
   private handleReset = (): void => {
@@ -41,7 +41,7 @@ export class ErrorBoundary extends Component<Props, State> {
   };
 
   private handleGoHome = (): void => {
-    window.location.href = '/';
+    window.location.href = "/";
   };
 
   public render(): ReactNode {
@@ -50,10 +50,12 @@ export class ErrorBoundary extends Component<Props, State> {
         return this.props.fallback;
       }
 
-      const isChunkLoadError = 
-        this.state.error?.name === 'ChunkLoadError' ||
-        this.state.error?.message?.includes('Loading chunk') ||
-        this.state.error?.message?.includes('Failed to fetch dynamically imported module');
+      const isChunkLoadError =
+        this.state.error?.name === "ChunkLoadError" ||
+        this.state.error?.message?.includes("Loading chunk") ||
+        this.state.error?.message?.includes(
+          "Failed to fetch dynamically imported module",
+        );
 
       return (
         <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
@@ -63,13 +65,16 @@ export class ErrorBoundary extends Component<Props, State> {
             </div>
 
             <h2 className="text-xl font-bold text-slate-800 mb-2">
-              {isChunkLoadError ? 'New Version Available' : 'Something went wrong'}
+              {isChunkLoadError
+                ? "New Version Available"
+                : "Something went wrong"}
             </h2>
 
             <p className="text-sm text-slate-600 mb-6">
               {isChunkLoadError
-                ? 'A new version of the app has been deployed. Please refresh the page to get the latest update.'
-                : this.state.error?.message || 'An unexpected error occurred while rendering this view.'}
+                ? "A new version of the app has been deployed. Please refresh the page to get the latest update."
+                : this.state.error?.message ||
+                  "An unexpected error occurred while rendering this view."}
             </p>
 
             <div className="flex flex-col sm:flex-row gap-3 justify-center mb-4">
@@ -103,7 +108,7 @@ export class ErrorBoundary extends Component<Props, State> {
                 </summary>
                 <pre className="whitespace-pre-wrap text-slate-700">
                   {this.state.error?.toString()}
-                  {'\n'}
+                  {"\n"}
                   {this.state.errorInfo.componentStack}
                 </pre>
               </details>

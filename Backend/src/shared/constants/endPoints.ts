@@ -28,7 +28,6 @@ export const ENDPOINTS = {
     },
   },
 
-
   SUPER_ADMIN: {
     AUTH: {
       LOGIN: "/super-admin/login",
@@ -57,45 +56,43 @@ export const ENDPOINTS = {
       GET_ONE: "/users/:id",
       UPDATE_STATUS: "/users/:id/status",
     },
-    
-
   },
 
   TENANT: {
     AUTH: {
-      REGISTER: '/register',
-      VERIFY_OTP: '/register/verify-otp',
-      RESEND_OTP: '/register/resend-otp',
-      LOGIN: '/login',
+      REGISTER: "/register",
+      VERIFY_OTP: "/register/verify-otp",
+      RESEND_OTP: "/register/resend-otp",
+      LOGIN: "/login",
     },
 
     PROFILE: {
-      GET: '/me'
+      GET: "/me",
     },
 
     PASSWORD: {
-      SEND_OTP: '/forgot-password/send-otp',
-      VERIFY_OTP: '/forgot-password/verify-otp',
-      RESET: '/forgot-password/reset',
-      RESEND_OTP: '/forgot-password/resend-otp',
-      CHANGE: '/me/password'    
+      SEND_OTP: "/forgot-password/send-otp",
+      VERIFY_OTP: "/forgot-password/verify-otp",
+      RESET: "/forgot-password/reset",
+      RESEND_OTP: "/forgot-password/resend-otp",
+      CHANGE: "/me/password",
     },
 
     BUSINESS: {
-      BUSINESS_INFO: '/business-info',
+      BUSINESS_INFO: "/business-info",
     },
-    
+
     KYC: {
-      KYC_UPLOAD: '/kyc',
+      KYC_UPLOAD: "/kyc",
     },
 
     BANKING: {
-      BANK_DETAILS: '/bank-details',
+      BANK_DETAILS: "/bank-details",
     },
 
     SESSION: {
-    REFRESH_TOKEN: "/tenants/refresh-token",
-    LOGOUT: "/tenants/logout",
+      REFRESH_TOKEN: "/tenants/refresh-token",
+      LOGOUT: "/tenants/logout",
     },
-}
+  },
 } as const;

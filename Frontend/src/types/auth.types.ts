@@ -1,16 +1,16 @@
 // Role types
-export type Role = 'SUPER_ADMIN' | 'TENANT_ADMIN' | 'USER'
+export type Role = "SUPER_ADMIN" | "TENANT_ADMIN" | "USER";
 
 // User
 export interface IUser {
-    id: string;
-    name: string;
-    email: string;
-    role: Role;
-    tenantId?: string;
-    isActive: boolean;
-    createdAt: string;
-    isEmailVerified?: boolean
+  id: string;
+  name: string;
+  email: string;
+  role: Role;
+  tenantId?: string;
+  isActive: boolean;
+  createdAt: string;
+  isEmailVerified?: boolean;
 }
 
 // Auth DTOs

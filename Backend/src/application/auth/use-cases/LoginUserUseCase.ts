@@ -4,7 +4,7 @@ import { LoginDto, LoginResponseDto } from "../dto/LoginDto";
 import { IJwtService } from "../../../infrastructure/auth/interfaces/IJwtService";
 import { IBcryptService } from "../../../infrastructure/auth/interfaces/IBcryptService";
 import { IUserRepository } from "../../../domain/repositories/IUserRepository";
-import { MESSAGES } from '../../../shared/constants/messages'
+import { MESSAGES } from "../../../shared/constants/messages";
 import { ROLES } from "../../../shared/constants/roles";
 import { ILoginUserUseCase } from "../../interface/auth/ILoginUserUseCase";
 import { UnauthorizedError } from "../../../shared/errors/UnauthorizedError";
@@ -18,13 +18,13 @@ export class LoginUserUseCase implements ILoginUserUseCase {
     @inject(TOKENS.BcryptService)
     private readonly _bcryptService: IBcryptService,
     @inject(TOKENS.JwtService)
-    private readonly _jwtService: IJwtService
+    private readonly _jwtService: IJwtService,
   ) {}
 
   async execute(input: LoginDto): Promise<LoginResponseDto> {
     const user = await this._userRepository.findByEmailAndRole(
       input.email,
-      ROLES.USER
+      ROLES.USER,
     );
 
     if (!user || !user.password) {
@@ -41,7 +41,7 @@ export class LoginUserUseCase implements ILoginUserUseCase {
 
     const isPasswordValid = await this._bcryptService.comparePassword(
       input.password,
-      user.password
+      user.password,
     );
 
     if (!isPasswordValid) {
@@ -54,19 +54,9 @@ export class LoginUserUseCase implements ILoginUserUseCase {
       role: user.role,
     });
 
-    // return {
-    //   user: {
-    //     id: user.id,
-    //     name: user.name,
-    //     email: user.email,
-    //     role: user.role,
-    //   },
-    //   tokens,
-    // };
-
     return {
       user: UserResponseMapper.toAuthUserDto(user),
-      tokens
-    }
+      tokens,
+    };
   }
 }

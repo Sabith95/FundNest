@@ -1,18 +1,17 @@
 export interface LoginDto {
-  email: string
-  password: string
+  email: string;
+  password: string;
 }
 
 export interface LoginResponseDto {
-  user:{
-    id: string
-    name: string
-    email: string
-    role: string
-  },
+  user: {
+    id: string;
+    name: string;
+    email: string;
+    role: string;
+  };
   tokens: {
-    accessToken: string
-    refreshToken: string
-  }
+    accessToken: string;
+    refreshToken: string;
+  };
 }
-

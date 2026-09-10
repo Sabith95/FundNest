@@ -1,10 +1,10 @@
-import { useEffect, useState } from 'react';
-import { Navigate, Outlet, useLocation } from 'react-router-dom';
-import { useAppDispatch, useAppSelector } from '../store/hooks';
-import { loginSuccess, logout } from '../store/slices/authSlice';
-import { ROUTES } from '../shared/constants';
-import type { IUser, Role } from '../types/auth.types';
-import { refreshAccessToken } from '../services/api';
+import { useEffect, useState } from "react";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { loginSuccess, logout } from "../store/slices/authSlice";
+import { ROUTES } from "../shared/constants";
+import type { IUser, Role } from "../types/auth.types";
+import { refreshAccessToken } from "../services/api";
 
 interface ProtectedRouteProps {
   allowedRoles?: Role[];
@@ -19,47 +19,51 @@ interface RawJwtPayload {
   tenantId?: string;
 }
 
-interface JwtPayload extends Omit<RawJwtPayload, 'role'> {
+interface JwtPayload extends Omit<RawJwtPayload, "role"> {
   role: Role;
 }
 
 const normalizeRole = (role: unknown): Role => {
-  if (typeof role !== 'string') {
-    throw new Error('Access token role is invalid');
+  if (typeof role !== "string") {
+    throw new Error("Access token role is invalid");
   }
 
-  const normalizedRole = role.trim().toUpperCase().replace(/[\s-]/g, '_');
+  const normalizedRole = role.trim().toUpperCase().replace(/[\s-]/g, "_");
 
-  if (normalizedRole === 'SUPERADMIN' || normalizedRole === 'SUPER_ADMIN') {
-    return 'SUPER_ADMIN';
+  if (normalizedRole === "SUPERADMIN" || normalizedRole === "SUPER_ADMIN") {
+    return "SUPER_ADMIN";
   }
 
-  if (normalizedRole === 'TENANT' || normalizedRole === 'TENANTADMIN' || normalizedRole === 'TENANT_ADMIN') {
-    return 'TENANT_ADMIN';
+  if (
+    normalizedRole === "TENANT" ||
+    normalizedRole === "TENANTADMIN" ||
+    normalizedRole === "TENANT_ADMIN"
+  ) {
+    return "TENANT_ADMIN";
   }
 
-  if (normalizedRole === 'USER') {
-    return 'USER';
+  if (normalizedRole === "USER") {
+    return "USER";
   }
 
-  throw new Error('Access token role is not supported');
+  throw new Error("Access token role is not supported");
 };
 
 const decodeTokenPayload = (token: string): JwtPayload => {
-  const payload = token.split('.')[1];
+  const payload = token.split(".")[1];
 
   if (!payload) {
-    throw new Error('Invalid access token');
+    throw new Error("Invalid access token");
   }
 
   const normalizedPayload = payload
-    .replace(/-/g, '+')
-    .replace(/_/g, '/')
-    .padEnd(Math.ceil(payload.length / 4) * 4, '=');
+    .replace(/-/g, "+")
+    .replace(/_/g, "/")
+    .padEnd(Math.ceil(payload.length / 4) * 4, "=");
   const decodedPayload = JSON.parse(atob(normalizedPayload)) as RawJwtPayload;
 
   if (!decodedPayload.id || !decodedPayload.email || !decodedPayload.role) {
-    throw new Error('Access token payload is missing auth fields');
+    throw new Error("Access token payload is missing auth fields");
   }
 
   return {
@@ -75,7 +79,7 @@ const mapPayloadToUser = (payload: JwtPayload): IUser => ({
   role: payload.role,
   tenantId: payload.tenantId,
   isActive: true,
-  createdAt: '',
+  createdAt: "",
 });
 
 const ProtectedRoute = ({
@@ -85,7 +89,8 @@ const ProtectedRoute = ({
   const location = useLocation();
   const dispatch = useAppDispatch();
   const { isAuthenticated, user } = useAppSelector((state) => state.auth);
-  const [isRestoringSession, setIsRestoringSession] = useState(!isAuthenticated);
+  const [isRestoringSession, setIsRestoringSession] =
+    useState(!isAuthenticated);
   const [restoredUser, setRestoredUser] = useState<IUser | null>(null);
   const activeUser = user ?? restoredUser;
   const hasAuthenticatedSession = isAuthenticated || Boolean(restoredUser);
@@ -93,7 +98,7 @@ const ProtectedRoute = ({
     allowedRoles &&
     hasAuthenticatedSession &&
     activeUser?.role &&
-    !allowedRoles.includes(activeUser.role)
+    !allowedRoles.includes(activeUser.role),
   );
 
   useEffect(() => {
@@ -117,10 +122,12 @@ const ProtectedRoute = ({
         if (!isMounted) return;
 
         setRestoredUser(restoredAuthUser);
-        dispatch(loginSuccess({
-          user: restoredAuthUser,
-          accessToken,
-        }));
+        dispatch(
+          loginSuccess({
+            user: restoredAuthUser,
+            accessToken,
+          }),
+        );
       } catch {
         if (!isMounted) return;
 

@@ -1,4 +1,3 @@
-import { User } from "../../../domain/entities/User";
 import { Role } from "../../../shared/constants/roles";
 
 export interface AddressDto {
@@ -63,4 +62,3 @@ export interface ChangePasswordDto {
 export interface ChangePasswordResponseDto {
   passwordChanged: boolean;
 }
-

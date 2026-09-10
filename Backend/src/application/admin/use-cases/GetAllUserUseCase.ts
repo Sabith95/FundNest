@@ -9,7 +9,7 @@ import { AdminUserResponseDtoMapper } from "../../mapper/AdminUserResponseDtoMap
 export class GetAllUserUseCase implements IGetAllUsersUseCase {
   constructor(
     @inject(TOKENS.UserRepository)
-    private readonly _userRepository: IUserRepository
+    private readonly _userRepository: IUserRepository,
   ) {}
 
   async execute(data: GetAllUsersRequestDto) {
@@ -20,10 +20,8 @@ export class GetAllUserUseCase implements IGetAllUsersUseCase {
     const result = await this._userRepository.findPaginated(
       page,
       limit,
-      search
+      search,
     );
-
-
 
     return {
       users: AdminUserResponseDtoMapper.toDtoList(result.data),

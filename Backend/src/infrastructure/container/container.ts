@@ -23,7 +23,6 @@ import { UserRepository } from "../repositories/UserRepository";
 import { TenantRepository } from "../repositories/TenantRepository";
 import { ITenantRepository } from "../../domain/repositories/ITenantRepository";
 
-
 //use cases
 import { LoginSuperAdminUseCase } from "../../application/auth/use-cases/LoginSuperAdminUseCase";
 import { ILoginSuperAdminUseCase } from "../../application/interface/auth/ILoginSuperAdminUseCase";
@@ -115,11 +114,11 @@ container.register<IGoogleAuthService>(TOKENS.GoogleAuthService, {
 
 container.register<IEmailService>(TOKENS.EmailService, {
   useClass: EmailService,
-})
+});
 
 container.register<IOtpService>(TOKENS.OtpService, {
   useClass: RedisOtpService,
-})
+});
 
 container.register<IImageStorageService>(TOKENS.ImageStorageService, {
   useClass: CloudinaryImageStorageService,
@@ -127,7 +126,7 @@ container.register<IImageStorageService>(TOKENS.ImageStorageService, {
 
 container.register<IS3StorageService>(TOKENS.S3StorageService, {
   useClass: S3StorageService,
-})
+});
 
 //use cases
 container.register<ILoginSuperAdminUseCase>(TOKENS.LoginSuperAdminUseCase, {
@@ -144,19 +143,25 @@ container.register<IGoogleUserLoginUseCase>(TOKENS.GoogleUserLoginUseCase, {
 
 container.register<IVerifyUserOtpUseCase>(TOKENS.VerifyUserOtpUseCase, {
   useClass: VerifyUserOtpUseCase,
-})
+});
 
 container.register<IResendUserOtpUseCase>(TOKENS.ResendUserOtpUseCase, {
   useClass: ResendUserOtpUseCase,
 });
 
-container.register<IRequestPasswordResetOtpUseCase>(TOKENS.RequestPasswordResetOtpUseCase, {
-  useClass: RequestPasswordResetOtpUseCase,
-});
+container.register<IRequestPasswordResetOtpUseCase>(
+  TOKENS.RequestPasswordResetOtpUseCase,
+  {
+    useClass: RequestPasswordResetOtpUseCase,
+  },
+);
 
-container.register<IVerifyPasswordResetOtpUseCase>(TOKENS.VerifyPasswordResetOtpUseCase, {
-  useClass: VerifyPasswordResetOtpUseCase,
-});
+container.register<IVerifyPasswordResetOtpUseCase>(
+  TOKENS.VerifyPasswordResetOtpUseCase,
+  {
+    useClass: VerifyPasswordResetOtpUseCase,
+  },
+);
 
 container.register<IResetUserPasswordUseCase>(TOKENS.ResetUserPasswordUseCase, {
   useClass: ResetUserPasswordUseCase,
@@ -177,74 +182,93 @@ container.register<IUpdateUserProfileUseCase>(TOKENS.UpdateUserProfileUseCase, {
   useClass: UpdateUserProfileUseCase,
 });
 
-container.register<IUpdateProfilePhotoUseCase>(TOKENS.UpdateProfilePhotoUseCase, {
-  useClass: UpdateProfilePhotoUseCase,
+container.register<IUpdateProfilePhotoUseCase>(
+  TOKENS.UpdateProfilePhotoUseCase,
+  {
+    useClass: UpdateProfilePhotoUseCase,
+  },
+);
+
+container.register<IChangeUserPasswordUseCase>(
+  TOKENS.ChangeUserPasswordUseCase,
+  {
+    useClass: ChangeUserPasswordUseCase,
+  },
+);
+
+container.register<IRefreshTokenUseCase>(TOKENS.RefreshTokenUseCase, {
+  useClass: RefreshTokenUseCase,
 });
 
-container.register<IChangeUserPasswordUseCase>(TOKENS.ChangeUserPasswordUseCase, {
-  useClass: ChangeUserPasswordUseCase,
+container.register<IRegisterTenantUseCase>(TOKENS.RegisterTenantUseCase, {
+  useClass: RegisterTenantUseCase,
 });
 
-container.register<IRefreshTokenUseCase>(TOKENS.RefreshTokenUseCase,{
-        useClass: RefreshTokenUseCase,
-});
-
-container.register<IRegisterTenantUseCase>(TOKENS.RegisterTenantUseCase,{
-  useClass: RegisterTenantUseCase
-})
-
-container.register<IVerifyTenantOtpUseCase>(TOKENS.VerifyTenantOtpUseCase,{
+container.register<IVerifyTenantOtpUseCase>(TOKENS.VerifyTenantOtpUseCase, {
   useClass: VerifyTenantOtpUseCase,
-})
+});
 
-container.register<IResendTenantOtpUseCase>(TOKENS.ResendTenantOtpUseCase,{
-  useClass: ResendTenantOtpUseCase
-})
+container.register<IResendTenantOtpUseCase>(TOKENS.ResendTenantOtpUseCase, {
+  useClass: ResendTenantOtpUseCase,
+});
 
-container.register<IUpdateBusinessInfoUseCase>(TOKENS.UpdateBusinessInfoUseCase,{
-  useClass: UpdateBusinessInfoUseCase
-})
+container.register<IUpdateBusinessInfoUseCase>(
+  TOKENS.UpdateBusinessInfoUseCase,
+  {
+    useClass: UpdateBusinessInfoUseCase,
+  },
+);
 
-container.register<IUploadKycDocumentsUseCase>(TOKENS.UploadKycDocumentsUseCase, {
-  useClass: UploadKycDocumentsUseCase
-})
-
+container.register<IUploadKycDocumentsUseCase>(
+  TOKENS.UploadKycDocumentsUseCase,
+  {
+    useClass: UploadKycDocumentsUseCase,
+  },
+);
 
 container.register<IUpdateBankDetailsUseCase>(TOKENS.UpdateBankDetailsUseCase, {
-  useClass: UpdateBankDetailsUseCase
-})
-
+  useClass: UpdateBankDetailsUseCase,
+});
 
 container.register<IGetAllTenantsUseCase>(TOKENS.GetAllTenantsUseCase, {
   useClass: GetAllTenantUseCase,
-})
+});
 
 container.register<IGetTenantByIdUseCase>(TOKENS.GetTenantByIdUseCase, {
-  useClass: GetTenantByIdUseCase
-})
+  useClass: GetTenantByIdUseCase,
+});
 
-container.register<IUpdateTenantStatusUseCase>(TOKENS.UpdateTenantStatusUseCase, {
-  useClass: UpdateTenantStatusUseCase
-})
+container.register<IUpdateTenantStatusUseCase>(
+  TOKENS.UpdateTenantStatusUseCase,
+  {
+    useClass: UpdateTenantStatusUseCase,
+  },
+);
 
 container.register<IGetAllUsersUseCase>(TOKENS.GetAllUsersUseCase, {
-  useClass: GetAllUserUseCase
-})
+  useClass: GetAllUserUseCase,
+});
 
 container.register<IUpdateUserStatusUseCase>(TOKENS.UpdateUserStatusUseCase, {
-  useClass: UpdateUserStatusUseCase
+  useClass: UpdateUserStatusUseCase,
 });
 
 container.register<IGetUserByIdUseCase>(TOKENS.GetUserByIdUseCase, {
-  useClass: GetUserByIdUseCase
-})
+  useClass: GetUserByIdUseCase,
+});
 
-container.register<IVerifyBusinessDetailsUseCase>(TOKENS.VerifyBusinessDetailsUseCase, {
-  useClass: VerifyBusinessDetailsUseCase,
-});
-container.register<IVerifyKycDocumentsUseCase>(TOKENS.VerifyKycDocumentsUseCase, {
-  useClass: VerifyKycDocumentsUseCase,
-});
+container.register<IVerifyBusinessDetailsUseCase>(
+  TOKENS.VerifyBusinessDetailsUseCase,
+  {
+    useClass: VerifyBusinessDetailsUseCase,
+  },
+);
+container.register<IVerifyKycDocumentsUseCase>(
+  TOKENS.VerifyKycDocumentsUseCase,
+  {
+    useClass: VerifyKycDocumentsUseCase,
+  },
+);
 container.register<IVerifyBankDetailsUseCase>(TOKENS.VerifyBankDetailsUseCase, {
   useClass: VerifyBankDetailsUseCase,
 });
@@ -253,29 +277,44 @@ container.register<IGenerateUploadUrlUseCase>(TOKENS.GenerateUploadUrlUseCase, {
   useClass: GenerateUploadUrlUseCase,
 });
 
-container.register<IGenerateDownloadUrlUseCase>(TOKENS.GenerateDownloadUrlUseCase, {
-  useClass: GenerateDownloadUrlUseCase,
-});
+container.register<IGenerateDownloadUrlUseCase>(
+  TOKENS.GenerateDownloadUrlUseCase,
+  {
+    useClass: GenerateDownloadUrlUseCase,
+  },
+);
 
-container.register<ICompleteTenantVerificationUseCase>(TOKENS.CompleteTenantVerificationUseCase, {
-  useClass: CompleteTenantVerificationUseCase,
-});
+container.register<ICompleteTenantVerificationUseCase>(
+  TOKENS.CompleteTenantVerificationUseCase,
+  {
+    useClass: CompleteTenantVerificationUseCase,
+  },
+);
 
 container.register<IGetTenantProfileUseCase>(TOKENS.GetTenantProfileUseCase, {
-  useClass: GetTenantProfileUseCase
-})
-
-container.register<IRequestTenantPasswordResetOtpUseCase>(TOKENS.RequestTenantPasswordResetOtpUseCase, {
-  useClass: RequestTenantPasswordResetOtpUseCase,
+  useClass: GetTenantProfileUseCase,
 });
 
-container.register<IVerifyTenantPasswordResetOtpUseCase>(TOKENS.VerifyTenantPasswordResetOtpUseCase, {
-  useClass: VerifyTenantPasswordResetOtpUseCase,
-});
+container.register<IRequestTenantPasswordResetOtpUseCase>(
+  TOKENS.RequestTenantPasswordResetOtpUseCase,
+  {
+    useClass: RequestTenantPasswordResetOtpUseCase,
+  },
+);
 
-container.register<IResetTenantPasswordUseCase>(TOKENS.ResetTenantPasswordUseCase, {
-  useClass: ResetTenantPasswordUseCase,
-});
+container.register<IVerifyTenantPasswordResetOtpUseCase>(
+  TOKENS.VerifyTenantPasswordResetOtpUseCase,
+  {
+    useClass: VerifyTenantPasswordResetOtpUseCase,
+  },
+);
+
+container.register<IResetTenantPasswordUseCase>(
+  TOKENS.ResetTenantPasswordUseCase,
+  {
+    useClass: ResetTenantPasswordUseCase,
+  },
+);
 
 // Respository
 container.register<IUserRepository>(TOKENS.UserRepository, {
@@ -284,5 +323,5 @@ container.register<IUserRepository>(TOKENS.UserRepository, {
 
 container.register<ITenantRepository>(TOKENS.TenantRepository, {
   useClass: TenantRepository,
-})
+});
 export { container };

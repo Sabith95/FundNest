@@ -1,5 +1,5 @@
 export interface BusinessInfo {
-    businessType: string;
-    registrationId: string;
-    registeredAddress: string;
+  businessType: string;
+  registrationId: string;
+  registeredAddress: string;
 }

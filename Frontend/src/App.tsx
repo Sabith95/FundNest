@@ -1,9 +1,8 @@
-
-import { Provider } from 'react-redux';
-import { store } from './store/index';
-import AppRouter from './router/AppRouter';
-import { ToastContainer } from 'react-toastify';
-import ErrorBoundary from './components/common/ErrorBoundary';
+import { Provider } from "react-redux";
+import { store } from "./store/index";
+import AppRouter from "./router/AppRouter";
+import { ToastContainer } from "react-toastify";
+import ErrorBoundary from "./components/common/ErrorBoundary";
 
 const App = () => {
   return (

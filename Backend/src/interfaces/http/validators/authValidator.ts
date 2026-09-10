@@ -8,10 +8,14 @@ export const loginSchema = z.object({
 const strongPasswordSchema = z
   .string()
   .min(8, "Password must be at least 8 characters")
+  .max(100, "Password is too long")
   .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
   .regex(/[a-z]/, "Password must contain at least one lowercase letter")
   .regex(/\d/, "Password must contain at least one digit")
-  .regex(/[!@#$%^&*(),.?":{}|<>_\-+=/\\[\]`;']/, "Password must contain at least one special character");
+  .regex(
+    /[!@#$%^&*(),.?":{}|<>_\-+=/\\[\]`;']/,
+    "Password must contain at least one special character",
+  );
 
 export const registerUserSchema = z
   .object({
@@ -40,7 +44,6 @@ export const googleLoginSchema = z.object({
   idToken: z.string().min(1, "Google token is required"),
 });
 
-
 export const verifyOtpSchema = z.object({
   email: z.email().trim().toLowerCase(),
   otp: z.string().length(6, "OTP must be 6 digits"),
@@ -58,9 +61,9 @@ export const resetPasswordSchema = z
   .object({
     email: z.email().trim().toLowerCase(),
     password: strongPasswordSchema,
-    confirmPassword: z.string().min(1, 'Confirm password is required'),
+    confirmPassword: z.string().min(1, "Confirm password is required"),
   })
   .refine((data) => data.password === data.confirmPassword, {
-    path: ['confirmPassword'],
-    message: 'Passwords do not match',
+    path: ["confirmPassword"],
+    message: "Passwords do not match",
   });

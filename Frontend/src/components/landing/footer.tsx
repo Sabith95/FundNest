@@ -19,7 +19,11 @@ interface FooterProps {
 const DEFAULT_COLUMNS: FooterColumn[] = [
   {
     title: "Product",
-    links: [{ label: "Features" }, { label: "Security", underline: true }, { label: "Pricing" }],
+    links: [
+      { label: "Features" },
+      { label: "Security", underline: true },
+      { label: "Pricing" },
+    ],
   },
   {
     title: "Legal",
@@ -65,7 +69,9 @@ const Footer: React.FC<FooterProps> = ({
       </div>
 
       <div className="mx-auto mt-10 max-w-6xl border-t border-slate-100 pt-6">
-        <p className="text-xs text-slate-400">© 2026 FundNest. The Digital Vault for your Capital.</p>
+        <p className="text-xs text-slate-400">
+          © 2026 FundNest. The Digital Vault for your Capital.
+        </p>
       </div>
     </footer>
   );

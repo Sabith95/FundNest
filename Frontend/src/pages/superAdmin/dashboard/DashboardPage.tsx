@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Building2, Users, CreditCard, AlertTriangle } from "lucide-react";
-import Sidebar from "../../../components/admin/Sidebar"
-import Header from "../../../components/admin/Header"
+import Sidebar from "../../../components/admin/Sidebar";
+import Header from "../../../components/admin/Header";
 
 interface StatCard {
   id: string;
@@ -68,7 +68,9 @@ const Dashboard: React.FC = () => {
           {/* Page header */}
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <h1 className="text-2xl font-bold text-slate-900 sm:text-3xl">Dashboard Overview</h1>
+              <h1 className="text-2xl font-bold text-slate-900 sm:text-3xl">
+                Dashboard Overview
+              </h1>
               <p className="mt-1 text-sm text-slate-500">
                 Monitor tenants, users and platform activity from one place.
               </p>
@@ -100,12 +102,18 @@ const Dashboard: React.FC = () => {
                 className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm"
               >
                 <div className="flex items-center justify-between">
-                  <span className={`flex h-10 w-10 items-center justify-center rounded-lg ${stat.iconBg}`}>
+                  <span
+                    className={`flex h-10 w-10 items-center justify-center rounded-lg ${stat.iconBg}`}
+                  >
                     <stat.icon className={`h-5 w-5 ${stat.iconColor}`} />
                   </span>
                 </div>
-                <p className="mt-4 text-2xl font-bold text-slate-900">{stat.value}</p>
-                <p className="text-sm font-medium text-slate-600">{stat.label}</p>
+                <p className="mt-4 text-2xl font-bold text-slate-900">
+                  {stat.value}
+                </p>
+                <p className="text-sm font-medium text-slate-600">
+                  {stat.label}
+                </p>
                 <p className="mt-3 border-t border-slate-100 pt-3 text-xs text-slate-400">
                   {stat.helperText}
                 </p>

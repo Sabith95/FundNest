@@ -1,8 +1,8 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { authService } from '../../../services/authService';
-import { ROUTES } from '../../../shared/constants';
-import { toast } from 'react-toastify';
+import React, { useState, useRef, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { authService } from "../../../services/authService";
+import { ROUTES } from "../../../shared/constants";
+import { toast } from "react-toastify";
 // ─── Types ────────────────────────────────────────────────
 
 interface IOtpLocationState {
@@ -15,8 +15,9 @@ const LeftPanel: React.FC = () => (
   <div
     className="hidden lg:flex lg:flex-col lg:justify-between relative overflow-hidden"
     style={{
-      background: 'linear-gradient(160deg, #0a1f5c 0%, #0d2680 50%, #0a1f5c 100%)',
-      minHeight: '100vh',
+      background:
+        "linear-gradient(160deg, #0a1f5c 0%, #0d2680 50%, #0a1f5c 100%)",
+      minHeight: "100vh",
     }}
   >
     {/* Network grid background */}
@@ -28,18 +29,36 @@ const LeftPanel: React.FC = () => (
     >
       {/* Network lines */}
       {[
-        [50,100,200,250],[200,250,380,150],[380,150,500,300],
-        [500,300,420,480],[420,480,250,520],[250,520,100,400],
-        [100,400,50,100],[200,250,250,520],[380,150,420,480],
-        [50,100,500,300],[100,400,380,150],[250,520,500,300],
-        [200,250,100,400],[420,480,50,100],[150,650,300,700],
-        [300,700,480,620],[480,620,520,800],[520,800,300,850],
-        [300,850,100,750],[100,750,150,650],[300,700,100,750],
-        [480,620,300,850],[150,650,520,800],
-      ].map(([x1,y1,x2,y2], i) => (
+        [50, 100, 200, 250],
+        [200, 250, 380, 150],
+        [380, 150, 500, 300],
+        [500, 300, 420, 480],
+        [420, 480, 250, 520],
+        [250, 520, 100, 400],
+        [100, 400, 50, 100],
+        [200, 250, 250, 520],
+        [380, 150, 420, 480],
+        [50, 100, 500, 300],
+        [100, 400, 380, 150],
+        [250, 520, 500, 300],
+        [200, 250, 100, 400],
+        [420, 480, 50, 100],
+        [150, 650, 300, 700],
+        [300, 700, 480, 620],
+        [480, 620, 520, 800],
+        [520, 800, 300, 850],
+        [300, 850, 100, 750],
+        [100, 750, 150, 650],
+        [300, 700, 100, 750],
+        [480, 620, 300, 850],
+        [150, 650, 520, 800],
+      ].map(([x1, y1, x2, y2], i) => (
         <line
           key={i}
-          x1={x1} y1={y1} x2={x2} y2={y2}
+          x1={x1}
+          y1={y1}
+          x2={x2}
+          y2={y2}
           stroke="#4a7fd4"
           strokeWidth="0.8"
           strokeOpacity="0.6"
@@ -48,17 +67,26 @@ const LeftPanel: React.FC = () => (
 
       {/* Network dots */}
       {[
-        [50,100],[200,250],[380,150],[500,300],[420,480],
-        [250,520],[100,400],[150,650],[300,700],[480,620],
-        [520,800],[300,850],[100,750],
-      ].map(([cx,cy], i) => (
-        <circle key={i} cx={cx} cy={cy} r="5" fill="#4a9fd4" opacity="0.8"/>
+        [50, 100],
+        [200, 250],
+        [380, 150],
+        [500, 300],
+        [420, 480],
+        [250, 520],
+        [100, 400],
+        [150, 650],
+        [300, 700],
+        [480, 620],
+        [520, 800],
+        [300, 850],
+        [100, 750],
+      ].map(([cx, cy], i) => (
+        <circle key={i} cx={cx} cy={cy} r="5" fill="#4a9fd4" opacity="0.8" />
       ))}
     </svg>
 
     {/* Content */}
     <div className="relative z-10 flex flex-col h-full justify-between p-10 xl:p-14">
-
       {/* Top label */}
       <div>
         <p className="text-white text-sm font-bold tracking-widest uppercase opacity-90">
@@ -73,15 +101,17 @@ const LeftPanel: React.FC = () => (
         </p>
         <h2
           className="text-white font-black leading-none mb-6"
-          style={{ fontSize: 'clamp(2.8rem, 4.5vw, 4rem)' }}
+          style={{ fontSize: "clamp(2.8rem, 4.5vw, 4rem)" }}
         >
-          Elevate Your<br />
-          Wealth<br />
+          Elevate Your
+          <br />
+          Wealth
+          <br />
           Management.
         </h2>
         <p className="text-blue-200 text-base leading-relaxed max-w-xs opacity-70">
-          Your institutional-grade portal to precise financial
-          curation and global asset oversight.
+          Your institutional-grade portal to precise financial curation and
+          global asset oversight.
         </p>
       </div>
 
@@ -89,16 +119,30 @@ const LeftPanel: React.FC = () => (
       <div className="flex items-center gap-4">
         <div
           className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0"
-          style={{ background: 'rgba(74, 127, 212, 0.25)', border: '1px solid rgba(74,127,212,0.3)' }}
+          style={{
+            background: "rgba(74, 127, 212, 0.25)",
+            border: "1px solid rgba(74,127,212,0.3)",
+          }}
         >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7ab3e8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-            <polyline points="9 12 11 14 15 10"/>
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#7ab3e8"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+            <polyline points="9 12 11 14 15 10" />
           </svg>
         </div>
         <div>
           <p className="text-white text-sm font-bold">Bank-Grade Security</p>
-          <p className="text-blue-300 text-xs opacity-70">AES-256 Bit Encryption</p>
+          <p className="text-blue-300 text-xs opacity-70">
+            AES-256 Bit Encryption
+          </p>
         </div>
       </div>
     </div>
@@ -135,13 +179,13 @@ const OtpInput: React.FC<IOtpInputProps> = ({ value, onChange, hasError }) => {
 
   const handleKeyDown = (
     index: number,
-    e: React.KeyboardEvent<HTMLInputElement>
+    e: React.KeyboardEvent<HTMLInputElement>,
   ): void => {
     // Backspace — clear current or go to previous
-    if (e.key === 'Backspace') {
+    if (e.key === "Backspace") {
       if (value[index]) {
         const newOtp = [...value];
-        newOtp[index] = '';
+        newOtp[index] = "";
         onChange(newOtp);
       } else if (index > 0) {
         inputRefs.current[index - 1]?.focus();
@@ -149,10 +193,10 @@ const OtpInput: React.FC<IOtpInputProps> = ({ value, onChange, hasError }) => {
     }
 
     // Arrow keys
-    if (e.key === 'ArrowLeft' && index > 0) {
+    if (e.key === "ArrowLeft" && index > 0) {
       inputRefs.current[index - 1]?.focus();
     }
-    if (e.key === 'ArrowRight' && index < 5) {
+    if (e.key === "ArrowRight" && index < 5) {
       inputRefs.current[index + 1]?.focus();
     }
   };
@@ -160,13 +204,13 @@ const OtpInput: React.FC<IOtpInputProps> = ({ value, onChange, hasError }) => {
   const handlePaste = (e: React.ClipboardEvent): void => {
     e.preventDefault();
     const pasted = e.clipboardData
-      .getData('text')
-      .replace(/\D/g, '')
+      .getData("text")
+      .replace(/\D/g, "")
       .slice(0, 6);
 
     if (pasted.length > 0) {
-      const newOtp = ['', '', '', '', '', ''];
-      pasted.split('').forEach((digit, i) => {
+      const newOtp = ["", "", "", "", "", ""];
+      pasted.split("").forEach((digit, i) => {
         if (i < 6) newOtp[i] = digit;
       });
       onChange(newOtp);
@@ -180,7 +224,9 @@ const OtpInput: React.FC<IOtpInputProps> = ({ value, onChange, hasError }) => {
       {value.map((digit, index) => (
         <input
           key={index}
-          ref={(el) => { inputRefs.current[index] = el; }}
+          ref={(el) => {
+            inputRefs.current[index] = el;
+          }}
           type="text"
           inputMode="numeric"
           maxLength={1}
@@ -192,16 +238,17 @@ const OtpInput: React.FC<IOtpInputProps> = ({ value, onChange, hasError }) => {
           className={`
             flex-1 text-center text-2xl font-bold rounded-2xl border-2
             outline-none transition-all duration-200
-            ${hasError
-              ? 'border-red-300 bg-red-50 text-red-600'
-              : digit
-                ? 'border-[#1a3a6e] bg-white text-[#1a3a6e] shadow-sm'
-                : 'border-gray-200 bg-gray-100 text-gray-800 focus:border-[#1a3a6e] focus:bg-white focus:border-2 focus:shadow-sm'
+            ${
+              hasError
+                ? "border-red-300 bg-red-50 text-red-600"
+                : digit
+                  ? "border-[#1a3a6e] bg-white text-[#1a3a6e] shadow-sm"
+                  : "border-gray-200 bg-gray-100 text-gray-800 focus:border-[#1a3a6e] focus:bg-white focus:border-2 focus:shadow-sm"
             }
           `}
           style={{
-            height: '64px',
-            minWidth: '0',
+            height: "64px",
+            minWidth: "0",
           }}
         />
       ))}
@@ -211,17 +258,35 @@ const OtpInput: React.FC<IOtpInputProps> = ({ value, onChange, hasError }) => {
 
 // ─── Clock Icon ───────────────────────────────────────────
 const ClockIcon: React.FC = () => (
-  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <circle cx="12" cy="12" r="10"/>
-    <polyline points="12 6 12 12 16 14"/>
+  <svg
+    width="15"
+    height="15"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <circle cx="12" cy="12" r="10" />
+    <polyline points="12 6 12 12 16 14" />
   </svg>
 );
 
 // ─── Arrow Left Icon ──────────────────────────────────────
 const ArrowLeftIcon: React.FC = () => (
-  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <line x1="19" y1="12" x2="5" y2="12"/>
-    <polyline points="12 19 5 12 12 5"/>
+  <svg
+    width="15"
+    height="15"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <line x1="19" y1="12" x2="5" y2="12" />
+    <polyline points="12 19 5 12 12 5" />
   </svg>
 );
 
@@ -231,7 +296,7 @@ const OtpPage: React.FC = () => {
   const location = useLocation();
 
   const state = location.state as IOtpLocationState | null;
-  const email = state?.email || '';
+  const email = state?.email || "";
 
   useEffect(() => {
     if (!email) {
@@ -241,32 +306,32 @@ const OtpPage: React.FC = () => {
 
   // Mask email — m***@fundnest.com
   const maskEmail = (email: string): string => {
-    const [local, domain] = email.split('@');
+    const [local, domain] = email.split("@");
     if (!domain) return email;
-    const masked = local[0] + '***';
+    const masked = local[0] + "***";
     return `${masked}@${domain}`;
   };
 
-    const OTP_TIMER_SECONDS = 60;
+  const OTP_TIMER_SECONDS = 60;
 
-    const formatTime = (seconds: number): string => {
+  const formatTime = (seconds: number): string => {
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
 
-    return `${minutes}:${String(remainingSeconds).padStart(2, '0')}`;
+    return `${minutes}:${String(remainingSeconds).padStart(2, "0")}`;
   };
 
-  const [otp, setOtp] = useState<string[]>(['', '', '', '', '', '']);
-  const [error, setError] = useState<string>('');
+  const [otp, setOtp] = useState<string[]>(["", "", "", "", "", ""]);
+  const [error, setError] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [resendTimer, setResendTimer] = useState<number>(OTP_TIMER_SECONDS);
   const [isResending, setIsResending] = useState<boolean>(false);
 
-  const canResend = resendTimer <= 0
+  const canResend = resendTimer <= 0;
 
   // ─── Countdown timer ──────────────────────────────────
   useEffect(() => {
-    if (resendTimer <= 0)  return;
+    if (resendTimer <= 0) return;
 
     const timer = setInterval(() => {
       setResendTimer((prev) => prev - 1);
@@ -278,70 +343,72 @@ const OtpPage: React.FC = () => {
   // ─── Handlers ─────────────────────────────────────────
   const handleOtpChange = (newOtp: string[]): void => {
     setOtp(newOtp);
-    if (error) setError('');
+    if (error) setError("");
   };
 
   const handleVerify = async (): Promise<void> => {
-    const otpValue = otp.join('');
+    const otpValue = otp.join("");
 
     if (otpValue.length < 6) {
-      setError('Please enter the complete 6-digit code');
+      setError("Please enter the complete 6-digit code");
       return;
     }
 
     setIsLoading(true);
-    setError('');
+    setError("");
 
     try {
       await authService.verifyUserOtp({
         email,
         otp: otpValue,
       });
-        toast.success('OTP verified. Please login.', {
-        position: 'top-right',
+      toast.success("OTP verified. Please login.", {
+        position: "top-right",
         autoClose: 3000,
-        theme: 'colored',
+        theme: "colored",
       });
       navigate(ROUTES.USER.LOGIN);
     } catch (err: any) {
       setError(
-          err.response?.data?.errors?.[0]?.message ||
+        err.response?.data?.errors?.[0]?.message ||
           err.response?.data?.message ||
-          'Invalid code. Please try again.'
-);
+          "Invalid code. Please try again.",
+      );
     } finally {
       setIsLoading(false);
     }
   };
 
   const handleResend = async (): Promise<void> => {
-  if (!canResend || !email) return;
+    if (!canResend || !email) return;
 
-  setIsResending(true);
-  setError('');
+    setIsResending(true);
+    setError("");
 
-  try {
-    await authService.resendUserOtp({ email });
+    try {
+      await authService.resendUserOtp({ email });
 
-    setOtp(['', '', '', '', '', '']);
-    setResendTimer(OTP_TIMER_SECONDS);
-  } catch (err: any) {
-    setError(
-      err.response?.data?.errors?.[0]?.message ||
-      err.response?.data?.message ||
-      'Failed to resend OTP. Please try again.'
-    );
-  } finally {
-    setIsResending(false);
-  }
-};
+      setOtp(["", "", "", "", "", ""]);
+      setResendTimer(OTP_TIMER_SECONDS);
+    } catch (err: any) {
+      setError(
+        err.response?.data?.errors?.[0]?.message ||
+          err.response?.data?.message ||
+          "Failed to resend OTP. Please try again.",
+      );
+    } finally {
+      setIsResending(false);
+    }
+  };
 
-  const isComplete = otp.join('').length === 6;
+  const isComplete = otp.join("").length === 6;
 
   // ─── Render ───────────────────────────────────────────
   return (
-    <div className="min-h-screen flex" style={{ fontFamily: "'Segoe UI', system-ui, sans-serif" }}>
-
+    <div
+      className="min-h-screen flex"
+      style={{ fontFamily: "'Segoe UI', system-ui, sans-serif" }}
+    >
       {/* Left panel */}
       <div className="lg:w-[52%] xl:w-[55%] flex-shrink-0">
         <LeftPanel />
@@ -350,20 +417,18 @@ const OtpPage: React.FC = () => {
       {/* Right panel */}
       <div
         className="flex-1 flex flex-col items-center justify-center px-6 py-12 sm:px-10"
-        style={{ background: '#f0f2f7' }}
+        style={{ background: "#f0f2f7" }}
       >
         <div className="w-full max-w-md">
-
           {/* Card */}
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 sm:p-10">
-
             {/* Header */}
             <div className="mb-7">
               <h2 className="text-2xl font-black text-gray-900 mb-2">
                 Verification Required
               </h2>
               <p className="text-sm text-gray-500 leading-relaxed">
-                A 6-digit code has been sent to{' '}
+                A 6-digit code has been sent to{" "}
                 <span className="font-bold text-[#1a3a6e]">
                   {maskEmail(email)}
                 </span>
@@ -393,13 +458,14 @@ const OtpPage: React.FC = () => {
               className={`
                 w-full py-4 rounded-xl font-bold text-sm text-white mb-5
                 transition-all duration-200
-                ${isLoading || !isComplete
-                  ? 'opacity-60 cursor-not-allowed'
-                  : 'hover:opacity-90 active:scale-[0.98] shadow-md hover:shadow-lg'
+                ${
+                  isLoading || !isComplete
+                    ? "opacity-60 cursor-not-allowed"
+                    : "hover:opacity-90 active:scale-[0.98] shadow-md hover:shadow-lg"
                 }
               `}
               style={{
-                background: 'linear-gradient(135deg, #1a3a6e 0%, #1a5276 100%)',
+                background: "linear-gradient(135deg, #1a3a6e 0%, #1a5276 100%)",
               }}
             >
               {isLoading ? (
@@ -421,7 +487,7 @@ const OtpPage: React.FC = () => {
                   Verifying...
                 </span>
               ) : (
-                'Verify OTP'
+                "Verify OTP"
               )}
             </button>
 
@@ -431,7 +497,7 @@ const OtpPage: React.FC = () => {
               <div className="flex items-center gap-1.5 text-gray-400 text-sm">
                 <ClockIcon />
                 <span>
-                  Resend in{' '}
+                  Resend in{" "}
                   <span className="font-bold text-gray-700">
                     {formatTime(resendTimer)}
                   </span>
@@ -445,9 +511,10 @@ const OtpPage: React.FC = () => {
                 disabled={!canResend || isResending}
                 className={`
                   text-sm font-semibold transition-all duration-200
-                  ${canResend
-                    ? 'text-[#1a3a6e] hover:underline cursor-pointer'
-                    : 'text-gray-300 cursor-not-allowed'
+                  ${
+                    canResend
+                      ? "text-[#1a3a6e] hover:underline cursor-pointer"
+                      : "text-gray-300 cursor-not-allowed"
                   }
                 `}
               >
@@ -467,18 +534,16 @@ const OtpPage: React.FC = () => {
               <ArrowLeftIcon />
               Back to Login
             </button>
-
           </div>
 
           {/* Footer help text */}
           <p className="text-center text-xs text-gray-400 mt-6 leading-relaxed px-4">
             Having trouble? Please check your spam folder or contact our
-            institutional support desk at{' '}
+            institutional support desk at{" "}
             <span className="text-gray-500 font-medium">
               support@fundnest.com
             </span>
           </p>
-
         </div>
       </div>
     </div>

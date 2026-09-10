@@ -8,7 +8,7 @@ import {
   VerifyOtpData,
   VerifiedOtpResult,
   PendingRegistration,
-  PendingTenantRegistration
+  PendingTenantRegistration,
 } from "./interfaces/IOtpService";
 import { BadRequestError } from "../../shared/errors/BadRequestError";
 
@@ -40,7 +40,7 @@ export class RedisOtpService implements IOtpService {
       key,
       JSON.stringify(payload),
       "EX",
-      env.OTP_EXPIRES_IN_SECONDS
+      env.OTP_EXPIRES_IN_SECONDS,
     );
   }
 
@@ -56,9 +56,7 @@ export class RedisOtpService implements IOtpService {
 
     if (storedOtp.attempts >= env.OTP_MAX_ATTEMPTS) {
       await redisClient.del(key);
-      throw new BadRequestError(
-        "Maximum OTP attempts exceeded"
-      );
+      throw new BadRequestError("Maximum OTP attempts exceeded");
     }
 
     const incomingOtpHash = this.hashOtp(data.otp);
@@ -85,7 +83,7 @@ export class RedisOtpService implements IOtpService {
 
   async createPasswordResetSession(
     email: string,
-    userId: string
+    userId: string,
   ): Promise<void> {
     const key = this.getPasswordResetSessionKey(email);
     const payload: PasswordResetSessionPayload = {
@@ -97,19 +95,17 @@ export class RedisOtpService implements IOtpService {
       key,
       JSON.stringify(payload),
       "EX",
-      env.OTP_EXPIRES_IN_SECONDS
+      env.OTP_EXPIRES_IN_SECONDS,
     );
   }
 
-  async consumePasswordResetSession(
-    email: string
-  ): Promise<VerifiedOtpResult> {
+  async consumePasswordResetSession(email: string): Promise<VerifiedOtpResult> {
     const key = this.getPasswordResetSessionKey(email);
     const raw = await redisClient.get(key);
 
     if (!raw) {
       throw new BadRequestError(
-        "Password reset session expired. Please verify OTP again."
+        "Password reset session expired. Please verify OTP again.",
       );
     }
 
@@ -123,82 +119,69 @@ export class RedisOtpService implements IOtpService {
     };
   }
 
-  async storePendingUserRegistration(
-    data: PendingRegistration
-  ): Promise<void> {
-    const key = this.getPendingRegistrationKey(data.email)
-    
+  async storePendingUserRegistration(data: PendingRegistration): Promise<void> {
+    const key = this.getPendingRegistrationKey(data.email);
+
     await redisClient.set(
       key,
       JSON.stringify(data),
-      'EX',
-      env.OTP_EXPIRES_IN_SECONDS
-    )
+      "EX",
+      env.OTP_EXPIRES_IN_SECONDS,
+    );
   }
 
   async getPendingUserRegistration(
-    email: string
+    email: string,
   ): Promise<PendingRegistration | null> {
+    const key = this.getPendingRegistrationKey(email);
 
-      const key = this.getPendingRegistrationKey(email);
+    const raw = await redisClient.get(key);
 
-      const raw = await redisClient.get(key);
+    if (!raw) {
+      return null;
+    }
 
-      if (!raw) {
-          return null;
-      }
-
-      return JSON.parse(raw) as PendingRegistration;
+    return JSON.parse(raw) as PendingRegistration;
   }
 
-  async deletePendingUserRegistration(
-        email: string
-    ): Promise<void> {
+  async deletePendingUserRegistration(email: string): Promise<void> {
+    const key = this.getPendingRegistrationKey(email);
 
-        const key = this.getPendingRegistrationKey(email);
-
-        await redisClient.del(key);
+    await redisClient.del(key);
   }
 
   async storePendingTenantRegistration(
-    data: PendingTenantRegistration
-    ): Promise<void> {
-
-        const key = this.getPendingTenantRegistrationKey(data.email);
-
-        await redisClient.set(
-            key,
-            JSON.stringify(data),
-            "EX",
-            env.OTP_EXPIRES_IN_SECONDS
-        );
-    }
-  
-  async getPendingTenantRegistration(
-      email: string
-  ): Promise<PendingTenantRegistration | null> {
-
-      const key = this.getPendingTenantRegistrationKey(email);
-
-      const raw = await redisClient.get(key);
-
-      if (!raw) {
-          return null;
-      }
-
-      return JSON.parse(raw) as PendingTenantRegistration;
-  }
-
-  async deletePendingTenantRegistration(
-    email: string
+    data: PendingTenantRegistration,
   ): Promise<void> {
+    const key = this.getPendingTenantRegistrationKey(data.email);
 
-      const key = this.getPendingTenantRegistrationKey(email);
-
-      await redisClient.del(key);
+    await redisClient.set(
+      key,
+      JSON.stringify(data),
+      "EX",
+      env.OTP_EXPIRES_IN_SECONDS,
+    );
   }
 
+  async getPendingTenantRegistration(
+    email: string,
+  ): Promise<PendingTenantRegistration | null> {
+    const key = this.getPendingTenantRegistrationKey(email);
 
+    const raw = await redisClient.get(key);
+
+    if (!raw) {
+      return null;
+    }
+
+    return JSON.parse(raw) as PendingTenantRegistration;
+  }
+
+  async deletePendingTenantRegistration(email: string): Promise<void> {
+    const key = this.getPendingTenantRegistrationKey(email);
+
+    await redisClient.del(key);
+  }
 
   private getOtpKey(purpose: string, email: string): string {
     return `otp:${purpose}:${email.toLowerCase().trim()}`;
@@ -213,7 +196,7 @@ export class RedisOtpService implements IOtpService {
   }
 
   private getPendingRegistrationKey(email: string): string {
-      return `pending_registration:user:${email.toLowerCase().trim()}`;
+    return `pending_registration:user:${email.toLowerCase().trim()}`;
   }
 
   private getPendingTenantRegistrationKey(email: string): string {

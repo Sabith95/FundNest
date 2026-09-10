@@ -1,27 +1,27 @@
-import nodemailer from 'nodemailer'
-import { IEmailService } from './interfaces/IEmailService'
-import { injectable } from 'tsyringe'
-import { env } from '../config/env'
-import { logger } from '../../shared/logger'
+import nodemailer from "nodemailer";
+import { IEmailService } from "./interfaces/IEmailService";
+import { injectable } from "tsyringe";
+import { env } from "../config/env";
+import { logger } from "../../shared/logger";
 
 @injectable()
 export class EmailService implements IEmailService {
-    private transporter = nodemailer.createTransport({
-        host: env.SMTP_HOST,
-        port: env.SMTP_PORT,
-        secure: env.SMTP_SECURE,
-        auth: {
-        user: env.SMTP_USER,
-        pass: env.SMTP_PASS,
+  private transporter = nodemailer.createTransport({
+    host: env.SMTP_HOST,
+    port: env.SMTP_PORT,
+    secure: env.SMTP_SECURE,
+    auth: {
+      user: env.SMTP_USER,
+      pass: env.SMTP_PASS,
     },
-    })
+  });
 
-    async sendOtp(email: string, otp: string): Promise<void> {
-        await this.transporter.sendMail({
-        from: `"${env.SMTP_FROM_NAME}" <${env.SMTP_FROM_EMAIL}>`,
-        to: email,
-        subject: "Verify your FundNest account",
-        html: `
+  async sendOtp(email: string, otp: string): Promise<void> {
+    await this.transporter.sendMail({
+      from: `"${env.SMTP_FROM_NAME}" <${env.SMTP_FROM_EMAIL}>`,
+      to: email,
+      subject: "Verify your FundNest account",
+      html: `
             <div style="font-family: Arial, sans-serif; max-width: 520px; margin: 0 auto; padding: 24px;">
             <h2 style="color: #1a3a6e;">FundNest Email Verification</h2>
             <p>Your OTP for account verification is:</p>
@@ -32,16 +32,16 @@ export class EmailService implements IEmailService {
             <p>If you did not request this, please ignore this email.</p>
             </div>
         `,
-        })
-        logger.info(`OTP sent to ${email}. OTP:${otp} `)
-    }
+    });
+    logger.info(`OTP sent to ${email}. OTP:${otp} `);
+  }
 
-    async sendPasswordResetOtp(email: string, otp: string): Promise<void> {
+  async sendPasswordResetOtp(email: string, otp: string): Promise<void> {
     await this.transporter.sendMail({
-        from: `"${env.SMTP_FROM_NAME}" <${env.SMTP_FROM_EMAIL}>`,
-        to: email,
-        subject: 'Reset your FundNest password',
-        html: `
+      from: `"${env.SMTP_FROM_NAME}" <${env.SMTP_FROM_EMAIL}>`,
+      to: email,
+      subject: "Reset your FundNest password",
+      html: `
         <div style="font-family: Arial, sans-serif; max-width: 520px; margin: 0 auto; padding: 24px;">
             <h2 style="color: #1a3a6e;">FundNest Password Reset</h2>
             <p>Your password reset OTP is:</p>
@@ -55,14 +55,17 @@ export class EmailService implements IEmailService {
     });
 
     logger.info(`Password reset OTP sent to ${email}. OTP:${otp}`);
-}
+  }
 
-async sendTenantVerificationApprovedEmail(email: string, companyName: string): Promise<void> {
+  async sendTenantVerificationApprovedEmail(
+    email: string,
+    companyName: string,
+  ): Promise<void> {
     await this.transporter.sendMail({
-        from: `"${env.SMTP_FROM_NAME}" <${env.SMTP_FROM_EMAIL}>`,
-        to: email,
-        subject: "FundNest - Account Verification Approved",
-        html: `
+      from: `"${env.SMTP_FROM_NAME}" <${env.SMTP_FROM_EMAIL}>`,
+      to: email,
+      subject: "FundNest - Account Verification Approved",
+      html: `
             <div style="font-family: Arial, sans-serif; max-width: 520px; margin: 0 auto; padding: 24px;">
                 <h2 style="color: #1a3a6e;">Verification Approved!</h2>
                 <p>Hello ${companyName},</p>
@@ -74,14 +77,18 @@ async sendTenantVerificationApprovedEmail(email: string, companyName: string): P
         `,
     });
     logger.info(`Tenant verification approval email sent to ${email}`);
-}
+  }
 
-async sendTenantVerificationRejectedEmail(email: string, companyName: string, reason: string): Promise<void> {
+  async sendTenantVerificationRejectedEmail(
+    email: string,
+    companyName: string,
+    reason: string,
+  ): Promise<void> {
     await this.transporter.sendMail({
-        from: `"${env.SMTP_FROM_NAME}" <${env.SMTP_FROM_EMAIL}>`,
-        to: email,
-        subject: "FundNest - Account Verification Status Update",
-        html: `
+      from: `"${env.SMTP_FROM_NAME}" <${env.SMTP_FROM_EMAIL}>`,
+      to: email,
+      subject: "FundNest - Account Verification Status Update",
+      html: `
             <div style="font-family: Arial, sans-serif; max-width: 520px; margin: 0 auto; padding: 24px;">
                 <h2 style="color: #d9534f;">Verification Update</h2>
                 <p>Hello ${companyName},</p>
@@ -94,5 +101,5 @@ async sendTenantVerificationRejectedEmail(email: string, companyName: string, re
         `,
     });
     logger.info(`Tenant verification rejection email sent to ${email}`);
-}
+  }
 }

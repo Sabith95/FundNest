@@ -11,51 +11,48 @@ import { IChangeUserPasswordUseCase } from "../../interface/user/IChangeUserPass
 import { NotFoundError } from "../../../shared/errors/NotFoundError";
 import { BadRequestError } from "../../../shared/errors/BadRequestError";
 
-
 @injectable()
 export class ChangeUserPasswordUseCase implements IChangeUserPasswordUseCase {
-    constructor(
+  constructor(
     @inject(TOKENS.UserRepository)
     private readonly _userRepository: IUserRepository,
 
     @inject(TOKENS.BcryptService)
-    private readonly _bcryptService: IBcryptService
+    private readonly _bcryptService: IBcryptService,
   ) {}
 
   async execute(input: ChangePasswordDto): Promise<ChangePasswordResponseDto> {
-    const user = await this._userRepository.findById(input.userId)
+    const user = await this._userRepository.findById(input.userId);
 
     if (!user) {
       throw new NotFoundError(MESSAGES.USER.NOT_FOUND);
     }
 
     if (user.authProvider !== "LOCAL" || !user.password) {
-      throw new BadRequestError(
-        MESSAGES.AUTH.PASSWORD_CHANGE_NOT_ALLOWED
-      );
+      throw new BadRequestError(MESSAGES.AUTH.PASSWORD_CHANGE_NOT_ALLOWED);
     }
 
     const isCurrentPasswordValid = await this._bcryptService.comparePassword(
-        input.currentPassword,
-        user.password
-    )
+      input.currentPassword,
+      user.password,
+    );
 
     if (!isCurrentPasswordValid) {
       throw new BadRequestError(MESSAGES.AUTH.CURRENT_PASSWORD_INCORRECT);
     }
 
     const isSamePassword = await this._bcryptService.comparePassword(
-        input.newPassword,
-        user.password
-    )
+      input.newPassword,
+      user.password,
+    );
 
     if (isSamePassword) {
-      throw new BadRequestError(
-        MESSAGES.AUTH.NEW_PASSWORD_MUST_BE_DIFFERENT
-      );
+      throw new BadRequestError(MESSAGES.AUTH.NEW_PASSWORD_MUST_BE_DIFFERENT);
     }
 
-    const hashedPassword = await this._bcryptService.hashPassword(input.newPassword);
+    const hashedPassword = await this._bcryptService.hashPassword(
+      input.newPassword,
+    );
 
     await this._userRepository.updatePassword(user.id, hashedPassword);
 

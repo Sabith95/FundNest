@@ -70,9 +70,7 @@ export default function Header({
             </div>
           )}
           <div className="hidden leading-tight sm:block">
-            <p className="text-sm font-semibold text-slate-800">
-              {user.name}
-            </p>
+            <p className="text-sm font-semibold text-slate-800">{user.name}</p>
             <p className="text-xs text-slate-400">{user.role}</p>
           </div>
         </div>

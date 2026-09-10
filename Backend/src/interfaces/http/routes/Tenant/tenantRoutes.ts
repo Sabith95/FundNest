@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { container } from '../../../../infrastructure/container/container'
+import { container } from "../../../../infrastructure/container/container";
 import { TenantAuthController } from "../../controllers/Tenant/TenantAuthController";
 import { ENDPOINTS } from "../../../../shared/constants/endPoints";
 import { TenantBusinessInfoController } from "../../controllers/Tenant/TenantBusinessInfoController";
@@ -11,31 +11,75 @@ import { authorize } from "../../middleware/authorize";
 import { ROLES } from "../../../../shared/constants/roles";
 import { TenantBankDetailsController } from "../../controllers/Tenant/TenantBankDetailsController";
 
-const router = Router()
+const router = Router();
 const jwtService = container.resolve(TOKENS.JwtService) as JwtService;
 const authenticate = createAuthMiddleware(jwtService);
-const tenantAuthcontroller = container.resolve(TenantAuthController)
-const tenantBusinessInfoController = container.resolve(TenantBusinessInfoController)
-const tenantKycController = container.resolve(TenantKycController)
-const tenantBankDetailsController = container.resolve(TenantBankDetailsController)
+const tenantAuthcontroller = container.resolve(TenantAuthController);
+const tenantBusinessInfoController = container.resolve(
+  TenantBusinessInfoController,
+);
+const tenantKycController = container.resolve(TenantKycController);
+const tenantBankDetailsController = container.resolve(
+  TenantBankDetailsController,
+);
 
 //tenant registration
-router.post(ENDPOINTS.TENANT.AUTH.REGISTER, tenantAuthcontroller.registerTenant)
-router.post(ENDPOINTS.TENANT.AUTH.VERIFY_OTP, tenantAuthcontroller.verifyTenantOtp)
-router.post(ENDPOINTS.TENANT.AUTH.RESEND_OTP, tenantAuthcontroller.resendTenantOtp)
-router.post(ENDPOINTS.TENANT.AUTH.LOGIN, tenantAuthcontroller.loginTenant)
-router.get(ENDPOINTS.TENANT.PROFILE.GET, authenticate, authorize(ROLES.TENANT_ADMIN), tenantAuthcontroller.getProfile)
+router.post(
+  ENDPOINTS.TENANT.AUTH.REGISTER,
+  tenantAuthcontroller.registerTenant,
+);
+router.post(
+  ENDPOINTS.TENANT.AUTH.VERIFY_OTP,
+  tenantAuthcontroller.verifyTenantOtp,
+);
+router.post(
+  ENDPOINTS.TENANT.AUTH.RESEND_OTP,
+  tenantAuthcontroller.resendTenantOtp,
+);
+router.post(ENDPOINTS.TENANT.AUTH.LOGIN, tenantAuthcontroller.loginTenant);
+router.get(
+  ENDPOINTS.TENANT.PROFILE.GET,
+  authenticate,
+  authorize(ROLES.TENANT_ADMIN),
+  tenantAuthcontroller.getProfile,
+);
 
-router.post(ENDPOINTS.TENANT.BUSINESS.BUSINESS_INFO, authenticate, authorize(ROLES.TENANT_ADMIN), tenantBusinessInfoController.updateBusinessInfo)
+router.post(
+  ENDPOINTS.TENANT.BUSINESS.BUSINESS_INFO,
+  authenticate,
+  authorize(ROLES.TENANT_ADMIN),
+  tenantBusinessInfoController.updateBusinessInfo,
+);
 
-router.post(ENDPOINTS.TENANT.KYC.KYC_UPLOAD, authenticate, authorize(ROLES.TENANT_ADMIN),tenantKycController.uploadKycDocuments)
+router.post(
+  ENDPOINTS.TENANT.KYC.KYC_UPLOAD,
+  authenticate,
+  authorize(ROLES.TENANT_ADMIN),
+  tenantKycController.uploadKycDocuments,
+);
 
-router.post(ENDPOINTS.TENANT.BANKING.BANK_DETAILS,authenticate, authorize(ROLES.TENANT_ADMIN), tenantBankDetailsController.updateBankingDetails)
-
+router.post(
+  ENDPOINTS.TENANT.BANKING.BANK_DETAILS,
+  authenticate,
+  authorize(ROLES.TENANT_ADMIN),
+  tenantBankDetailsController.updateBankingDetails,
+);
 
 // tenant forgot password
-router.post(ENDPOINTS.TENANT.PASSWORD.SEND_OTP, tenantAuthcontroller.requestPasswordResetOtp);
-router.post(ENDPOINTS.TENANT.PASSWORD.RESEND_OTP, tenantAuthcontroller.requestPasswordResetOtp)
-router.post(ENDPOINTS.TENANT.PASSWORD.VERIFY_OTP, tenantAuthcontroller.verifyPasswordResetOtp);
-router.post(ENDPOINTS.TENANT.PASSWORD.RESET, tenantAuthcontroller.resetPassword);
-export default router
+router.post(
+  ENDPOINTS.TENANT.PASSWORD.SEND_OTP,
+  tenantAuthcontroller.requestPasswordResetOtp,
+);
+router.post(
+  ENDPOINTS.TENANT.PASSWORD.RESEND_OTP,
+  tenantAuthcontroller.requestPasswordResetOtp,
+);
+router.post(
+  ENDPOINTS.TENANT.PASSWORD.VERIFY_OTP,
+  tenantAuthcontroller.verifyPasswordResetOtp,
+);
+router.post(
+  ENDPOINTS.TENANT.PASSWORD.RESET,
+  tenantAuthcontroller.resetPassword,
+);
+export default router;

@@ -1,6 +1,11 @@
 import React from "react";
-import AdminEntityManager, { type Column } from "../../../components/admin/AdminEntityManager";
-import { adminTenantService, type AdminTenant } from "../../../services/adminTenantService";
+import AdminEntityManager, {
+  type Column,
+} from "../../../components/admin/AdminEntityManager";
+import {
+  adminTenantService,
+  type AdminTenant,
+} from "../../../services/adminTenantService";
 import { useNavigate } from "react-router-dom";
 
 type TenantRow = AdminTenant & { displayName: string };
@@ -21,8 +26,18 @@ const TenantManagement: React.FC = () => {
         </button>
       ),
     },
-    { key: "owner", header: "Owner", render: (t) => <span className="text-sm text-slate-600">{t.ownerName}</span> },
-    { key: "email", header: "Email", render: (t) => <span className="text-sm text-slate-600">{t.email}</span> },
+    {
+      key: "owner",
+      header: "Owner",
+      render: (t) => (
+        <span className="text-sm text-slate-600">{t.ownerName}</span>
+      ),
+    },
+    {
+      key: "email",
+      header: "Email",
+      render: (t) => <span className="text-sm text-slate-600">{t.email}</span>,
+    },
     {
       key: "status",
       header: "Status",
@@ -50,7 +65,11 @@ const TenantManagement: React.FC = () => {
     {
       key: "created",
       header: "Created",
-      render: (t) => <span className="text-sm text-slate-500">{new Date(t.createdAt).toLocaleDateString()}</span>,
+      render: (t) => (
+        <span className="text-sm text-slate-500">
+          {new Date(t.createdAt).toLocaleDateString()}
+        </span>
+      ),
     },
   ];
 
@@ -68,7 +87,9 @@ const TenantManagement: React.FC = () => {
             total: r.total,
           })),
         updateStatus: (id, isActive) =>
-          adminTenantService.updateStatus(id, isActive).then((t) => ({ ...t, displayName: t.companyName })),
+          adminTenantService
+            .updateStatus(id, isActive)
+            .then((t) => ({ ...t, displayName: t.companyName })),
       }}
     />
   );

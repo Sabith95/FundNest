@@ -2,12 +2,12 @@ export abstract class AppError extends Error {
   constructor(
     public message: string,
     public readonly statusCode: number = 500,
-    public isOperational: boolean = true
-  ){
-    super(message)
+    public isOperational: boolean = true,
+  ) {
+    super(message);
 
-    this.name = this.constructor.name
+    this.name = this.constructor.name;
 
-    Error.captureStackTrace(this, this.constructor)
+    Error.captureStackTrace(this, this.constructor);
   }
 }

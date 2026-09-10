@@ -14,7 +14,7 @@ import { syncOverallTenantStatus } from "../services/syncOverallTenantStatus";
 export class VerifyBankDetailsUseCase implements IVerifyBankDetailsUseCase {
   constructor(
     @inject(TOKENS.TenantRepository)
-    private readonly _tenantRepository: ITenantRepository
+    private readonly _tenantRepository: ITenantRepository,
   ) {}
 
   async execute(tenantId: string, dto: VerifyBankDetailsDto): Promise<Tenant> {
@@ -28,14 +28,19 @@ export class VerifyBankDetailsUseCase implements IVerifyBankDetailsUseCase {
     }
 
     if (dto.status === VerificationStatus.REJECTED && !dto.rejectionReason) {
-      throw new BadRequestError("Rejection reason is required when rejecting bank details.");
+      throw new BadRequestError(
+        "Rejection reason is required when rejecting bank details.",
+      );
     }
 
-    const updatedTenant = await this._tenantRepository.verifyBankDetails(tenantId, {
-      status: dto.status,
-      rejectionReason: dto.rejectionReason,
-      verifiedAt: new Date(),
-    });
+    const updatedTenant = await this._tenantRepository.verifyBankDetails(
+      tenantId,
+      {
+        status: dto.status,
+        rejectionReason: dto.rejectionReason,
+        verifiedAt: new Date(),
+      },
+    );
 
     if (!updatedTenant) {
       throw new NotFoundError(MESSAGES.TENANT.NOT_FOUND);

@@ -48,11 +48,13 @@ export default function VerificationPending({
         {/* Heading */}
         <div className="mt-6 text-center">
           <h1 className="text-xl font-bold tracking-tight text-slate-900 sm:text-2xl">
-            {tenantName ? `Hang tight, ${tenantName}` : "Hang tight — you're under verification"}
+            {tenantName
+              ? `Hang tight, ${tenantName}`
+              : "Hang tight — you're under verification"}
           </h1>
           <p className="mx-auto mt-2 max-w-md text-sm leading-relaxed text-slate-500">
-            Our team is reviewing your business information, KYC documents
-            and bank details. This usually takes up to{" "}
+            Our team is reviewing your business information, KYC documents and
+            bank details. This usually takes up to{" "}
             <span className="font-semibold text-slate-700">24 hours</span>.
             We'll notify you by email and in-app the moment you're approved.
           </p>
@@ -77,8 +79,8 @@ export default function VerificationPending({
                       isDone
                         ? "bg-emerald-100 text-emerald-600"
                         : isCurrent
-                        ? "bg-indigo-600 text-white"
-                        : "bg-slate-200 text-slate-400"
+                          ? "bg-indigo-600 text-white"
+                          : "bg-slate-200 text-slate-400"
                     }`}
                   >
                     <Icon
@@ -90,8 +92,8 @@ export default function VerificationPending({
                       isUpcoming
                         ? "text-slate-400"
                         : isCurrent
-                        ? "text-indigo-700"
-                        : "text-slate-600"
+                          ? "text-indigo-700"
+                          : "text-slate-600"
                     }`}
                   >
                     {step.label}
@@ -109,9 +111,7 @@ export default function VerificationPending({
         {submittedLabel && (
           <p className="mt-5 text-center text-xs text-slate-400">
             Documents submitted on{" "}
-            <span className="font-medium text-slate-500">
-              {submittedLabel}
-            </span>
+            <span className="font-medium text-slate-500">{submittedLabel}</span>
           </p>
         )}
       </div>

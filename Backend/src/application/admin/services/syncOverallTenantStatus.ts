@@ -6,16 +6,20 @@ import { ITenantRepository } from "../../../domain/repositories/ITenantRepositor
 
 export async function syncOverallTenantStatus(
   tenant: Tenant,
-  tenantRepository: ITenantRepository
+  tenantRepository: ITenantRepository,
 ): Promise<Tenant> {
   const busStatus = tenant.businessInfo?.verification?.status;
   const bankStatus = tenant.bankDetails?.verification?.status;
-  const kycBusDocStatus = tenant.kycDocuments?.businessRegistrationCertificate?.verification?.status;
-  const kycOwnerDocStatus = tenant.kycDocuments?.ownerIdProof?.verification?.status;
+  const kycBusDocStatus =
+    tenant.kycDocuments?.businessRegistrationCertificate?.verification?.status;
+  const kycOwnerDocStatus =
+    tenant.kycDocuments?.ownerIdProof?.verification?.status;
 
   const isBusinessApproved = busStatus === VerificationStatus.APPROVED;
   const isBankApproved = bankStatus === VerificationStatus.APPROVED;
-  const isKycApproved = kycBusDocStatus === VerificationStatus.APPROVED && kycOwnerDocStatus === VerificationStatus.APPROVED;
+  const isKycApproved =
+    kycBusDocStatus === VerificationStatus.APPROVED &&
+    kycOwnerDocStatus === VerificationStatus.APPROVED;
 
   const isAnyRejected =
     busStatus === VerificationStatus.REJECTED ||
@@ -29,27 +33,30 @@ export async function syncOverallTenantStatus(
       TenantStatus.APPROVED,
       undefined,
       new Date(),
-      OnboardingStep.COMPLETED
+      OnboardingStep.COMPLETED,
     );
     return updated || tenant;
   } else if (isAnyRejected) {
     const rejectionReasons = [
       tenant.businessInfo?.verification?.rejectionReason,
       tenant.bankDetails?.verification?.rejectionReason,
-      tenant.kycDocuments?.businessRegistrationCertificate?.verification?.rejectionReason,
+      tenant.kycDocuments?.businessRegistrationCertificate?.verification
+        ?.rejectionReason,
       tenant.kycDocuments?.ownerIdProof?.verification?.rejectionReason,
-    ].filter(Boolean).join("; ");
+    ]
+      .filter(Boolean)
+      .join("; ");
 
     const updated = await tenantRepository.updateOverallStatus(
       tenant.id,
       TenantStatus.REJECTED,
-      rejectionReasons || "Verification failed."
+      rejectionReasons || "Verification failed.",
     );
     return updated || tenant;
   } else {
     const updated = await tenantRepository.updateOverallStatus(
       tenant.id,
-      TenantStatus.UNDER_REVIEW
+      TenantStatus.UNDER_REVIEW,
     );
     return updated || tenant;
   }

@@ -7,7 +7,12 @@ export interface IDashboardStats {
 }
 
 // ─── Chit fund ────────────────────────────────────────────
-export type FundStatus = 'ACTIVE' | 'PENDING' | 'COMPLETED' | 'OPEN' | 'FILLING';
+export type FundStatus =
+  | "ACTIVE"
+  | "PENDING"
+  | "COMPLETED"
+  | "OPEN"
+  | "FILLING";
 
 export interface IActiveFund {
   id: string;
@@ -20,8 +25,12 @@ export interface IActiveFund {
 }
 
 // ─── Recent activity ──────────────────────────────────────
-export type ActivityType = 'contribution' | 'topup' | 'scheduled' | 'withdrawal';
-export type ActivityStatus = 'SUCCESS' | 'PENDING' | 'FAILED';
+export type ActivityType =
+  | "contribution"
+  | "topup"
+  | "scheduled"
+  | "withdrawal";
+export type ActivityStatus = "SUCCESS" | "PENDING" | "FAILED";
 
 export interface IActivity {
   id: string;
@@ -34,7 +43,7 @@ export interface IActivity {
 }
 
 // ─── Alert ────────────────────────────────────────────────
-export type AlertType = 'urgent' | 'info' | 'success';
+export type AlertType = "urgent" | "info" | "success";
 
 export interface IAlert {
   id: string;
@@ -52,12 +61,12 @@ export interface IAvailableFund {
   monthlyAmount: number;
   members: number;
   duration: string;
-  status: 'Open' | 'Filling' | 'Full';
+  status: "Open" | "Filling" | "Full";
 }
 
 // ─── Full dashboard data ──────────────────────────────────
 export interface IDashboardData {
-  isNewUser: boolean;            // ← controls which UI to show
+  isNewUser: boolean; // ← controls which UI to show
   userName: string;
   userRole: string;
   stats: IDashboardStats;

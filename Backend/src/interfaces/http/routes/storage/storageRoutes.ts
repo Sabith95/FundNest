@@ -13,17 +13,17 @@ const authenticate = createAuthMiddleware(jwtService);
 const storageController = container.resolve(StorageController);
 
 router.post(
-    "/presigned-url",
-    authenticate,
-    authorize(ROLES.TENANT_ADMIN),
-    storageController.generateUploadUrl
+  "/presigned-url",
+  authenticate,
+  authorize(ROLES.TENANT_ADMIN),
+  storageController.generateUploadUrl,
 );
 
 router.post(
-    "/presigned-download-url",
-    authenticate,
-    authorize(ROLES.SUPER_ADMIN, ROLES.TENANT_ADMIN),
-    storageController.generateDownloadUrl
+  "/presigned-download-url",
+  authenticate,
+  authorize(ROLES.SUPER_ADMIN, ROLES.TENANT_ADMIN),
+  storageController.generateDownloadUrl,
 );
 
 export default router;

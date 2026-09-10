@@ -19,10 +19,10 @@ export interface RegisterTenantDto {
   email: string;
   phone: string;
   password: string;
-  confirmPassword: string
+  confirmPassword: string;
 }
 
 export interface RegisterTenantResponseDto {
-  verificationRequired: boolean
-  email: string
+  verificationRequired: boolean;
+  email: string;
 }

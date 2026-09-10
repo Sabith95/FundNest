@@ -1,4 +1,4 @@
 export interface DocumentInfo {
-    publicId: string;
-    url: string;
+  publicId: string;
+  url: string;
 }

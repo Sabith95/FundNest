@@ -1,15 +1,9 @@
-import {
-  Schema,
-  model,
-  models,
-  HydratedDocument,
-} from "mongoose";
+import { Schema, model, models, HydratedDocument } from "mongoose";
 import { TenantStatus } from "../../../shared/constants/enums/TenantStatus";
 import { OnboardingStep } from "../../../shared/constants/enums/OnboardingStep";
 import { VerificationStatus } from "../../../shared/constants/enums/VerificationStatus";
 import { Role, ROLES } from "../../../shared/constants/roles";
 import { BusinessType } from "../../../shared/constants/enums/BusinessType";
-
 
 export interface VerificationInfoDocument {
   status: VerificationStatus;
@@ -21,14 +15,12 @@ export interface BusinessInfoDocument {
   businessType: BusinessType;
   registrationId: string;
   registeredBusinessAddress: string;
-  verification: VerificationInfoDocument
+  verification: VerificationInfoDocument;
 }
 
 export interface DocumentInfoDocument {
-  // url: string;
-  // publicId: string;
-  objectKey:string
-  verification: VerificationInfoDocument
+  objectKey: string;
+  verification: VerificationInfoDocument;
 }
 
 export interface KycDocumentsDocument {
@@ -40,7 +32,7 @@ export interface BankDetailsDocument {
   accountHolderName: string;
   accountNumber: string;
   ifscCode: string;
-  verification: VerificationInfoDocument
+  verification: VerificationInfoDocument;
 }
 
 export interface TenantDocument {
@@ -70,8 +62,6 @@ export interface TenantDocument {
   updatedAt: Date;
 }
 
-
-
 const verificationInfoSchema = new Schema<VerificationInfoDocument>(
   {
     status: {
@@ -83,7 +73,7 @@ const verificationInfoSchema = new Schema<VerificationInfoDocument>(
     rejectionReason: { type: String, trim: true },
     verifiedAt: { type: Date },
   },
-  { _id: false }
+  { _id: false },
 );
 
 //sub scehmas
@@ -106,12 +96,12 @@ const businessInfoSchema = new Schema<BusinessInfoDocument>(
       trim: true,
     },
     verification: {
-    type: verificationInfoSchema,
-    default: () => ({ status: VerificationStatus.PENDING }),
-    required: true,
+      type: verificationInfoSchema,
+      default: () => ({ status: VerificationStatus.PENDING }),
+      required: true,
+    },
   },
-  },
-  { _id: false }
+  { _id: false },
 );
 
 const documentInfoSchema = new Schema<DocumentInfoDocument>(
@@ -121,23 +111,14 @@ const documentInfoSchema = new Schema<DocumentInfoDocument>(
       required: true,
       trim: true,
     },
-    // url: {
-    //   type: String,
-    //   required: true,
-    //   trim: true,
-    // },
-    // publicId: {
-    //   type: String,
-    //   required: true,
-    //   trim: true,
-    // },
+
     verification: {
-    type: verificationInfoSchema,
-    default: () => ({ status: VerificationStatus.PENDING }),
-    required: true,
+      type: verificationInfoSchema,
+      default: () => ({ status: VerificationStatus.PENDING }),
+      required: true,
+    },
   },
-  },
-  { _id: false }
+  { _id: false },
 );
 
 const kycDocumentsSchema = new Schema<KycDocumentsDocument>(
@@ -150,9 +131,8 @@ const kycDocumentsSchema = new Schema<KycDocumentsDocument>(
       type: documentInfoSchema,
       required: true,
     },
-
   },
-  { _id: false }
+  { _id: false },
 );
 
 const bankDetailsSchema = new Schema<BankDetailsDocument>(
@@ -174,17 +154,15 @@ const bankDetailsSchema = new Schema<BankDetailsDocument>(
       trim: true,
     },
     verification: {
-    type: verificationInfoSchema,
-    default: () => ({ status: VerificationStatus.PENDING }),
-    required: true,
+      type: verificationInfoSchema,
+      default: () => ({ status: VerificationStatus.PENDING }),
+      required: true,
+    },
   },
-  },
-  { _id: false }
+  { _id: false },
 );
 
-
 //main schema
-
 
 const tenantSchema = new Schema<TenantDocument>(
   {
@@ -277,7 +255,7 @@ const tenantSchema = new Schema<TenantDocument>(
   {
     timestamps: true,
     collection: "tenants",
-  }
+  },
 );
 
 export type HydratedTenantDocument = HydratedDocument<TenantDocument>;

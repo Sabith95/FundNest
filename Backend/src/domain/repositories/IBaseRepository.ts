@@ -7,9 +7,9 @@ export interface IBaseRepository<TEntity> {
   insertMany(entities: Partial<TEntity>[]): Promise<TEntity[]>;
   update(id: string, data: Partial<TEntity>): Promise<TEntity | null>;
   delete(id: string): Promise<boolean>;
-    findPaginated(
+  findPaginated(
     page: number,
     limit: number,
-    filterOrSearch?: Partial<TEntity> | string
+    filterOrSearch?: Partial<TEntity> | string,
   ): Promise<PaginatedResult<TEntity>>;
 }

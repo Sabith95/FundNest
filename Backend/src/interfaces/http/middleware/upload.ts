@@ -1,13 +1,9 @@
 import multer from "multer";
 import { env } from "../../../infrastructure/config/env";
-import { AppError } from "../../../shared/errors/AppError";
-import { HTTP_STATUS } from "../../../shared/constants/httpStatus";
 
-const allowedImageTypes = [
-  "image/jpeg",
-  "image/png",
-  "image/webp",
-];
+import { BadRequestError } from "../../../shared/errors/BadRequestError";
+
+const allowedImageTypes = ["image/jpeg", "image/png", "image/webp"];
 
 const upload = multer({
   storage: multer.memoryStorage(),
@@ -17,10 +13,7 @@ const upload = multer({
   fileFilter: (_req, file, cb) => {
     if (!allowedImageTypes.includes(file.mimetype)) {
       return cb(
-        new AppError(
-          "Only JPG, PNG and WEBP images are allowed",
-          HTTP_STATUS.BAD_REQUEST
-        )
+        new BadRequestError("Only JPG, PNG and WEBP images are allowed"),
       );
     }
 

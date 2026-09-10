@@ -11,7 +11,7 @@ import { TenantResponseMapper } from "../../mapper/TenantResponseMapper";
 export class GetTenantProfileUseCase implements IGetTenantProfileUseCase {
   constructor(
     @inject(TOKENS.TenantRepository)
-    private readonly _tenantRepository: ITenantRepository
+    private readonly _tenantRepository: ITenantRepository,
   ) {}
 
   async execute(tenantId: string): Promise<TenantProfileResponseDto> {

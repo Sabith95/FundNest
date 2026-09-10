@@ -2,5 +2,8 @@ import { UploadUrlResponse } from "../../../infrastructure/storage/interfaces/IS
 import { GenerateUploadUrlDto } from "../../storage/Dto/GenerateUploadUrlDto";
 
 export interface IGenerateUploadUrlUseCase {
-    execute(dto: GenerateUploadUrlDto, tenantId: string): Promise<UploadUrlResponse>
+  execute(
+    dto: GenerateUploadUrlDto,
+    tenantId: string,
+  ): Promise<UploadUrlResponse>;
 }

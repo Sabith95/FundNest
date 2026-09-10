@@ -1,6 +1,6 @@
-import React from 'react';
-import Sidebar from '../Sidebar';
-import Header from '../Header';
+import React from "react";
+import Sidebar from "../Sidebar";
+import Header from "../Header";
 
 // ─── Props ────────────────────────────────────────────────
 interface IDashboardLayoutProps {
@@ -34,13 +34,11 @@ const DashboardLayout: React.FC<IDashboardLayoutProps> = ({
       className="flex h-screen overflow-hidden bg-gray-50"
       style={{ fontFamily: "'Segoe UI', system-ui, sans-serif" }}
     >
-
       {/* Sidebar — fixed left, used on all pages */}
       <Sidebar />
 
       {/* Main area — scrollable content */}
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
-
         {/* Header — fixed top, used on all pages */}
         <Header
           userName={userName}
@@ -49,10 +47,7 @@ const DashboardLayout: React.FC<IDashboardLayoutProps> = ({
         />
 
         {/* Page content — scrollable */}
-        <main className="flex-1 overflow-y-auto">
-          {children}
-        </main>
-
+        <main className="flex-1 overflow-y-auto">{children}</main>
       </div>
     </div>
   );

@@ -15,15 +15,13 @@ export interface BusinessInfo {
   registrationId: string;
   registeredBusinessAddress: string;
 
-  verification: VerificationInfo
+  verification: VerificationInfo;
 }
 
 export interface DocumentInfo {
-  // url: string;
-  // publicId: string;
-  objectKey: string
+  objectKey: string;
 
-  verification: VerificationInfo
+  verification: VerificationInfo;
 }
 
 export interface KycDocuments {
@@ -64,7 +62,7 @@ export interface Tenant {
   rejectionReason?: string;
 
   approvedAt?: Date;
-  
+
   createdAt: Date;
   updatedAt: Date;
 }

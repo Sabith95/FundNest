@@ -17,7 +17,7 @@ export class CompleteTenantVerificationUseCase implements ICompleteTenantVerific
     @inject(TOKENS.TenantRepository)
     private readonly _tenantRepository: ITenantRepository,
     @inject(TOKENS.EmailService)
-    private readonly _emailService: IEmailService
+    private readonly _emailService: IEmailService,
   ) {}
 
   async execute(tenantId: string): Promise<Tenant> {
@@ -28,13 +28,17 @@ export class CompleteTenantVerificationUseCase implements ICompleteTenantVerific
 
     // 1. Ensure tenant has submitted all required sections
     if (!tenant.businessInfo || !tenant.kycDocuments || !tenant.bankDetails) {
-      throw new BadRequestError(MESSAGES.SUPER_ADMIN.TENANT_NOT_SUBMITTED_REQUIRED_DOCS);
+      throw new BadRequestError(
+        MESSAGES.SUPER_ADMIN.TENANT_NOT_SUBMITTED_REQUIRED_DOCS,
+      );
     }
 
     const busStatus = tenant.businessInfo.verification?.status;
     const bankStatus = tenant.bankDetails.verification?.status;
-    const kycBusStatus = tenant.kycDocuments.businessRegistrationCertificate?.verification?.status;
-    const kycOwnerStatus = tenant.kycDocuments.ownerIdProof?.verification?.status;
+    const kycBusStatus =
+      tenant.kycDocuments.businessRegistrationCertificate?.verification?.status;
+    const kycOwnerStatus =
+      tenant.kycDocuments.ownerIdProof?.verification?.status;
 
     // 2. Ensure all 4 items have been reviewed by Admin
     if (
@@ -43,7 +47,9 @@ export class CompleteTenantVerificationUseCase implements ICompleteTenantVerific
       kycBusStatus === VerificationStatus.PENDING ||
       kycOwnerStatus === VerificationStatus.PENDING
     ) {
-      throw new BadRequestError(MESSAGES.SUPER_ADMIN.ALL_DOCUMENTS_MUST_BE_VERIFIED);
+      throw new BadRequestError(
+        MESSAGES.SUPER_ADMIN.ALL_DOCUMENTS_MUST_BE_VERIFIED,
+      );
     }
 
     // 3. Determine if all are approved or any rejected
@@ -61,34 +67,37 @@ export class CompleteTenantVerificationUseCase implements ICompleteTenantVerific
         TenantStatus.APPROVED,
         undefined,
         new Date(),
-        OnboardingStep.COMPLETED
+        OnboardingStep.COMPLETED,
       );
 
       // Send Approval Email
       await this._emailService.sendTenantVerificationApprovedEmail(
         tenant.email,
-        tenant.companyName
+        tenant.companyName,
       );
     } else {
       // Consolidate rejection reasons
       const rejectionReasons = [
         tenant.businessInfo.verification?.rejectionReason,
         tenant.bankDetails.verification?.rejectionReason,
-        tenant.kycDocuments.businessRegistrationCertificate?.verification?.rejectionReason,
+        tenant.kycDocuments.businessRegistrationCertificate?.verification
+          ?.rejectionReason,
         tenant.kycDocuments.ownerIdProof?.verification?.rejectionReason,
-      ].filter(Boolean).join("; ");
+      ]
+        .filter(Boolean)
+        .join("; ");
 
       updatedTenant = await this._tenantRepository.updateOverallStatus(
         tenant.id,
         TenantStatus.REJECTED,
-        rejectionReasons || "Verification failed."
+        rejectionReasons || "Verification failed.",
       );
 
       // Send Rejection Email
       await this._emailService.sendTenantVerificationRejectedEmail(
         tenant.email,
         tenant.companyName,
-        rejectionReasons || MESSAGES.SUPER_ADMIN.UPDATE_VERIFICATION_DOCS
+        rejectionReasons || MESSAGES.SUPER_ADMIN.UPDATE_VERIFICATION_DOCS,
       );
     }
 

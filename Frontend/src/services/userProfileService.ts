@@ -1,5 +1,5 @@
-import api from './api';
-import { setAccessToken } from './api';
+import api from "./api";
+import { setAccessToken } from "./api";
 import type {
   IAddressDto,
   IAddressFormValues,
@@ -9,8 +9,8 @@ import type {
   IUpdateProfileResponse,
   IUserProfile,
   IUserProfileApiDto,
-} from '../types/profile.types';
-import { API_ROUTES } from '../shared/apiRoutes';
+} from "../types/profile.types";
+import { API_ROUTES } from "../shared/apiRoutes";
 
 interface IApiResponse<T> {
   success: boolean;
@@ -19,31 +19,35 @@ interface IApiResponse<T> {
   data: T;
 }
 
-export const mapAddressFromApi = (address?: IAddressDto): IAddressFormValues => ({
-  line1: address?.line1 ?? '',
-  line2: address?.line2 ?? '',
-  city: address?.city ?? '',
-  state: address?.state ?? '',
-  pincode: address?.pincode ?? '',
-  country: address?.country ?? 'India',
+export const mapAddressFromApi = (
+  address?: IAddressDto,
+): IAddressFormValues => ({
+  line1: address?.line1 ?? "",
+  line2: address?.line2 ?? "",
+  city: address?.city ?? "",
+  state: address?.state ?? "",
+  pincode: address?.pincode ?? "",
+  country: address?.country ?? "India",
 });
 
-export const mapAddressToRequest = (address: IAddressFormValues): IAddressDto => ({
+export const mapAddressToRequest = (
+  address: IAddressFormValues,
+): IAddressDto => ({
   line1: address.line1.trim(),
   line2: address.line2.trim() || undefined,
   city: address.city.trim(),
   state: address.state.trim(),
   pincode: address.pincode.trim(),
-  country: address.country.trim() || 'India',
+  country: address.country.trim() || "India",
 });
 
 const formatLastUpdated = (value?: string): string => {
-  if (!value) return 'Not updated yet';
+  if (!value) return "Not updated yet";
 
-  return new Intl.DateTimeFormat('en-IN', {
-    day: 'numeric',
-    month: 'short',
-    year: 'numeric',
+  return new Intl.DateTimeFormat("en-IN", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
   }).format(new Date(value));
 };
 
@@ -51,9 +55,9 @@ export const mapProfileDto = (user: IUserProfileApiDto): IUserProfile => ({
   id: user.id,
   fullName: user.name,
   email: user.email,
-  phone: user.phone ?? '',
+  phone: user.phone ?? "",
   address: mapAddressFromApi(user.profile.address),
-  role: user.role === 'USER' ? 'Member' : user.role,
+  role: user.role === "USER" ? "Member" : user.role,
   isVerified: user.isEmailVerified,
   avatarUrl: user.profile.avatarUrl,
   lastUpdated: formatLastUpdated(user.updatedAt),
@@ -63,18 +67,22 @@ export const mapProfileDto = (user: IUserProfileApiDto): IUserProfile => ({
 
 class UserProfileService {
   async getProfile(): Promise<IUserProfile> {
-    const response = await api.get<IApiResponse<IUserProfileApiDto>>(API_ROUTES.USERS.GET_PROFILE);
+    const response = await api.get<IApiResponse<IUserProfileApiDto>>(
+      API_ROUTES.USERS.GET_PROFILE,
+    );
     return mapProfileDto(response.data.data);
   }
 
-  async updateProfile(data: IUpdateProfileRequest): Promise<IUpdateProfileResponse> {
+  async updateProfile(
+    data: IUpdateProfileRequest,
+  ): Promise<IUpdateProfileResponse> {
     const response = await api.patch<IApiResponse<IUpdateProfileResponse>>(
       API_ROUTES.USERS.UPDATE_PROFILE,
-      data
+      data,
     );
 
     if (response.data.data.tokens?.accessToken) {
-      setAccessToken(response.data.data.tokens.accessToken, 'USER');
+      setAccessToken(response.data.data.tokens.accessToken, "USER");
     }
 
     return response.data.data;
@@ -82,21 +90,23 @@ class UserProfileService {
 
   async updateProfilePhoto(file: File): Promise<IUserProfile> {
     const formData = new FormData();
-    formData.append('profilePhoto', file);
+    formData.append("profilePhoto", file);
 
     const response = await api.patch<IApiResponse<IUserProfileApiDto>>(
       API_ROUTES.USERS.UPDATE_PROFILE_PHOTO,
       formData,
-      { headers: { 'Content-Type': 'multipart/form-data' } }
+      { headers: { "Content-Type": "multipart/form-data" } },
     );
 
     return mapProfileDto(response.data.data);
   }
 
-  async changePassword(data: IChangePasswordRequest): Promise<IChangePasswordResponse> {
+  async changePassword(
+    data: IChangePasswordRequest,
+  ): Promise<IChangePasswordResponse> {
     const response = await api.patch<IApiResponse<IChangePasswordResponse>>(
       API_ROUTES.USERS.CHANGE_PASSWORD,
-      data
+      data,
     );
 
     return response.data.data;

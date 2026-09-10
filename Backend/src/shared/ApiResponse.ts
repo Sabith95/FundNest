@@ -1,4 +1,4 @@
-import { ISuccessResponse, IErrorResponse } from './interfaces/IApiResponse';
+import { ISuccessResponse, IErrorResponse } from "./interfaces/IApiResponse";
 
 export interface PaginationMeta {
   total: number;
@@ -10,12 +10,11 @@ export interface PaginationMeta {
 }
 
 export class ApiResponse {
-
   static success<T>(
     data: T,
-    message: string = 'Success',
+    message: string = "Success",
     statusCode: number = 200,
-    pagination?: PaginationMeta
+    pagination?: PaginationMeta,
   ): ISuccessResponse<T> {
     return {
       success: true,
@@ -29,7 +28,7 @@ export class ApiResponse {
   static error(
     message: string,
     statusCode: number = 500,
-    errors?: any
+    errors?: any,
   ): IErrorResponse {
     return {
       success: false,
@@ -44,7 +43,7 @@ export class ApiResponse {
     total: number,
     page: number,
     limit: number,
-    message: string = 'Success'
+    message: string = "Success",
   ): ISuccessResponse<T[]> {
     const totalPages = Math.ceil(total / limit);
     return this.success(data, message, 200, {

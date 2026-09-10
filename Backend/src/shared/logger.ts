@@ -1,5 +1,5 @@
-import { createLogger, format, transports } from 'winston';
-import { env } from '../infrastructure/config/env';
+import { createLogger, format, transports } from "winston";
+import { env } from "../infrastructure/config/env";
 
 const { combine, timestamp, colorize, printf, json, errors } = format;
 
@@ -8,15 +8,15 @@ const devFormat = printf(({ level, message, timestamp, stack }) => {
 });
 
 export const logger = createLogger({
-  level: env.NODE_ENV === 'production' ? 'warn' : 'debug',
+  level: env.NODE_ENV === "production" ? "warn" : "debug",
   format: combine(
     errors({ stack: true }),
-    timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
-    env.NODE_ENV === 'production' ? json() : combine(colorize(), devFormat)
+    timestamp({ format: "YYYY-MM-DD HH:mm:ss" }),
+    env.NODE_ENV === "production" ? json() : combine(colorize(), devFormat),
   ),
   transports: [
     new transports.Console(),
-    new transports.File({ filename: 'logs/error.log', level: 'error' }),
-    new transports.File({ filename: 'logs/combined.log' }),
+    new transports.File({ filename: "logs/error.log", level: "error" }),
+    new transports.File({ filename: "logs/combined.log" }),
   ],
 });

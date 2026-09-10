@@ -1,4 +1,4 @@
-import { PaginationMeta } from '../ApiResponse';
+import { PaginationMeta } from "../ApiResponse";
 
 export interface ISuccessResponse<T> {
   success: true;

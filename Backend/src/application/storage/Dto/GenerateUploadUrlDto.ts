@@ -1,6 +1,4 @@
 export interface GenerateUploadUrlDto {
-    fileName: string;
-    contentType: string;
-
-  
+  fileName: string;
+  contentType: string;
 }

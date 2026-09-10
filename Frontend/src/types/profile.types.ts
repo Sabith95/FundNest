@@ -48,8 +48,8 @@ export interface IUserProfile {
   isVerified: boolean;
   avatarUrl?: string;
   lastUpdated: string;
-  kycStatus: 'PENDING' | 'VERIFIED' | 'REJECTED';
-  authProvider: 'LOCAL' | 'GOOGLE';
+  kycStatus: "PENDING" | "VERIFIED" | "REJECTED";
+  authProvider: "LOCAL" | "GOOGLE";
 }
 
 export interface IAddressDto {
@@ -67,13 +67,13 @@ export interface IUserProfileApiDto {
   email: string;
   phone?: string;
   role: string;
-  authProvider: 'LOCAL' | 'GOOGLE';
+  authProvider: "LOCAL" | "GOOGLE";
   isActive: boolean;
   isEmailVerified: boolean;
   profile: {
     avatarUrl?: string;
     address?: IAddressDto;
-    kycStatus: 'PENDING' | 'VERIFIED' | 'REJECTED';
+    kycStatus: "PENDING" | "VERIFIED" | "REJECTED";
   };
   createdAt: string;
   updatedAt: string;
@@ -106,10 +106,10 @@ export interface IChangePasswordResponse {
 }
 
 export const EMPTY_ADDRESS: IAddressFormValues = {
-  line1: '',
-  line2: '',
-  city: '',
-  state: '',
-  pincode: '',
-  country: 'India',
+  line1: "",
+  line2: "",
+  city: "",
+  state: "",
+  pincode: "",
+  country: "India",
 };

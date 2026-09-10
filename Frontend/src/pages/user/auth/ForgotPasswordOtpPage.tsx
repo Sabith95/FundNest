@@ -1,7 +1,7 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { authService } from '../../../services/authService';
-import { ROUTES } from '../../../shared/constants';
+import React, { useState, useRef, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { authService } from "../../../services/authService";
+import { ROUTES } from "../../../shared/constants";
 
 // ─── Types ────────────────────────────────────────────────
 
@@ -14,8 +14,9 @@ const LeftPanel: React.FC = () => (
   <div
     className="hidden lg:flex lg:flex-col lg:justify-between relative overflow-hidden"
     style={{
-      background: 'linear-gradient(160deg, #0a1f5c 0%, #0d2680 50%, #0a1f5c 100%)',
-      minHeight: '100vh',
+      background:
+        "linear-gradient(160deg, #0a1f5c 0%, #0d2680 50%, #0a1f5c 100%)",
+      minHeight: "100vh",
     }}
   >
     <svg
@@ -25,14 +26,29 @@ const LeftPanel: React.FC = () => (
       xmlns="http://www.w3.org/2000/svg"
     >
       {[
-        [50, 100, 200, 250], [200, 250, 380, 150], [380, 150, 500, 300],
-        [500, 300, 420, 480], [420, 480, 250, 520], [250, 520, 100, 400],
-        [100, 400, 50, 100], [200, 250, 250, 520], [380, 150, 420, 480],
-        [50, 100, 500, 300], [100, 400, 380, 150], [250, 520, 500, 300],
-        [200, 250, 100, 400], [420, 480, 50, 100], [150, 650, 300, 700],
-        [300, 700, 480, 620], [480, 620, 520, 800], [520, 800, 300, 850],
-        [300, 850, 100, 750], [100, 750, 150, 650], [300, 700, 100, 750],
-        [480, 620, 300, 850], [150, 650, 520, 800],
+        [50, 100, 200, 250],
+        [200, 250, 380, 150],
+        [380, 150, 500, 300],
+        [500, 300, 420, 480],
+        [420, 480, 250, 520],
+        [250, 520, 100, 400],
+        [100, 400, 50, 100],
+        [200, 250, 250, 520],
+        [380, 150, 420, 480],
+        [50, 100, 500, 300],
+        [100, 400, 380, 150],
+        [250, 520, 500, 300],
+        [200, 250, 100, 400],
+        [420, 480, 50, 100],
+        [150, 650, 300, 700],
+        [300, 700, 480, 620],
+        [480, 620, 520, 800],
+        [520, 800, 300, 850],
+        [300, 850, 100, 750],
+        [100, 750, 150, 650],
+        [300, 700, 100, 750],
+        [480, 620, 300, 850],
+        [150, 650, 520, 800],
       ].map(([x1, y1, x2, y2], i) => (
         <line
           key={i}
@@ -46,9 +62,19 @@ const LeftPanel: React.FC = () => (
         />
       ))}
       {[
-        [50, 100], [200, 250], [380, 150], [500, 300], [420, 480],
-        [250, 520], [100, 400], [150, 650], [300, 700], [480, 620],
-        [520, 800], [300, 850], [100, 750],
+        [50, 100],
+        [200, 250],
+        [380, 150],
+        [500, 300],
+        [420, 480],
+        [250, 520],
+        [100, 400],
+        [150, 650],
+        [300, 700],
+        [480, 620],
+        [520, 800],
+        [300, 850],
+        [100, 750],
       ].map(([cx, cy], i) => (
         <circle key={i} cx={cx} cy={cy} r="5" fill="#4a9fd4" opacity="0.8" />
       ))}
@@ -67,15 +93,17 @@ const LeftPanel: React.FC = () => (
         </p>
         <h2
           className="text-white font-black leading-none mb-6"
-          style={{ fontSize: 'clamp(2.8rem, 4.5vw, 4rem)' }}
+          style={{ fontSize: "clamp(2.8rem, 4.5vw, 4rem)" }}
         >
-          Elevate Your<br />
-          Wealth<br />
+          Elevate Your
+          <br />
+          Wealth
+          <br />
           Management.
         </h2>
         <p className="text-blue-200 text-base leading-relaxed max-w-xs opacity-70">
-          Your institutional-grade portal to precise financial
-          curation and global asset oversight.
+          Your institutional-grade portal to precise financial curation and
+          global asset oversight.
         </p>
       </div>
 
@@ -83,8 +111,8 @@ const LeftPanel: React.FC = () => (
         <div
           className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0"
           style={{
-            background: 'rgba(74, 127, 212, 0.25)',
-            border: '1px solid rgba(74,127,212,0.3)',
+            background: "rgba(74, 127, 212, 0.25)",
+            border: "1px solid rgba(74,127,212,0.3)",
           }}
         >
           <svg
@@ -103,7 +131,9 @@ const LeftPanel: React.FC = () => (
         </div>
         <div>
           <p className="text-white text-sm font-bold">Bank-Grade Security</p>
-          <p className="text-blue-300 text-xs opacity-70">AES-256 Bit Encryption</p>
+          <p className="text-blue-300 text-xs opacity-70">
+            AES-256 Bit Encryption
+          </p>
         </div>
       </div>
     </div>
@@ -138,22 +168,22 @@ const OtpInput: React.FC<IOtpInputProps> = ({ value, onChange, hasError }) => {
 
   const handleKeyDown = (
     index: number,
-    e: React.KeyboardEvent<HTMLInputElement>
+    e: React.KeyboardEvent<HTMLInputElement>,
   ): void => {
-    if (e.key === 'Backspace') {
+    if (e.key === "Backspace") {
       if (value[index]) {
         const newOtp = [...value];
-        newOtp[index] = '';
+        newOtp[index] = "";
         onChange(newOtp);
       } else if (index > 0) {
         inputRefs.current[index - 1]?.focus();
       }
     }
 
-    if (e.key === 'ArrowLeft' && index > 0) {
+    if (e.key === "ArrowLeft" && index > 0) {
       inputRefs.current[index - 1]?.focus();
     }
-    if (e.key === 'ArrowRight' && index < 5) {
+    if (e.key === "ArrowRight" && index < 5) {
       inputRefs.current[index + 1]?.focus();
     }
   };
@@ -161,13 +191,13 @@ const OtpInput: React.FC<IOtpInputProps> = ({ value, onChange, hasError }) => {
   const handlePaste = (e: React.ClipboardEvent): void => {
     e.preventDefault();
     const pasted = e.clipboardData
-      .getData('text')
-      .replace(/\D/g, '')
+      .getData("text")
+      .replace(/\D/g, "")
       .slice(0, 6);
 
     if (pasted.length > 0) {
-      const newOtp = ['', '', '', '', '', ''];
-      pasted.split('').forEach((digit, i) => {
+      const newOtp = ["", "", "", "", "", ""];
+      pasted.split("").forEach((digit, i) => {
         if (i < 6) newOtp[i] = digit;
       });
       onChange(newOtp);
@@ -197,13 +227,13 @@ const OtpInput: React.FC<IOtpInputProps> = ({ value, onChange, hasError }) => {
             outline-none transition-all duration-200
             ${
               hasError
-                ? 'border-red-300 bg-red-50 text-red-600'
+                ? "border-red-300 bg-red-50 text-red-600"
                 : digit
-                  ? 'border-[#1a3a6e] bg-white text-[#1a3a6e] shadow-sm'
-                  : 'border-gray-200 bg-gray-100 text-gray-800 focus:border-[#1a3a6e] focus:bg-white focus:border-2 focus:shadow-sm'
+                  ? "border-[#1a3a6e] bg-white text-[#1a3a6e] shadow-sm"
+                  : "border-gray-200 bg-gray-100 text-gray-800 focus:border-[#1a3a6e] focus:bg-white focus:border-2 focus:shadow-sm"
             }
           `}
-          style={{ height: '64px', minWidth: '0' }}
+          style={{ height: "64px", minWidth: "0" }}
         />
       ))}
     </div>
@@ -248,7 +278,7 @@ const ForgotPasswordOtpPage: React.FC = () => {
   const location = useLocation();
 
   const state = location.state as IForgotPasswordOtpLocationState | null;
-  const email = state?.email || '';
+  const email = state?.email || "";
 
   useEffect(() => {
     if (!email) {
@@ -257,7 +287,7 @@ const ForgotPasswordOtpPage: React.FC = () => {
   }, [email, navigate]);
 
   const maskEmail = (value: string): string => {
-    const [local, domain] = value.split('@');
+    const [local, domain] = value.split("@");
     if (!domain) return value;
     return `${local[0]}***@${domain}`;
   };
@@ -267,19 +297,19 @@ const ForgotPasswordOtpPage: React.FC = () => {
   const formatTime = (seconds: number): string => {
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
-    return `${minutes}:${String(remainingSeconds).padStart(2, '0')}`;
+    return `${minutes}:${String(remainingSeconds).padStart(2, "0")}`;
   };
 
-  const [otp, setOtp] = useState<string[]>(['', '', '', '', '', '']);
-  const [error, setError] = useState<string>('');
+  const [otp, setOtp] = useState<string[]>(["", "", "", "", "", ""]);
+  const [error, setError] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [resendTimer, setResendTimer] = useState<number>(OTP_TIMER_SECONDS);
   const [isResending, setIsResending] = useState<boolean>(false);
 
-  const canResend = resendTimer <= 0
+  const canResend = resendTimer <= 0;
 
   useEffect(() => {
-    if (resendTimer <= 0)  return;
+    if (resendTimer <= 0) return;
 
     const timer = setInterval(() => {
       setResendTimer((prev) => prev - 1);
@@ -290,19 +320,19 @@ const ForgotPasswordOtpPage: React.FC = () => {
 
   const handleOtpChange = (newOtp: string[]): void => {
     setOtp(newOtp);
-    if (error) setError('');
+    if (error) setError("");
   };
 
   const handleVerify = async (): Promise<void> => {
-    const otpValue = otp.join('');
+    const otpValue = otp.join("");
 
     if (otpValue.length < 6) {
-      setError('Please enter the complete 6-digit code');
+      setError("Please enter the complete 6-digit code");
       return;
     }
 
     setIsLoading(true);
-    setError('');
+    setError("");
 
     try {
       await authService.verifyPasswordResetOtp({ email, otp: otpValue });
@@ -312,12 +342,14 @@ const ForgotPasswordOtpPage: React.FC = () => {
       });
     } catch (err: unknown) {
       const apiErr = err as {
-        response?: { data?: { errors?: { message: string }[]; message?: string } };
+        response?: {
+          data?: { errors?: { message: string }[]; message?: string };
+        };
       };
       setError(
         apiErr.response?.data?.errors?.[0]?.message ||
           apiErr.response?.data?.message ||
-          'Invalid code. Please try again.'
+          "Invalid code. Please try again.",
       );
     } finally {
       setIsLoading(false);
@@ -328,28 +360,30 @@ const ForgotPasswordOtpPage: React.FC = () => {
     if (!canResend || !email) return;
 
     setIsResending(true);
-    setError('');
+    setError("");
 
     try {
       await authService.resendPasswordResetOtp({ email });
 
-      setOtp(['', '', '', '', '', '']);
+      setOtp(["", "", "", "", "", ""]);
       setResendTimer(OTP_TIMER_SECONDS);
     } catch (err: unknown) {
       const apiErr = err as {
-        response?: { data?: { errors?: { message: string }[]; message?: string } };
+        response?: {
+          data?: { errors?: { message: string }[]; message?: string };
+        };
       };
       setError(
         apiErr.response?.data?.errors?.[0]?.message ||
           apiErr.response?.data?.message ||
-          'Failed to resend OTP. Please try again.'
+          "Failed to resend OTP. Please try again.",
       );
     } finally {
       setIsResending(false);
     }
   };
 
-  const isComplete = otp.join('').length === 6;
+  const isComplete = otp.join("").length === 6;
 
   return (
     <div
@@ -362,7 +396,7 @@ const ForgotPasswordOtpPage: React.FC = () => {
 
       <div
         className="flex-1 flex flex-col items-center justify-center px-6 py-12 sm:px-10"
-        style={{ background: '#f0f2f7' }}
+        style={{ background: "#f0f2f7" }}
       >
         <div className="w-full max-w-md">
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 sm:p-10">
@@ -371,16 +405,24 @@ const ForgotPasswordOtpPage: React.FC = () => {
                 Reset Your Password
               </h2>
               <p className="text-sm text-gray-500 leading-relaxed">
-                Enter the 6-digit code we sent to{' '}
-                <span className="font-bold text-[#1a3a6e]">{maskEmail(email)}</span>{' '}
+                Enter the 6-digit code we sent to{" "}
+                <span className="font-bold text-[#1a3a6e]">
+                  {maskEmail(email)}
+                </span>{" "}
                 to continue resetting your password.
               </p>
             </div>
 
             <div className="mb-5">
-              <OtpInput value={otp} onChange={handleOtpChange} hasError={!!error} />
+              <OtpInput
+                value={otp}
+                onChange={handleOtpChange}
+                hasError={!!error}
+              />
               {error && (
-                <p className="mt-2.5 text-xs text-red-500 text-center">{error}</p>
+                <p className="mt-2.5 text-xs text-red-500 text-center">
+                  {error}
+                </p>
               )}
             </div>
 
@@ -393,12 +435,12 @@ const ForgotPasswordOtpPage: React.FC = () => {
                 transition-all duration-200
                 ${
                   isLoading || !isComplete
-                    ? 'opacity-60 cursor-not-allowed'
-                    : 'hover:opacity-90 active:scale-[0.98] shadow-md hover:shadow-lg'
+                    ? "opacity-60 cursor-not-allowed"
+                    : "hover:opacity-90 active:scale-[0.98] shadow-md hover:shadow-lg"
                 }
               `}
               style={{
-                background: 'linear-gradient(135deg, #1a3a6e 0%, #1a5276 100%)',
+                background: "linear-gradient(135deg, #1a3a6e 0%, #1a5276 100%)",
               }}
             >
               {isLoading ? (
@@ -420,7 +462,7 @@ const ForgotPasswordOtpPage: React.FC = () => {
                   Verifying...
                 </span>
               ) : (
-                'Verify OTP'
+                "Verify OTP"
               )}
             </button>
 
@@ -428,7 +470,7 @@ const ForgotPasswordOtpPage: React.FC = () => {
               <div className="flex items-center gap-1.5 text-gray-400 text-sm">
                 <ClockIcon />
                 <span>
-                  Resend in{' '}
+                  Resend in{" "}
                   <span className="font-bold text-gray-700">
                     {formatTime(resendTimer)}
                   </span>
@@ -443,8 +485,8 @@ const ForgotPasswordOtpPage: React.FC = () => {
                   text-sm font-semibold transition-all duration-200
                   ${
                     canResend
-                      ? 'text-[#1a3a6e] hover:underline cursor-pointer'
-                      : 'text-gray-300 cursor-not-allowed'
+                      ? "text-[#1a3a6e] hover:underline cursor-pointer"
+                      : "text-gray-300 cursor-not-allowed"
                   }
                 `}
               >
@@ -466,8 +508,10 @@ const ForgotPasswordOtpPage: React.FC = () => {
 
           <p className="text-center text-xs text-gray-400 mt-6 leading-relaxed px-4">
             Having trouble? Please check your spam folder or contact our
-            institutional support desk at{' '}
-            <span className="text-gray-500 font-medium">support@fundnest.com</span>
+            institutional support desk at{" "}
+            <span className="text-gray-500 font-medium">
+              support@fundnest.com
+            </span>
           </p>
         </div>
       </div>

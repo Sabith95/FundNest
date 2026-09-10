@@ -1,14 +1,14 @@
 import { configureStore } from "@reduxjs/toolkit";
-import authReducer from './slices/authSlice'
-import tenantReducer from './slices/tenantSlice'
+import authReducer from "./slices/authSlice";
+import tenantReducer from "./slices/tenantSlice";
 
 export const store = configureStore({
-    reducer: {
-        auth: authReducer,
-        tenant: tenantReducer
-    },
-})
+  reducer: {
+    auth: authReducer,
+    tenant: tenantReducer,
+  },
+});
 
 // type for useSelector and useDispatch
-export type RootState = ReturnType<typeof store.getState>
-export type AppDispatch = typeof store.dispatch 
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;

@@ -23,13 +23,13 @@ export interface UserDocument {
   email: string;
   phone?: string;
   password?: string;
-  authProvider: AuthProvider
-  googleId?: string
+  authProvider: AuthProvider;
+  googleId?: string;
   role: Role;
   isActive: boolean;
-  isEmailVerified:boolean,
+  isEmailVerified: boolean;
   tenantId?: Schema.Types.ObjectId;
-  profile: UserProfileDocument
+  profile: UserProfileDocument;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -55,8 +55,8 @@ const userSchema = new Schema<UserDocument>(
     },
     password: {
       type: String,
-      required: function (this: UserDocument){
-        return this.authProvider === 'LOCAL'
+      required: function (this: UserDocument) {
+        return this.authProvider === "LOCAL";
       },
     },
     role: {
@@ -67,19 +67,19 @@ const userSchema = new Schema<UserDocument>(
     },
     authProvider: {
       type: String,
-      enum: ['LOCAL', "GOOGLE"],
+      enum: ["LOCAL", "GOOGLE"],
       default: "LOCAL",
-      required: true
+      required: true,
     },
     googleId: {
       type: String,
       sparse: true,
       unique: true,
-      index: true
+      index: true,
     },
     isEmailVerified: {
       type: Boolean,
-      default: false
+      default: false,
     },
     isActive: {
       type: Boolean,
@@ -91,7 +91,7 @@ const userSchema = new Schema<UserDocument>(
       required: false,
       index: true,
     },
-    profile:{
+    profile: {
       avatarUrl: {
         type: String,
         trim: true,
@@ -101,27 +101,26 @@ const userSchema = new Schema<UserDocument>(
         trim: true,
       },
       address: {
-          line1: { type: String, trim: true },
-          line2: { type: String, trim: true },
-          city: { type: String, trim: true },
-          state: { type: String, trim: true },
-          pincode: { type: String, trim: true },
-          country: { type: String, trim: true, default: "India" },
-    },
-    kycStatus: {
-    type: String,
-    enum: ["PENDING", "VERIFIED", "REJECTED"],
-    default: "PENDING",
+        line1: { type: String, trim: true },
+        line2: { type: String, trim: true },
+        city: { type: String, trim: true },
+        state: { type: String, trim: true },
+        pincode: { type: String, trim: true },
+        country: { type: String, trim: true, default: "India" },
+      },
+      kycStatus: {
+        type: String,
+        enum: ["PENDING", "VERIFIED", "REJECTED"],
+        default: "PENDING",
       },
     },
   },
   {
     timestamps: true,
     collection: "users",
-  }
+  },
 );
 
 export type HydratedUserDocument = HydratedDocument<UserDocument>;
 
-export const UserModel =
-  models.User || model<UserDocument>("User", userSchema);
+export const UserModel = models.User || model<UserDocument>("User", userSchema);

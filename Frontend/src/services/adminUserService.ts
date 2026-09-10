@@ -18,7 +18,11 @@ interface UserListResponse {
 }
 
 export const adminUserService = {
-  async getUsers(page: number, limit: number, search?: string): Promise<UserListResponse> {
+  async getUsers(
+    page: number,
+    limit: number,
+    search?: string,
+  ): Promise<UserListResponse> {
     const response = await api.get(API_ROUTES.SUPER_ADMIN.GET_USERS, {
       params: { page, limit, search: search || undefined },
     });
@@ -31,7 +35,9 @@ export const adminUserService = {
   },
 
   async updateStatus(id: string, isActive: boolean): Promise<AdminUser> {
-    const response = await api.patch(API_ROUTES.SUPER_ADMIN.UPDATE_STATUS(id), { isActive });
+    const response = await api.patch(API_ROUTES.SUPER_ADMIN.UPDATE_STATUS(id), {
+      isActive,
+    });
     return response.data.data.user;
   },
 };

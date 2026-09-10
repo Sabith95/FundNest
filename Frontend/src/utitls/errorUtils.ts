@@ -8,7 +8,7 @@ import axios from "axios";
  */
 export const getErrorMessage = (
   error: unknown,
-  defaultFallback: string = "An unexpected error occurred. Please try again."
+  defaultFallback: string = "An unexpected error occurred. Please try again.",
 ): string => {
   // 1. Axios HTTP Errors
   if (axios.isAxiosError(error)) {
@@ -32,7 +32,9 @@ export const getErrorMessage = (
 
     // 403 Forbidden
     if (status === 403) {
-      return backendMessage || "You do not have permission to perform this action.";
+      return (
+        backendMessage || "You do not have permission to perform this action."
+      );
     }
 
     // 400 / 409 / 422 Business Validation Errors

@@ -48,9 +48,11 @@ const LOGIN_OPTIONS = [
   { label: "Admin", href: ROUTES.SUPER_ADMIN.LOGIN },
 ];
 
-const ACTIVE_LINK = "border-b-2 border-indigo-600 pb-1 text-sm font-medium text-indigo-600";
+const ACTIVE_LINK =
+  "border-b-2 border-indigo-600 pb-1 text-sm font-medium text-indigo-600";
 const INACTIVE_LINK = "text-sm font-medium text-slate-600 hover:text-slate-900";
-const TRIGGER = "flex items-center gap-1 text-sm font-medium text-slate-600 hover:text-slate-900";
+const TRIGGER =
+  "flex items-center gap-1 text-sm font-medium text-slate-600 hover:text-slate-900";
 
 const Header: React.FC<HeaderProps> = ({ active = "main" }) => {
   const [openMenu, setOpenMenu] = useState<MenuKey>(null);
@@ -87,10 +89,16 @@ const Header: React.FC<HeaderProps> = ({ active = "main" }) => {
 
         {/* Desktop nav */}
         <nav ref={navRef} className="hidden items-center gap-8 md:flex">
-          <a href={ROUTES.COMMON.LANDING} className={active === "main" ? ACTIVE_LINK : INACTIVE_LINK}>
+          <a
+            href={ROUTES.COMMON.LANDING}
+            className={active === "main" ? ACTIVE_LINK : INACTIVE_LINK}
+          >
             Home
           </a>
-          <a href={ROUTES.COMMON.PRICING} className={active === "pricing" ? ACTIVE_LINK : INACTIVE_LINK}>
+          <a
+            href={ROUTES.COMMON.PRICING}
+            className={active === "pricing" ? ACTIVE_LINK : INACTIVE_LINK}
+          >
             Pricing
           </a>
 
@@ -120,8 +128,12 @@ const Header: React.FC<HeaderProps> = ({ active = "main" }) => {
                     role="menuitem"
                     className="block rounded-xl px-3 py-2.5 transition hover:bg-slate-50"
                   >
-                    <p className="text-sm font-semibold text-slate-900">{opt.label}</p>
-                    <p className="mt-0.5 text-xs text-slate-500">{opt.description}</p>
+                    <p className="text-sm font-semibold text-slate-900">
+                      {opt.label}
+                    </p>
+                    <p className="mt-0.5 text-xs text-slate-500">
+                      {opt.description}
+                    </p>
                   </a>
                 ))}
               </div>
@@ -170,7 +182,11 @@ const Header: React.FC<HeaderProps> = ({ active = "main" }) => {
             aria-expanded={mobileOpen}
             className="rounded-lg p-2 text-slate-600 hover:bg-slate-50 md:hidden"
           >
-            {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            {mobileOpen ? (
+              <X className="h-5 w-5" />
+            ) : (
+              <Menu className="h-5 w-5" />
+            )}
           </button>
         </div>
       </div>
@@ -179,16 +195,24 @@ const Header: React.FC<HeaderProps> = ({ active = "main" }) => {
       {mobileOpen && (
         <div className="space-y-5 border-t border-slate-100 bg-white px-4 py-5 md:hidden">
           <div className="flex flex-col gap-3">
-            <a href={ROUTES.COMMON.LANDING} className="text-sm font-medium text-slate-700">
+            <a
+              href={ROUTES.COMMON.LANDING}
+              className="text-sm font-medium text-slate-700"
+            >
               Home
             </a>
-            <a href={ROUTES.COMMON.PRICING} className="text-sm font-medium text-slate-700">
+            <a
+              href={ROUTES.COMMON.PRICING}
+              className="text-sm font-medium text-slate-700"
+            >
               Pricing
             </a>
           </div>
 
           <div>
-            <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">Register</p>
+            <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">
+              Register
+            </p>
             <div className="mt-2 flex flex-col gap-1">
               {REGISTER_OPTIONS.map((opt) => (
                 <a
@@ -203,7 +227,9 @@ const Header: React.FC<HeaderProps> = ({ active = "main" }) => {
           </div>
 
           <div>
-            <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">Login</p>
+            <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">
+              Login
+            </p>
             <div className="mt-2 flex flex-col gap-1">
               {LOGIN_OPTIONS.map((opt) => (
                 <a

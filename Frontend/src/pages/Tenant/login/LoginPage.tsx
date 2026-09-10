@@ -9,7 +9,7 @@ import { getTenantDestination } from "../../../utitls/tenantRouting";
 import { toast } from "react-toastify";
 import { isAxiosError } from "axios";
 import { ROUTES } from "../../../shared/constants";
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 
 interface LoginFormValues {
   email: string;
@@ -50,40 +50,89 @@ function validateField(name: FieldName, value: string): string | undefined {
 // ---------------------------------------------------------------------------
 
 const MailIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" className="h-5 w-5 text-slate-400" aria-hidden="true">
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    className="h-5 w-5 text-slate-400"
+    aria-hidden="true"
+  >
     <path
       d="M3 6.5A1.5 1.5 0 0 1 4.5 5h15A1.5 1.5 0 0 1 21 6.5v11A1.5 1.5 0 0 1 19.5 19h-15A1.5 1.5 0 0 1 3 17.5v-11Z"
       stroke="currentColor"
       strokeWidth="1.6"
     />
-    <path d="m4 6.5 8 6.25L20 6.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+    <path
+      d="m4 6.5 8 6.25L20 6.5"
+      stroke="currentColor"
+      strokeWidth="1.6"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
   </svg>
 );
 
 const LockIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" className="h-5 w-5 text-slate-400" aria-hidden="true">
-    <rect x="5" y="10.5" width="14" height="9" rx="1.6" stroke="currentColor" strokeWidth="1.6" />
-    <path d="M8 10.5V7.5a4 4 0 1 1 8 0v3" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    className="h-5 w-5 text-slate-400"
+    aria-hidden="true"
+  >
+    <rect
+      x="5"
+      y="10.5"
+      width="14"
+      height="9"
+      rx="1.6"
+      stroke="currentColor"
+      strokeWidth="1.6"
+    />
+    <path
+      d="M8 10.5V7.5a4 4 0 1 1 8 0v3"
+      stroke="currentColor"
+      strokeWidth="1.6"
+      strokeLinecap="round"
+    />
   </svg>
 );
 
 const ArrowRightIcon = () => (
   <svg viewBox="0 0 24 24" fill="none" className="h-4 w-4" aria-hidden="true">
-    <path d="M4 12h16M14 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    <path
+      d="M4 12h16M14 6l6 6-6 6"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
   </svg>
 );
 
 const ErrorIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" className="h-3.5 w-3.5 shrink-0" aria-hidden="true">
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    className="h-3.5 w-3.5 shrink-0"
+    aria-hidden="true"
+  >
     <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.8" />
-    <path d="M12 7.5v5.5M12 16.25v.1" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+    <path
+      d="M12 7.5v5.5M12 16.25v.1"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+    />
   </svg>
 );
 
 const GlobeIcon = () => (
   <svg viewBox="0 0 24 24" fill="none" className="h-4 w-4" aria-hidden="true">
     <circle cx="12" cy="12" r="8.5" stroke="currentColor" strokeWidth="1.4" />
-    <path d="M3.5 12h17M12 3.5a13 13 0 0 1 0 17M12 3.5a13 13 0 0 0 0 17" stroke="currentColor" strokeWidth="1.4" />
+    <path
+      d="M3.5 12h17M12 3.5a13 13 0 0 1 0 17M12 3.5a13 13 0 0 0 0 17"
+      stroke="currentColor"
+      strokeWidth="1.4"
+    />
   </svg>
 );
 
@@ -156,20 +205,26 @@ const LoginPage: React.FC = () => {
       // so errors don't appear before the user has had a chance to type.
       setTouched((prevTouched) => {
         if (prevTouched[name]) {
-          setErrors((prevErrors) => ({ ...prevErrors, [name]: validateField(name, value) }));
+          setErrors((prevErrors) => ({
+            ...prevErrors,
+            [name]: validateField(name, value),
+          }));
         }
         return prevTouched;
       });
     },
-    []
+    [],
   );
 
   const handleBlur = useCallback(
     (name: FieldName) => (e: React.FocusEvent<HTMLInputElement>) => {
       setTouched((prev) => ({ ...prev, [name]: true }));
-      setErrors((prev) => ({ ...prev, [name]: validateField(name, e.target.value) }));
+      setErrors((prev) => ({
+        ...prev,
+        [name]: validateField(name, e.target.value),
+      }));
     },
-    []
+    [],
   );
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -199,26 +254,29 @@ const LoginPage: React.FC = () => {
         onboardingStep: result.tenant.onboardingStep,
       };
 
-        dispatch(setTenant(tenantProfile));
-        dispatch(
-          loginSuccess({
-            user: {
-              id: result.tenant.id,
-              name: result.tenant.ownerName,
-              email: result.tenant.email,
-              role: "TENANT_ADMIN",
-              tenantId: result.tenant.id,
-              isActive: true,
-              createdAt: "",
-            },
-            accessToken: result.accessToken,
-          })
-        );
+      dispatch(setTenant(tenantProfile));
+      dispatch(
+        loginSuccess({
+          user: {
+            id: result.tenant.id,
+            name: result.tenant.ownerName,
+            email: result.tenant.email,
+            role: "TENANT_ADMIN",
+            tenantId: result.tenant.id,
+            isActive: true,
+            createdAt: "",
+          },
+          accessToken: result.accessToken,
+        }),
+      );
 
-      navigate(getTenantDestination(result.tenant.onboardingStep), { replace: true });
+      navigate(getTenantDestination(result.tenant.onboardingStep), {
+        replace: true,
+      });
     } catch (err) {
       const message = isAxiosError(err)
-        ? err.response?.data?.message ?? "We couldn't sign you in. Check your details and try again."
+        ? (err.response?.data?.message ??
+          "We couldn't sign you in. Check your details and try again.")
         : "We couldn't sign you in. Check your details and try again.";
       toast.error(message, { position: "top-center" });
     } finally {
@@ -250,14 +308,21 @@ const LoginPage: React.FC = () => {
 
         <div className="relative w-full max-w-md rounded-2xl bg-white p-6 shadow-xl shadow-slate-900/5 ring-1 ring-slate-100 sm:p-9">
           <div className="mb-7 text-center">
-            <h1 className="text-2xl font-extrabold text-[#12163f] sm:text-[28px]">Welcome Back</h1>
-            <p className="mt-2 text-sm text-slate-500">Secure access to your digital capital vault.</p>
+            <h1 className="text-2xl font-extrabold text-[#12163f] sm:text-[28px]">
+              Welcome Back
+            </h1>
+            <p className="mt-2 text-sm text-slate-500">
+              Secure access to your digital capital vault.
+            </p>
           </div>
 
           <form noValidate onSubmit={handleSubmit} className="space-y-5">
             {/* Email */}
             <div>
-              <label htmlFor="email" className="mb-1.5 block text-xs font-bold uppercase tracking-wide text-[#12163f]">
+              <label
+                htmlFor="email"
+                className="mb-1.5 block text-xs font-bold uppercase tracking-wide text-[#12163f]"
+              >
                 Email Address
               </label>
               <div className="relative">
@@ -275,11 +340,16 @@ const LoginPage: React.FC = () => {
                   onBlur={handleBlur("email")}
                   aria-invalid={Boolean(touched.email && errors.email)}
                   aria-describedby={errors.email ? "email-error" : undefined}
-                  className={inputClasses(Boolean(touched.email && errors.email))}
+                  className={inputClasses(
+                    Boolean(touched.email && errors.email),
+                  )}
                 />
               </div>
               {touched.email && errors.email && (
-                <p id="email-error" className="mt-1.5 flex items-center gap-1.5 text-xs font-medium text-red-600">
+                <p
+                  id="email-error"
+                  className="mt-1.5 flex items-center gap-1.5 text-xs font-medium text-red-600"
+                >
                   <ErrorIcon />
                   {errors.email}
                 </p>
@@ -289,12 +359,18 @@ const LoginPage: React.FC = () => {
             {/* Password */}
             <div>
               <div className="mb-1.5 flex items-center justify-between">
-                <label htmlFor="password" className="block text-xs font-bold uppercase tracking-wide text-[#12163f]">
+                <label
+                  htmlFor="password"
+                  className="block text-xs font-bold uppercase tracking-wide text-[#12163f]"
+                >
                   Password
                 </label>
-              <Link to={ROUTES.TENANT.FORGOT_PASSWORD} className="text-xs font-bold uppercase tracking-wide text-[#3730a3] hover:text-[#2c2582]">
-                Forgot Password?
-              </Link>
+                <Link
+                  to={ROUTES.TENANT.FORGOT_PASSWORD}
+                  className="text-xs font-bold uppercase tracking-wide text-[#3730a3] hover:text-[#2c2582]"
+                >
+                  Forgot Password?
+                </Link>
               </div>
               <div className="relative">
                 <span className="pointer-events-none absolute inset-y-0 left-3.5 flex items-center">
@@ -305,17 +381,26 @@ const LoginPage: React.FC = () => {
                   name="password"
                   type="password"
                   autoComplete="current-password"
-                  placeholder={"\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022"}
+                  placeholder={
+                    "\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022"
+                  }
                   value={values.password}
                   onChange={handleChange("password")}
                   onBlur={handleBlur("password")}
                   aria-invalid={Boolean(touched.password && errors.password)}
-                  aria-describedby={errors.password ? "password-error" : undefined}
-                  className={inputClasses(Boolean(touched.password && errors.password))}
+                  aria-describedby={
+                    errors.password ? "password-error" : undefined
+                  }
+                  className={inputClasses(
+                    Boolean(touched.password && errors.password),
+                  )}
                 />
               </div>
               {touched.password && errors.password && (
-                <p id="password-error" className="mt-1.5 flex items-center gap-1.5 text-xs font-medium text-red-600">
+                <p
+                  id="password-error"
+                  className="mt-1.5 flex items-center gap-1.5 text-xs font-medium text-red-600"
+                >
                   <ErrorIcon />
                   {errors.password}
                 </p>
@@ -343,7 +428,10 @@ const LoginPage: React.FC = () => {
 
       <p className="pb-2 text-center text-sm text-slate-600">
         Don&apos;t have an account?{" "}
-        <a href= {ROUTES.TENANT.REGISTER} className="font-semibold text-[#3730a3] hover:text-[#2c2582]">
+        <a
+          href={ROUTES.TENANT.REGISTER}
+          className="font-semibold text-[#3730a3] hover:text-[#2c2582]"
+        >
           Create Vault
         </a>
       </p>

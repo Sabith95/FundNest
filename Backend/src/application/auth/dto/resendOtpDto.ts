@@ -1,8 +1,8 @@
-export interface ResendOtpDto{
-    email: string
+export interface ResendOtpDto {
+  email: string;
 }
 
 export interface ResendOtpResponseDto {
-    email: string
-    otpExpiresInSeconds: number
+  email: string;
+  otpExpiresInSeconds: number;
 }

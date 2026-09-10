@@ -10,7 +10,7 @@ import { MESSAGES } from "../../../shared/constants/messages";
 export class GetTenantByIdUseCase implements IGetTenantByIdUseCase {
   constructor(
     @inject(TOKENS.TenantRepository)
-    private readonly _tenantRepository: ITenantRepository
+    private readonly _tenantRepository: ITenantRepository,
   ) {}
 
   async execute(id: string): Promise<Tenant> {

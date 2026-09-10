@@ -17,14 +17,14 @@ export interface TenantProfileResponseDto {
   status: TenantStatus;
   onboardingStep: OnboardingStep;
   rejectionReason?: string;
-  
+
   businessInfo?: {
     businessType: string;
     registrationId: string;
     registeredBusinessAddress: string;
     verification?: VerificationSectionDto;
   };
-  
+
   kycDocuments?: {
     businessRegistrationCertificate?: {
       objectKey: string;

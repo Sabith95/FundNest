@@ -20,7 +20,11 @@ interface TenantListResponse {
 }
 
 export const adminTenantService = {
-  async getTenants(page: number, limit: number, search?: string): Promise<TenantListResponse> {
+  async getTenants(
+    page: number,
+    limit: number,
+    search?: string,
+  ): Promise<TenantListResponse> {
     const response = await api.get(API_ROUTES.SUPER_ADMIN.GET_TENANTS, {
       params: { page, limit, search: search || undefined },
     });
@@ -33,22 +37,39 @@ export const adminTenantService = {
   },
 
   async updateStatus(id: string, isActive: boolean): Promise<AdminTenant> {
-    const response = await api.patch(API_ROUTES.SUPER_ADMIN.UPDATE_TENANT_STATUS(id), { isActive });
+    const response = await api.patch(
+      API_ROUTES.SUPER_ADMIN.UPDATE_TENANT_STATUS(id),
+      { isActive },
+    );
     return response.data.data.tenant;
   },
 
-  async verifyBusinessDetails(id: string, isApproved: boolean, rejectionReason?: string): Promise<TenantDetailsData> {
-    const response = await api.patch(API_ROUTES.SUPER_ADMIN.VERIFY_BUSINESS_DETAILS(id), {
-      status: isApproved ? "APPROVED" : "REJECTED",
-      rejectionReason,
-    });
+  async verifyBusinessDetails(
+    id: string,
+    isApproved: boolean,
+    rejectionReason?: string,
+  ): Promise<TenantDetailsData> {
+    const response = await api.patch(
+      API_ROUTES.SUPER_ADMIN.VERIFY_BUSINESS_DETAILS(id),
+      {
+        status: isApproved ? "APPROVED" : "REJECTED",
+        rejectionReason,
+      },
+    );
     return response.data.data.tenant;
   },
-  async verifyBankDetails(id: string, isApproved: boolean, rejectionReason?: string): Promise<TenantDetailsData> {
-    const response = await api.patch(API_ROUTES.SUPER_ADMIN.VERIFY_BANK_DETAILS(id), {
-      status: isApproved ? "APPROVED" : "REJECTED",
-      rejectionReason,
-    });
+  async verifyBankDetails(
+    id: string,
+    isApproved: boolean,
+    rejectionReason?: string,
+  ): Promise<TenantDetailsData> {
+    const response = await api.patch(
+      API_ROUTES.SUPER_ADMIN.VERIFY_BANK_DETAILS(id),
+      {
+        status: isApproved ? "APPROVED" : "REJECTED",
+        rejectionReason,
+      },
+    );
     return response.data.data.tenant;
   },
   async verifyKycDocuments(
@@ -58,14 +79,19 @@ export const adminTenantService = {
       businessRegistrationRejectionReason?: string;
       ownerIdProofStatus: string;
       ownerIdProofRejectionReason?: string;
-    }
+    },
   ): Promise<TenantDetailsData> {
-    const response = await api.patch(API_ROUTES.SUPER_ADMIN.VERIFY_KYC_DOCUMENTS(id), payload);
+    const response = await api.patch(
+      API_ROUTES.SUPER_ADMIN.VERIFY_KYC_DOCUMENTS(id),
+      payload,
+    );
     return response.data.data.tenant;
   },
 
   async completeVerification(id: string): Promise<TenantDetailsData> {
-    const response = await api.post(API_ROUTES.SUPER_ADMIN.COMPLETE_TENANT_VERIFICATION(id));
+    const response = await api.post(
+      API_ROUTES.SUPER_ADMIN.COMPLETE_TENANT_VERIFICATION(id),
+    );
     return response.data.data.tenant;
   },
 };

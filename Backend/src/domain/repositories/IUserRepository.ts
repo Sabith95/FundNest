@@ -3,8 +3,8 @@ import { User } from "../entities/User";
 import { IBaseRepository } from "./IBaseRepository";
 
 export interface CreateUserData {
-  name: string
-  email: string
+  name: string;
+  email: string;
   phone?: string;
   password?: string;
   role: Role;
@@ -42,18 +42,21 @@ export interface UpdateUserProfileData {
   address?: UserAddressData;
 }
 
-
-
 export interface IUserRepository extends IBaseRepository<User> {
-  create(data: CreateUserData): Promise<User>
-  findByEmail(email: string): Promise<User | null>
-  findByEmailAndRole(email: string, role: Role): Promise<User | null>
-  findByGoogleId(googleId: string): Promise<User | null>
-  markEmailAsVerified(userId: string): Promise<void>
-  updatePassword(userId: string, hashedPassword: string): Promise<void>
-  updateProfile(userId: string, data: UpdateUserProfileData): Promise<User | null>
-  updateProfilePhoto(userId: string, avatarUrl: string, avatarPublicId: string): Promise<User | null>
+  create(data: CreateUserData): Promise<User>;
+  findByEmail(email: string): Promise<User | null>;
+  findByEmailAndRole(email: string, role: Role): Promise<User | null>;
+  findByGoogleId(googleId: string): Promise<User | null>;
+  markEmailAsVerified(userId: string): Promise<void>;
+  updatePassword(userId: string, hashedPassword: string): Promise<void>;
+  updateProfile(
+    userId: string,
+    data: UpdateUserProfileData,
+  ): Promise<User | null>;
+  updateProfilePhoto(
+    userId: string,
+    avatarUrl: string,
+    avatarPublicId: string,
+  ): Promise<User | null>;
   updateActiveStatus(userId: string, isActive: boolean): Promise<User | null>;
-
 }
-

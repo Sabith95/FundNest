@@ -1,15 +1,14 @@
-import { Request, Response, NextFunction } from 'express';
-import { ZodError } from 'zod';
-import { ApiResponse } from '../../../shared/ApiResponse';
-import { AppError } from '../../../shared/errors/AppError';
-import { logger } from '../../../shared/logger';
-import { env } from '../../../infrastructure/config/env';
-import { HTTP_STATUS } from '../../../shared/constants/httpStatus';
+import { Request, Response, NextFunction } from "express";
+import { ZodError } from "zod";
+import { ApiResponse } from "../../../shared/ApiResponse";
+import { AppError } from "../../../shared/errors/AppError";
+import { logger } from "../../../shared/logger";
+import { env } from "../../../infrastructure/config/env";
+import { HTTP_STATUS } from "../../../shared/constants/httpStatus";
 
-
-interface IErrorHandlerStrategy{
-  canHandle(err: Error): boolean
-  handle(err: Error, res: Response): void
+interface IErrorHandlerStrategy {
+  canHandle(err: Error): boolean;
+  handle(err: Error, res: Response): void;
 }
 
 // Strategy 1 — Zod validation errors
@@ -21,12 +20,18 @@ class ZodErrorHandler implements IErrorHandlerStrategy {
   handle(err: Error, res: Response): void {
     const zodError = err as ZodError;
     const errors = zodError.issues.map((e) => ({
-      field: e.path.join('.'),
+      field: e.path.join("."),
       message: e.message,
     }));
     (res as any)
       .status(HTTP_STATUS.UNPROCESSABLE_ENTITY)
-      .json(ApiResponse.error('Validation failed', HTTP_STATUS.UNPROCESSABLE_ENTITY, errors));
+      .json(
+        ApiResponse.error(
+          "Validation failed",
+          HTTP_STATUS.UNPROCESSABLE_ENTITY,
+          errors,
+        ),
+      );
   }
 }
 
@@ -51,8 +56,7 @@ class MongoDbDuplicateKeyHandler implements IErrorHandlerStrategy {
   }
 
   handle(err: Error, res: Response): void {
-    const field =
-      Object.keys((err as any).keyValue || {})[0] || 'field';
+    const field = Object.keys((err as any).keyValue || {})[0] || "field";
     (res as any)
       .status(HTTP_STATUS.CONFLICT)
       .json(ApiResponse.error(`${field} already exists`, HTTP_STATUS.CONFLICT));
@@ -62,36 +66,34 @@ class MongoDbDuplicateKeyHandler implements IErrorHandlerStrategy {
 // Strategy 4 — Default fallback
 class DefaultErrorHandler implements IErrorHandlerStrategy {
   canHandle(_err: Error): boolean {
-    return true;  
+    return true;
   }
 
   handle(err: Error, res: Response): void {
-    (res as any).status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json(
-      ApiResponse.error(
-        env.NODE_ENV === 'production'
-          ? 'Internal server error'
-          : err.message,
-        HTTP_STATUS.INTERNAL_SERVER_ERROR
-      )
-    );
+    (res as any)
+      .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
+      .json(
+        ApiResponse.error(
+          env.NODE_ENV === "production" ? "Internal server error" : err.message,
+          HTTP_STATUS.INTERNAL_SERVER_ERROR,
+        ),
+      );
   }
 }
-
 
 const errorHandlers: IErrorHandlerStrategy[] = [
   new ZodErrorHandler(),
   new AppErrorHandler(),
   new MongoDbDuplicateKeyHandler(),
-  new DefaultErrorHandler(),   
+  new DefaultErrorHandler(),
 ];
 
 export const errorHandler = (
   err: Error,
   req: Request,
   res: Response,
-  _next: NextFunction
+  _next: NextFunction,
 ): void => {
-
   //   console.log("ERROR OBJECT:", err);
   // console.log(
   //   "ERROR STACK:",

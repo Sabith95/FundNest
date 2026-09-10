@@ -20,30 +20,39 @@ const authenticate = createAuthMiddleware(jwtService);
 router.post(ENDPOINTS.USER.AUTH.REGISTER, authController.registerUser);
 router.post(ENDPOINTS.USER.AUTH.VERIFY_OTP, authController.verifyUserOtp);
 router.post(ENDPOINTS.USER.AUTH.RESEND_OTP, authController.resendUserOtp);
-router.post(ENDPOINTS.USER.AUTH.LOGIN,authController.loginUser)
+router.post(ENDPOINTS.USER.AUTH.LOGIN, authController.loginUser);
 
 //forgot password
-router.post(ENDPOINTS.USER.PASSWORD.SEND_OTP, authController.requestPasswordResetOtp);
-router.post(ENDPOINTS.USER.PASSWORD.RESEND_OTP, authController.requestPasswordResetOtp);
-router.post(ENDPOINTS.USER.PASSWORD.VERIFY_OTP, authController.verifyPasswordResetOtp);
+router.post(
+  ENDPOINTS.USER.PASSWORD.SEND_OTP,
+  authController.requestPasswordResetOtp,
+);
+router.post(
+  ENDPOINTS.USER.PASSWORD.RESEND_OTP,
+  authController.requestPasswordResetOtp,
+);
+router.post(
+  ENDPOINTS.USER.PASSWORD.VERIFY_OTP,
+  authController.verifyPasswordResetOtp,
+);
 router.post(ENDPOINTS.USER.PASSWORD.RESET, authController.resetUserPassword);
 
 // user google login
-router.post(ENDPOINTS.USER.AUTH.GOOGLE_LOGIN,authController.googleUserLogin)
+router.post(ENDPOINTS.USER.AUTH.GOOGLE_LOGIN, authController.googleUserLogin);
 
 //profile management
 router.get(
   ENDPOINTS.USER.PROFILE.GET,
   authenticate,
   authorize(ROLES.USER),
-  userProfileController.getProfile
+  userProfileController.getProfile,
 );
 
 router.patch(
   ENDPOINTS.USER.PROFILE.UPDATE,
   authenticate,
   authorize(ROLES.USER),
-  userProfileController.updateProfile
+  userProfileController.updateProfile,
 );
 
 router.patch(
@@ -51,14 +60,14 @@ router.patch(
   authenticate,
   authorize(ROLES.USER),
   upload.single("profilePhoto"),
-  userProfileController.updateProfilePhoto
+  userProfileController.updateProfilePhoto,
 );
 
 router.patch(
   ENDPOINTS.USER.PASSWORD.CHANGE,
   authenticate,
   authorize(ROLES.USER),
-  userProfileController.changePassword
+  userProfileController.changePassword,
 );
 
 export default router;

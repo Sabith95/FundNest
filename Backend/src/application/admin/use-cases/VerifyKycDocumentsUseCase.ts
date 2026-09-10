@@ -14,7 +14,7 @@ import { syncOverallTenantStatus } from "../services/syncOverallTenantStatus";
 export class VerifyKycDocumentsUseCase implements IVerifyKycDocumentsUseCase {
   constructor(
     @inject(TOKENS.TenantRepository)
-    private readonly _tenantRepository: ITenantRepository
+    private readonly _tenantRepository: ITenantRepository,
   ) {}
 
   async execute(tenantId: string, dto: VerifyKycDocumentsDto): Promise<Tenant> {
@@ -28,24 +28,31 @@ export class VerifyKycDocumentsUseCase implements IVerifyKycDocumentsUseCase {
     }
 
     if (
-      (dto.businessRegistrationStatus === VerificationStatus.REJECTED && !dto.businessRegistrationRejectionReason) ||
-      (dto.ownerIdProofStatus === VerificationStatus.REJECTED && !dto.ownerIdProofRejectionReason)
+      (dto.businessRegistrationStatus === VerificationStatus.REJECTED &&
+        !dto.businessRegistrationRejectionReason) ||
+      (dto.ownerIdProofStatus === VerificationStatus.REJECTED &&
+        !dto.ownerIdProofRejectionReason)
     ) {
-      throw new BadRequestError("Rejection reason is required for rejected KYC documents.");
+      throw new BadRequestError(
+        "Rejection reason is required for rejected KYC documents.",
+      );
     }
 
-    const updatedTenant = await this._tenantRepository.verifyKycDocuments(tenantId, {
-      businessRegistrationCertificateVerification: {
-        status: dto.businessRegistrationStatus,
-        rejectionReason: dto.businessRegistrationRejectionReason,
-        verifiedAt: new Date(),
+    const updatedTenant = await this._tenantRepository.verifyKycDocuments(
+      tenantId,
+      {
+        businessRegistrationCertificateVerification: {
+          status: dto.businessRegistrationStatus,
+          rejectionReason: dto.businessRegistrationRejectionReason,
+          verifiedAt: new Date(),
+        },
+        ownerIdProofVerification: {
+          status: dto.ownerIdProofStatus,
+          rejectionReason: dto.ownerIdProofRejectionReason,
+          verifiedAt: new Date(),
+        },
       },
-      ownerIdProofVerification: {
-        status: dto.ownerIdProofStatus,
-        rejectionReason: dto.ownerIdProofRejectionReason,
-        verifiedAt: new Date(),
-      },
-    });
+    );
 
     if (!updatedTenant) {
       throw new NotFoundError(MESSAGES.TENANT.NOT_FOUND);

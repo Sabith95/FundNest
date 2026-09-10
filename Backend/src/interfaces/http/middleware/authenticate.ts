@@ -5,48 +5,42 @@ import { IMiddleware } from "./interfaces/IMiddleware";
 import { TokenExtracter } from "./helpers/tokenExtracter";
 import { UnauthorizedError } from "../../../shared/errors/UnauthorizedError";
 
-
-
 export class AuthenticateMiddleware implements IMiddleware {
+  constructor(private _jwtService: IJwtService) {}
 
-    constructor(
-        private _jwtService: IJwtService
-     ){}
+  handle = (req: Request, res: Response, next: NextFunction): void => {
+    try {
+      const token = TokenExtracter.fromHeader(req);
 
-     handle = (req: Request, res: Response, next: NextFunction): void =>{
-        try {
-            // Single Responsibility — extraction delegated to TokenExtractor
-            const token = TokenExtracter.fromHeader(req)
+      if (!token) {
+        throw new UnauthorizedError("No token provided");
+      }
 
-            if(!token){
-                throw new UnauthorizedError('No token provided')
-            }
+      const payload = this._jwtService.verifyAccessToken(token);
 
-            const payload = this._jwtService.verifyAccessToken(token)
+      req.user = payload;
 
-            req.user = payload
+      logger.debug(`Authenticated ${payload.email}`);
+      next();
+    } catch (error: any) {
+      if (error.name === "TokenExpiredError") {
+        next(new UnauthorizedError("Token expired"));
+        return;
+      }
 
-            logger.debug(`Authenticated ${payload.email}`)
-            next()
-        } catch (error: any) {
-            if(error.name === 'TokenExpiredError'){
-                next(new UnauthorizedError('Token expired'))
-                return
-            }
-            
-            if(error.name === 'JsonWebTokenError'){
-                next(new UnauthorizedError('Invalid token'))
-                return
-            }
-            next(error)
-        }
-     }
+      if (error.name === "JsonWebTokenError") {
+        next(new UnauthorizedError("Invalid token"));
+        return;
+      }
+      next(error);
+    }
+  };
 }
 
 // Factory function - creates middleware handler for Express
 export const createAuthMiddleware = (
-    jwtService: IJwtService
-):((req: Request, res: Response, next: NextFunction) => void) =>{
-    const middleware = new AuthenticateMiddleware(jwtService)
-    return middleware.handle
-} 
+  jwtService: IJwtService,
+): ((req: Request, res: Response, next: NextFunction) => void) => {
+  const middleware = new AuthenticateMiddleware(jwtService);
+  return middleware.handle;
+};

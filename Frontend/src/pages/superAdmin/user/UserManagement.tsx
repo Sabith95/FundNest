@@ -1,6 +1,11 @@
 import React from "react";
-import AdminEntityManager, { type Column } from "../../../components/admin/AdminEntityManager";
-import { adminUserService, type AdminUser } from "../../../services/adminUserService";
+import AdminEntityManager, {
+  type Column,
+} from "../../../components/admin/AdminEntityManager";
+import {
+  adminUserService,
+  type AdminUser,
+} from "../../../services/adminUserService";
 
 type UserRow = AdminUser & { displayName: string };
 
@@ -9,7 +14,9 @@ const UserManagement: React.FC = () => {
     {
       key: "name",
       header: "Name",
-      render: (u) => <span className="text-sm font-semibold text-slate-900">{u.name}</span>,
+      render: (u) => (
+        <span className="text-sm font-semibold text-slate-900">{u.name}</span>
+      ),
     },
     {
       key: "email",
@@ -19,7 +26,9 @@ const UserManagement: React.FC = () => {
     {
       key: "phone",
       header: "Phone",
-      render: (u) => <span className="text-sm text-slate-600">{u.phone || "—"}</span>,
+      render: (u) => (
+        <span className="text-sm text-slate-600">{u.phone || "—"}</span>
+      ),
     },
     {
       key: "status",
@@ -39,7 +48,11 @@ const UserManagement: React.FC = () => {
     {
       key: "created",
       header: "Created",
-      render: (u) => <span className="text-sm text-slate-500">{new Date(u.createdAt).toLocaleDateString()}</span>,
+      render: (u) => (
+        <span className="text-sm text-slate-500">
+          {new Date(u.createdAt).toLocaleDateString()}
+        </span>
+      ),
     },
   ];
 
@@ -57,7 +70,9 @@ const UserManagement: React.FC = () => {
             total: r.total,
           })),
         updateStatus: (id, isActive) =>
-          adminUserService.updateStatus(id, isActive).then((u) => ({ ...u, displayName: u.name })),
+          adminUserService
+            .updateStatus(id, isActive)
+            .then((u) => ({ ...u, displayName: u.name })),
       }}
     />
   );

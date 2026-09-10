@@ -2,9 +2,7 @@ import { AdminUsersResponseDto } from "../../admin/dto/AdminUsersResponseDto";
 import { GetAllUsersRequestDto } from "../../admin/dto/GetAllUsersRequestDto";
 
 export interface IGetAllUsersUseCase {
-  execute(
-    data: GetAllUsersRequestDto
-  ): Promise<{
+  execute(data: GetAllUsersRequestDto): Promise<{
     users: AdminUsersResponseDto[];
     total: number;
     page: number;

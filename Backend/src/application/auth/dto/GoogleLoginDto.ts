@@ -1,13 +1,13 @@
-import { AuthUserDto } from "./AuthUserDto"
+import { AuthUserDto } from "./AuthUserDto";
 
 export interface GoogleLoginDto {
-    idToken: string
+  idToken: string;
 }
 
 export interface GoogleResponseDto {
-    user: AuthUserDto,
-    tokens: {
-        accessToken: string
-        refreshToken: string
-    }
-} 
+  user: AuthUserDto;
+  tokens: {
+    accessToken: string;
+    refreshToken: string;
+  };
+}

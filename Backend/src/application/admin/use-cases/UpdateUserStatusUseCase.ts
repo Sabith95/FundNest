@@ -10,16 +10,13 @@ import { MESSAGES } from "../../../shared/constants/messages";
 export class UpdateUserStatusUseCase implements IUpdateUserStatusUseCase {
   constructor(
     @inject(TOKENS.UserRepository)
-    private readonly _userRepository: IUserRepository
+    private readonly _userRepository: IUserRepository,
   ) {}
 
-  async execute(data: {
-    userId: string;
-    isActive: boolean;
-  }): Promise<User> {
+  async execute(data: { userId: string; isActive: boolean }): Promise<User> {
     const user = await this._userRepository.updateActiveStatus(
       data.userId,
-      data.isActive
+      data.isActive,
     );
 
     if (!user) {

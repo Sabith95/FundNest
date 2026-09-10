@@ -16,16 +16,9 @@ export const registerTenantSchema = z
       .min(2, "Owner name is required")
       .max(100, "Owner name is too long"),
 
-    email: z
-      .string()
-      .trim()
-      .email("Invalid email address")
-      .toLowerCase(),
+    email: z.string().trim().email("Invalid email address").toLowerCase(),
 
-    phone: z
-      .string()
-      .trim()
-      .regex(phoneRegex, "Invalid phone number"),
+    phone: z.string().trim().regex(phoneRegex, "Invalid phone number"),
 
     password: z
       .string()
@@ -40,22 +33,11 @@ export const registerTenantSchema = z
   });
 
 export const verifyTenantOtpSchema = z.object({
-  email: z
-    .string()
-    .trim()
-    .email("Invalid email address")
-    .toLowerCase(),
+  email: z.string().trim().email("Invalid email address").toLowerCase(),
 
-  otp: z
-    .string()
-    .trim()
-    .length(6, "OTP must be 6 digits"),
+  otp: z.string().trim().length(6, "OTP must be 6 digits"),
 });
 
 export const resendTenantOtpSchema = z.object({
-  email: z
-    .string()
-    .trim()
-    .email("Invalid email address")
-    .toLowerCase(),
+  email: z.string().trim().email("Invalid email address").toLowerCase(),
 });

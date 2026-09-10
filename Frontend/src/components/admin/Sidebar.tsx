@@ -13,19 +13,44 @@ import {
   ShieldCheck,
   X,
 } from "lucide-react";
-import type { NavItem } from '../../types/nav.types'
+import type { NavItem } from "../../types/nav.types";
 
 // Single source of truth for every sidebar link. These are navigators to
 // their respective pages, not standalone components — the pages they point
 // to are built separately.
 const primaryNavItems: NavItem[] = [
-  { id: "dashboard", label: "Dashboard", icon: LayoutDashboard, path: "/superadmin/dashboard" },
-  { id: "tenant-management", label: "Tenant Management", icon: Building2, path: "/superadmin/tenants" },
-  { id: "user-management", label: "User Management", icon: Users, path: "/superadmin/users" },
-  { id: "billing", label: "Billing & Subscriptions", icon: CreditCard, path: "/billing" },
+  {
+    id: "dashboard",
+    label: "Dashboard",
+    icon: LayoutDashboard,
+    path: "/superadmin/dashboard",
+  },
+  {
+    id: "tenant-management",
+    label: "Tenant Management",
+    icon: Building2,
+    path: "/superadmin/tenants",
+  },
+  {
+    id: "user-management",
+    label: "User Management",
+    icon: Users,
+    path: "/superadmin/users",
+  },
+  {
+    id: "billing",
+    label: "Billing & Subscriptions",
+    icon: CreditCard,
+    path: "/billing",
+  },
   { id: "plans", label: "Plans & Pricing", icon: Package, path: "/plans" },
   { id: "analytics", label: "Analytics", icon: BarChart3, path: "/analytics" },
-  { id: "notifications", label: "Notifications", icon: Bell, path: "/notifications" },
+  {
+    id: "notifications",
+    label: "Notifications",
+    icon: Bell,
+    path: "/notifications",
+  },
 ];
 
 interface SidebarProps {
@@ -84,7 +109,13 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
         {/* Primary navigation */}
         <nav className="flex-1 space-y-1 overflow-y-auto px-3 py-4">
           {primaryNavItems.map((item) => (
-            <NavLink key={item.id} to={item.path} className={linkClasses} onClick={onClose} end={item.path === "/"}>
+            <NavLink
+              key={item.id}
+              to={item.path}
+              className={linkClasses}
+              onClick={onClose}
+              end={item.path === "/"}
+            >
               <item.icon className="h-5 w-5 shrink-0" />
               <span className="truncate">{item.label}</span>
             </NavLink>

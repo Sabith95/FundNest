@@ -39,18 +39,20 @@ export class AdminTenantController {
     private readonly _verifyBankDetailsUseCase: IVerifyBankDetailsUseCase,
 
     @inject(TOKENS.CompleteTenantVerificationUseCase)
-    private readonly _completeTenantVerificationUseCase: ICompleteTenantVerificationUseCase
+    private readonly _completeTenantVerificationUseCase: ICompleteTenantVerificationUseCase,
   ) {}
 
   getAll = async (
     req: Request,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ): Promise<void> => {
     try {
       const page = Number(req.query.page ?? 1);
       const limit = Number(req.query.limit ?? 10);
-      const search = req.query.search ? String(req.query.search).trim() : undefined;
+      const search = req.query.search
+        ? String(req.query.search).trim()
+        : undefined;
 
       if (
         !Number.isInteger(page) ||
@@ -72,7 +74,7 @@ export class AdminTenantController {
         res,
         HTTP_STATUS.OK,
         MESSAGES.TENANT.TENANTS_FETCHED,
-        result
+        result,
       );
     } catch (error) {
       next(error);
@@ -82,11 +84,11 @@ export class AdminTenantController {
   getOne = async (
     req: Request,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ): Promise<void> => {
     try {
       const tenant = await this._getTenantByIdUseCase.execute(
-        String(req.params.id)
+        String(req.params.id),
       );
 
       ResponseHandler.success(
@@ -95,7 +97,7 @@ export class AdminTenantController {
         MESSAGES.TENANT.TENANTS_FETCHED,
         {
           tenant: AdminTenantResponseDtoMapper.toDetailsDto(tenant),
-        }
+        },
       );
     } catch (error) {
       next(error);
@@ -105,7 +107,7 @@ export class AdminTenantController {
   updateStatus = async (
     req: Request,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ): Promise<void> => {
     try {
       if (typeof req.body.isActive !== "boolean") {
@@ -120,12 +122,10 @@ export class AdminTenantController {
       ResponseHandler.success(
         res,
         HTTP_STATUS.OK,
-        tenant.isActive
-          ? MESSAGES.TENANT.UNBLOCKED
-          : MESSAGES.TENANT.BLOCKED,
+        tenant.isActive ? MESSAGES.TENANT.UNBLOCKED : MESSAGES.TENANT.BLOCKED,
         {
           tenant: AdminTenantResponseDtoMapper.toDto(tenant),
-        }
+        },
       );
     } catch (error) {
       next(error);
@@ -135,12 +135,12 @@ export class AdminTenantController {
   verifyBusinessDetails = async (
     req: Request,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ): Promise<void> => {
     try {
       const tenant = await this._verifyBusinessDetailsUseCase.execute(
         String(req.params.id),
-        req.body
+        req.body,
       );
 
       ResponseHandler.success(
@@ -149,7 +149,7 @@ export class AdminTenantController {
         MESSAGES.SUPER_ADMIN.BUSINESS_DETAILS_VERIFIED,
         {
           tenant: AdminTenantResponseDtoMapper.toDetailsDto(tenant),
-        }
+        },
       );
     } catch (error) {
       next(error);
@@ -159,12 +159,12 @@ export class AdminTenantController {
   verifyKycDocuments = async (
     req: Request,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ): Promise<void> => {
     try {
       const tenant = await this._verifyKycDocumentsUseCase.execute(
         String(req.params.id),
-        req.body
+        req.body,
       );
 
       ResponseHandler.success(
@@ -173,7 +173,7 @@ export class AdminTenantController {
         MESSAGES.SUPER_ADMIN.KYC_VERIFIED,
         {
           tenant: AdminTenantResponseDtoMapper.toDetailsDto(tenant),
-        }
+        },
       );
     } catch (error) {
       next(error);
@@ -183,12 +183,12 @@ export class AdminTenantController {
   verifyBankDetails = async (
     req: Request,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ): Promise<void> => {
     try {
       const tenant = await this._verifyBankDetailsUseCase.execute(
         String(req.params.id),
-        req.body
+        req.body,
       );
 
       ResponseHandler.success(
@@ -197,32 +197,32 @@ export class AdminTenantController {
         MESSAGES.SUPER_ADMIN.BANK_DETAILS_VERIFIED,
         {
           tenant: AdminTenantResponseDtoMapper.toDetailsDto(tenant),
-        }
+        },
       );
     } catch (error) {
       next(error);
     }
   };
 
-completeVerification = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-): Promise<void> => {
-  try {
-    const tenant = await this._completeTenantVerificationUseCase.execute(
-      String(req.params.id)
-    );
-    ResponseHandler.success(
-      res,
-      HTTP_STATUS.OK,
-      MESSAGES.SUPER_ADMIN.TENANT_VERIFICATION_COMPLETED,
-      {
-        tenant: AdminTenantResponseDtoMapper.toDetailsDto(tenant),
-      }
-    );
-  } catch (error) {
-    next(error);
-  }
-};
+  completeVerification = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> => {
+    try {
+      const tenant = await this._completeTenantVerificationUseCase.execute(
+        String(req.params.id),
+      );
+      ResponseHandler.success(
+        res,
+        HTTP_STATUS.OK,
+        MESSAGES.SUPER_ADMIN.TENANT_VERIFICATION_COMPLETED,
+        {
+          tenant: AdminTenantResponseDtoMapper.toDetailsDto(tenant),
+        },
+      );
+    } catch (error) {
+      next(error);
+    }
+  };
 }

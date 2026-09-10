@@ -14,10 +14,13 @@ import { syncOverallTenantStatus } from "../services/syncOverallTenantStatus";
 export class VerifyBusinessDetailsUseCase implements IVerifyBusinessDetailsUseCase {
   constructor(
     @inject(TOKENS.TenantRepository)
-    private readonly _tenantRepository: ITenantRepository
+    private readonly _tenantRepository: ITenantRepository,
   ) {}
 
-  async execute(tenantId: string, dto: VerifyBusinessDetailsDto): Promise<Tenant> {
+  async execute(
+    tenantId: string,
+    dto: VerifyBusinessDetailsDto,
+  ): Promise<Tenant> {
     const tenant = await this._tenantRepository.findById(tenantId);
     if (!tenant) {
       throw new NotFoundError(MESSAGES.TENANT.NOT_FOUND);
@@ -28,14 +31,19 @@ export class VerifyBusinessDetailsUseCase implements IVerifyBusinessDetailsUseCa
     }
 
     if (dto.status === VerificationStatus.REJECTED && !dto.rejectionReason) {
-      throw new BadRequestError("Rejection reason is required when rejecting business info.");
+      throw new BadRequestError(
+        "Rejection reason is required when rejecting business info.",
+      );
     }
 
-    const updatedTenant = await this._tenantRepository.verifyBusinessDetails(tenantId, {
-      status: dto.status,
-      rejectionReason: dto.rejectionReason,
-      verifiedAt: new Date(),
-    });
+    const updatedTenant = await this._tenantRepository.verifyBusinessDetails(
+      tenantId,
+      {
+        status: dto.status,
+        rejectionReason: dto.rejectionReason,
+        verifiedAt: new Date(),
+      },
+    );
 
     if (!updatedTenant) {
       throw new NotFoundError(MESSAGES.TENANT.NOT_FOUND);

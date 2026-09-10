@@ -1,5 +1,13 @@
 import React from "react";
-import { Shield, Users, Wallet, ShieldCheck, LineChart, Briefcase, Bell } from "lucide-react";
+import {
+  Shield,
+  Users,
+  Wallet,
+  ShieldCheck,
+  LineChart,
+  Briefcase,
+  Bell,
+} from "lucide-react";
 import { ROUTES } from "../../shared/constants";
 import Header from "../../components/landing/Header";
 import Footer, { type FooterColumn } from "../../components/landing/footer";
@@ -64,13 +72,15 @@ const FEATURES: Feature[] = [
     icon: <Briefcase className="h-5 w-5 text-slate-700" strokeWidth={2} />,
     iconBg: "bg-slate-200",
     title: "Multi-user Access",
-    description: "Assign roles to administrators and agents with granular permission controls.",
+    description:
+      "Assign roles to administrators and agents with granular permission controls.",
   },
   {
     icon: <Bell className="h-5 w-5 text-slate-700" strokeWidth={2} />,
     iconBg: "bg-slate-200",
     title: "Notifications & Reminders",
-    description: "Automated alerts for upcoming auctions and installment deadlines.",
+    description:
+      "Automated alerts for upcoming auctions and installment deadlines.",
   },
 ];
 
@@ -137,7 +147,11 @@ const JOURNEY_STEPS: JourneyStep[] = [
 const FOOTER_COLUMNS: FooterColumn[] = [
   {
     title: "Product",
-    links: [{ label: "Features" }, { label: "Security", underline: true }, { label: "Pricing", href: ROUTES.COMMON.PRICING }],
+    links: [
+      { label: "Features" },
+      { label: "Security", underline: true },
+      { label: "Pricing", href: ROUTES.COMMON.PRICING },
+    ],
   },
   {
     title: "Legal",
@@ -161,7 +175,11 @@ const HeroIllustration: React.FC = () => (
         <span className="h-1.5 w-1.5 rounded-full bg-slate-300" />
         <span className="h-1.5 w-1.5 rounded-full bg-slate-300" />
       </div>
-      <svg viewBox="0 0 200 90" className="h-16 w-full sm:h-20" preserveAspectRatio="none">
+      <svg
+        viewBox="0 0 200 90"
+        className="h-16 w-full sm:h-20"
+        preserveAspectRatio="none"
+      >
         <polyline
           points="0,70 25,55 45,60 65,35 90,45 115,15 140,30 165,10 200,20"
           fill="none"
@@ -217,7 +235,10 @@ const TenantLandingPage: React.FC = () => {
       <Header active="tenant" />
 
       {/* ---------- Hero ---------- */}
-      <section id="home" className="mx-auto max-w-7xl px-4 pb-16 pt-12 sm:px-6 sm:pt-16 lg:px-8 lg:pt-20">
+      <section
+        id="home"
+        className="mx-auto max-w-7xl px-4 pb-16 pt-12 sm:px-6 sm:pt-16 lg:px-8 lg:pt-20"
+      >
         <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-2 lg:gap-12">
           {/* Left column */}
           <div>
@@ -235,8 +256,9 @@ const TenantLandingPage: React.FC = () => {
             </h1>
 
             <p className="mt-5 max-w-md text-base leading-relaxed text-slate-500 sm:text-lg">
-              Subscribe, create normal or multi-division funds, manage your members, and run
-              every lot and auction from one institutional-grade digital vault.
+              Subscribe, create normal or multi-division funds, manage your
+              members, and run every lot and auction from one
+              institutional-grade digital vault.
             </p>
 
             <div className="mt-8 flex flex-wrap items-center gap-3">
@@ -271,15 +293,19 @@ const TenantLandingPage: React.FC = () => {
                 key={stat.label}
                 className="order-first rounded-2xl bg-white px-6 py-6 text-center shadow-md sm:order-none"
               >
-                <p className="text-2xl font-extrabold text-indigo-600 sm:text-3xl">{stat.value}</p>
+                <p className="text-2xl font-extrabold text-indigo-600 sm:text-3xl">
+                  {stat.value}
+                </p>
                 <p className="mt-1 text-sm text-slate-500">{stat.label}</p>
               </div>
             ) : (
               <div key={stat.label} className="text-center">
-                <p className="text-2xl font-extrabold text-slate-900 sm:text-3xl">{stat.value}</p>
+                <p className="text-2xl font-extrabold text-slate-900 sm:text-3xl">
+                  {stat.value}
+                </p>
                 <p className="mt-1 text-sm text-slate-500">{stat.label}</p>
               </div>
-            )
+            ),
           )}
         </div>
       </section>
@@ -302,11 +328,17 @@ const TenantLandingPage: React.FC = () => {
                 key={feature.title}
                 className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-100 transition hover:shadow-md"
               >
-                <div className={`flex h-10 w-10 items-center justify-center rounded-xl ${feature.iconBg}`}>
+                <div
+                  className={`flex h-10 w-10 items-center justify-center rounded-xl ${feature.iconBg}`}
+                >
                   {feature.icon}
                 </div>
-                <h3 className="mt-4 text-base font-bold text-slate-900">{feature.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-slate-500">{feature.description}</p>
+                <h3 className="mt-4 text-base font-bold text-slate-900">
+                  {feature.title}
+                </h3>
+                <p className="mt-2 text-sm leading-relaxed text-slate-500">
+                  {feature.description}
+                </p>
               </div>
             ))}
           </div>
@@ -327,8 +359,12 @@ const TenantLandingPage: React.FC = () => {
                   <span className="block text-5xl font-extrabold text-slate-300 sm:text-6xl">
                     {step.number}
                   </span>
-                  <h3 className="mt-2 text-2xl font-bold text-slate-900">{step.title}</h3>
-                  <p className="mt-3 max-w-md text-slate-500">{step.description}</p>
+                  <h3 className="mt-2 text-2xl font-bold text-slate-900">
+                    {step.title}
+                  </h3>
+                  <p className="mt-3 max-w-md text-slate-500">
+                    {step.description}
+                  </p>
                 </div>
               );
 
@@ -341,7 +377,10 @@ const TenantLandingPage: React.FC = () => {
               const isEven = idx % 2 === 1;
 
               return (
-                <div key={step.number} className="grid grid-cols-1 items-center gap-8 md:grid-cols-2 md:gap-12">
+                <div
+                  key={step.number}
+                  className="grid grid-cols-1 items-center gap-8 md:grid-cols-2 md:gap-12"
+                >
                   {isEven ? (
                     <>
                       <div className="order-2 md:order-1">{visualBlock}</div>
@@ -367,8 +406,8 @@ const TenantLandingPage: React.FC = () => {
             Start Managing Your Chit Funds Today
           </h2>
           <p className="mx-auto mt-4 max-w-xl text-indigo-100">
-            Join hundreds of fund managers who have digitized their operations with FundNest.
-            Security, transparency, and growth—all in one place.
+            Join hundreds of fund managers who have digitized their operations
+            with FundNest. Security, transparency, and growth—all in one place.
           </p>
           <a
             href={ROUTES.TENANT.REGISTER}

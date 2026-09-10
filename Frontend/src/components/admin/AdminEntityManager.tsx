@@ -1,6 +1,11 @@
-
 import React, { useEffect, useRef, useState } from "react";
-import { Ban, CheckCircle2, ChevronLeft, ChevronRight, Search } from "lucide-react";
+import {
+  Ban,
+  CheckCircle2,
+  ChevronLeft,
+  ChevronRight,
+  Search,
+} from "lucide-react";
 import Sidebar from "./Sidebar";
 import Header from "./Header";
 import type { AdminListService } from "../../services/adminListService";
@@ -16,7 +21,9 @@ export interface Column<T> {
   render: (item: T) => React.ReactNode;
 }
 
-interface AdminEntityManagerProps<T extends { id: string; isActive: boolean; displayName: string }> {
+interface AdminEntityManagerProps<
+  T extends { id: string; isActive: boolean; displayName: string },
+> {
   breadcrumb: string;
   title: string;
   description: string;
@@ -26,7 +33,9 @@ interface AdminEntityManagerProps<T extends { id: string; isActive: boolean; dis
   pageSize?: number;
 }
 
-function AdminEntityManager<T extends { id: string; isActive: boolean; displayName: string }>({
+function AdminEntityManager<
+  T extends { id: string; isActive: boolean; displayName: string },
+>({
   breadcrumb,
   title,
   description,
@@ -81,14 +90,21 @@ function AdminEntityManager<T extends { id: string; isActive: boolean; displayNa
 
   const toggleStatus = async (item: T) => {
     const action = item.isActive ? "block" : "activate";
-    const confirmed = await confirmToast(`Are you sure you want to ${action} ${item.displayName}?`);
+    const confirmed = await confirmToast(
+      `Are you sure you want to ${action} ${item.displayName}?`,
+    );
     if (!confirmed) return;
 
     try {
       setUpdatingId(item.id);
-      const updated = await serviceRef.current.updateStatus(item.id, !item.isActive);
+      const updated = await serviceRef.current.updateStatus(
+        item.id,
+        !item.isActive,
+      );
       setItems((cur) => cur.map((i) => (i.id === updated.id ? updated : i)));
-      toast.success(`${item.displayName} ${action === "block" ? "blocked" : "activated"} successfully`);
+      toast.success(
+        `${item.displayName} ${action === "block" ? "blocked" : "activated"} successfully`,
+      );
     } catch {
       setError(`Unable to ${action} this record. Please try again.`);
       toast.error(`Unable to ${action} this record. Please try again.`);
@@ -105,7 +121,9 @@ function AdminEntityManager<T extends { id: string; isActive: boolean; displayNa
         <main className="flex-1 space-y-5 p-4 sm:p-6 lg:p-8">
           <div>
             <p className="text-xs text-slate-400">{breadcrumb}</p>
-            <h1 className="mt-1 text-2xl font-bold text-slate-900 sm:text-3xl">{title}</h1>
+            <h1 className="mt-1 text-2xl font-bold text-slate-900 sm:text-3xl">
+              {title}
+            </h1>
             <p className="mt-1 text-sm text-slate-500">{description}</p>
           </div>
 
@@ -119,7 +137,11 @@ function AdminEntityManager<T extends { id: string; isActive: boolean; displayNa
             />
           </div>
 
-          {error && <p className="rounded-lg bg-red-50 p-3 text-sm text-red-700">{error}</p>}
+          {error && (
+            <p className="rounded-lg bg-red-50 p-3 text-sm text-red-700">
+              {error}
+            </p>
+          )}
 
           <div className="overflow-hidden rounded-lg border border-slate-200 bg-white">
             <div className="overflow-x-auto">
@@ -127,7 +149,10 @@ function AdminEntityManager<T extends { id: string; isActive: boolean; displayNa
                 <thead>
                   <tr className="border-b bg-slate-50 text-xs uppercase text-slate-400">
                     {columns.map((col) => (
-                      <th key={col.key} className={`px-6 py-3 ${col.align === "right" ? "text-right" : ""}`}>
+                      <th
+                        key={col.key}
+                        className={`px-6 py-3 ${col.align === "right" ? "text-right" : ""}`}
+                      >
                         {col.header}
                       </th>
                     ))}
@@ -137,7 +162,10 @@ function AdminEntityManager<T extends { id: string; isActive: boolean; displayNa
                 <tbody className="divide-y divide-slate-100">
                   {loading ? (
                     <tr>
-                      <td colSpan={columns.length + 1} className="px-6 py-14 text-center text-sm text-slate-400">
+                      <td
+                        colSpan={columns.length + 1}
+                        className="px-6 py-14 text-center text-sm text-slate-400"
+                      >
                         Loading…
                       </td>
                     </tr>
@@ -145,7 +173,10 @@ function AdminEntityManager<T extends { id: string; isActive: boolean; displayNa
                     items.map((item) => (
                       <tr key={item.id} className="hover:bg-slate-50">
                         {columns.map((col) => (
-                          <td key={col.key} className={`px-6 py-4 ${col.align === "right" ? "text-right" : ""}`}>
+                          <td
+                            key={col.key}
+                            className={`px-6 py-4 ${col.align === "right" ? "text-right" : ""}`}
+                          >
                             {col.render(item)}
                           </td>
                         ))}
@@ -159,7 +190,11 @@ function AdminEntityManager<T extends { id: string; isActive: boolean; displayNa
                                 : "inline-flex items-center gap-1 rounded border border-emerald-200 px-3 py-1.5 text-xs text-emerald-700 hover:bg-emerald-50"
                             }
                           >
-                            {item.isActive ? <Ban className="h-3.5 w-3.5" /> : <CheckCircle2 className="h-3.5 w-3.5" />}
+                            {item.isActive ? (
+                              <Ban className="h-3.5 w-3.5" />
+                            ) : (
+                              <CheckCircle2 className="h-3.5 w-3.5" />
+                            )}
                             {item.isActive ? "Block" : "Activate"}
                           </button>
                         </td>
@@ -168,7 +203,10 @@ function AdminEntityManager<T extends { id: string; isActive: boolean; displayNa
                   )}
                   {!loading && items.length === 0 && (
                     <tr>
-                      <td colSpan={columns.length + 1} className="px-6 py-14 text-center text-sm text-slate-400">
+                      <td
+                        colSpan={columns.length + 1}
+                        className="px-6 py-14 text-center text-sm text-slate-400"
+                      >
                         No records found.
                       </td>
                     </tr>
@@ -180,13 +218,20 @@ function AdminEntityManager<T extends { id: string; isActive: boolean; displayNa
 
           <div className="flex items-center justify-between text-sm text-slate-500">
             <span>
-              Showing {(page - 1) * pageSize + (total ? 1 : 0)}–{Math.min(page * pageSize, total)} of {total}
+              Showing {(page - 1) * pageSize + (total ? 1 : 0)}–
+              {Math.min(page * pageSize, total)} of {total}
             </span>
             <div className="flex items-center gap-1">
-              <button disabled={page === 1} onClick={() => setPage((p) => p - 1)} className="p-2 disabled:opacity-40">
+              <button
+                disabled={page === 1}
+                onClick={() => setPage((p) => p - 1)}
+                className="p-2 disabled:opacity-40"
+              >
                 <ChevronLeft className="h-4 w-4" />
               </button>
-              <span className="px-2 text-xs text-slate-600 font-medium">Page {page} of {totalPages}</span>
+              <span className="px-2 text-xs text-slate-600 font-medium">
+                Page {page} of {totalPages}
+              </span>
               <button
                 disabled={page === totalPages}
                 onClick={() => setPage((p) => p + 1)}

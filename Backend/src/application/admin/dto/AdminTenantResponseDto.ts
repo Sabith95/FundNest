@@ -6,14 +6,14 @@ export interface AdminTenantResponseDto {
   companyName: string;
   ownerName: string;
   email: string;
-  isActive: boolean
+  isActive: boolean;
   verificationStatus: string;
   createdAt: Date;
 }
 
 export interface VerificationItem {
-  label: string
-  state: VerificationStatus
+  label: string;
+  state: VerificationStatus;
 }
 
 export interface TenantSubscriptionDto {

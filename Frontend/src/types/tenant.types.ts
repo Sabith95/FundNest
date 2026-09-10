@@ -9,19 +9,6 @@ export interface VerificationSectionInfo {
   verifiedAt?: string;
 }
 
-
-// export interface ITenantProfile {
-//   id: string;
-//   companyName: string;
-//   ownerName: string;
-//   email: string;
-//   status: TenantStatus;
-//   onboardingStep: OnboardingStep;
-// }
-// export interface ITenantState {
-//   tenant: ITenantProfile | null;
-// }
-
 export interface ITenantProfile {
   id: string;
   companyName: string;
@@ -84,8 +71,8 @@ export interface ITenantRegisterRequest {
 }
 
 export interface ITenantRegisterResponse {
-  verificationRequired: boolean
-  email:string
+  verificationRequired: boolean;
+  email: string;
 }
 
 export interface IVerifyTenantOtpRequest {
@@ -114,7 +101,10 @@ export interface ITenantLoginRequest {
 }
 
 export interface ITenantLoginResponse {
-  tenant: Pick<ITenant, "id" | "companyName" | "ownerName" | "email" | "status" | "onboardingStep">;
+  tenant: Pick<
+    ITenant,
+    "id" | "companyName" | "ownerName" | "email" | "status" | "onboardingStep"
+  >;
   accessToken: string;
 }
 
@@ -129,7 +119,7 @@ export interface IUpdateBusinessInfoResponse {
 }
 
 export type TenantVerificationStatus = "pending" | "active" | "rejected";
- 
+
 // export interface TenantUser {
 //   name: string;
 //   role: string;
@@ -184,18 +174,12 @@ export interface ITenantLoginRequest {
   email: string;
   password: string;
 }
- 
+
 export interface NavItem {
   label: string;
   href: string;
   icon: ComponentType<SVGProps<SVGSVGElement>>;
 }
-
-
-
-
-
-
 
 export interface VerificationItem {
   label: string;
@@ -239,7 +223,6 @@ export interface BankDetailsData {
   ifscCode?: string;
   verification?: VerificationInfoData;
 }
-
 
 export interface TenantDetailsData {
   id: string;

@@ -36,10 +36,9 @@ export class TenantPersistenceMapper {
             registeredBusinessAddress:
               tenant.businessInfo.registeredBusinessAddress,
             verification: {
-              status:
-                tenant.businessInfo.verification.status as VerificationStatus,
-              rejectionReason:
-                tenant.businessInfo.verification.rejectionReason,
+              status: tenant.businessInfo.verification
+                .status as VerificationStatus,
+              rejectionReason: tenant.businessInfo.verification.rejectionReason,
               verifiedAt: tenant.businessInfo.verification.verifiedAt,
             },
           }
@@ -48,11 +47,11 @@ export class TenantPersistenceMapper {
       kycDocuments: tenant.kycDocuments
         ? {
             businessRegistrationCertificate: {
-              objectKey: tenant.kycDocuments.businessRegistrationCertificate.objectKey,
+              objectKey:
+                tenant.kycDocuments.businessRegistrationCertificate.objectKey,
               verification: {
-                status:
-                  tenant.kycDocuments.businessRegistrationCertificate
-                    .verification.status as VerificationStatus,
+                status: tenant.kycDocuments.businessRegistrationCertificate
+                  .verification.status as VerificationStatus,
                 rejectionReason:
                   tenant.kycDocuments.businessRegistrationCertificate
                     .verification.rejectionReason,
@@ -63,17 +62,15 @@ export class TenantPersistenceMapper {
             },
 
             ownerIdProof: {
-              objectKey: tenant.kycDocuments.businessRegistrationCertificate.objectKey,
+              objectKey:
+                tenant.kycDocuments.businessRegistrationCertificate.objectKey,
               verification: {
-                status:
-                  tenant.kycDocuments.ownerIdProof.verification
-                    .status as VerificationStatus,
+                status: tenant.kycDocuments.ownerIdProof.verification
+                  .status as VerificationStatus,
                 rejectionReason:
-                  tenant.kycDocuments.ownerIdProof.verification
-                    .rejectionReason,
+                  tenant.kycDocuments.ownerIdProof.verification.rejectionReason,
                 verifiedAt:
-                  tenant.kycDocuments.ownerIdProof.verification
-                    .verifiedAt,
+                  tenant.kycDocuments.ownerIdProof.verification.verifiedAt,
               },
             },
           }
@@ -85,10 +82,9 @@ export class TenantPersistenceMapper {
             accountNumber: tenant.bankDetails.accountNumber,
             ifscCode: tenant.bankDetails.ifscCode,
             verification: {
-              status:
-                tenant.bankDetails.verification.status as VerificationStatus,
-              rejectionReason:
-                tenant.bankDetails.verification.rejectionReason,
+              status: tenant.bankDetails.verification
+                .status as VerificationStatus,
+              rejectionReason: tenant.bankDetails.verification.rejectionReason,
               verifiedAt: tenant.bankDetails.verification.verifiedAt,
             },
           }

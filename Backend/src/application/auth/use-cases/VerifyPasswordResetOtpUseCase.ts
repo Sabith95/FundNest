@@ -1,15 +1,15 @@
-import { inject, injectable } from 'tsyringe';
-import { TOKENS } from '../../../shared/tokens';
-import { IUserRepository } from '../../../domain/repositories/IUserRepository';
-import { IOtpService } from '../../../infrastructure/cache/interfaces/IOtpService';
-import { MESSAGES } from '../../../shared/constants/messages'
+import { inject, injectable } from "tsyringe";
+import { TOKENS } from "../../../shared/tokens";
+import { IUserRepository } from "../../../domain/repositories/IUserRepository";
+import { IOtpService } from "../../../infrastructure/cache/interfaces/IOtpService";
+import { MESSAGES } from "../../../shared/constants/messages";
 import {
   VerifyPasswordResetOtpDto,
   VerifyPasswordResetOtpResponseDto,
-} from '../dto/PasswordResetDto';
-import { OtpPurpose } from '../../../shared/constants/enums/OtpPurpose';
-import { IVerifyPasswordResetOtpUseCase } from '../../interface/auth/IVerifyPasswordResetOtpUseCase';
-import { BadRequestError } from '../../../shared/errors/BadRequestError';
+} from "../dto/PasswordResetDto";
+import { OtpPurpose } from "../../../shared/constants/enums/OtpPurpose";
+import { IVerifyPasswordResetOtpUseCase } from "../../interface/auth/IVerifyPasswordResetOtpUseCase";
+import { BadRequestError } from "../../../shared/errors/BadRequestError";
 
 @injectable()
 export class VerifyPasswordResetOtpUseCase implements IVerifyPasswordResetOtpUseCase {
@@ -18,16 +18,16 @@ export class VerifyPasswordResetOtpUseCase implements IVerifyPasswordResetOtpUse
     private readonly _userRepository: IUserRepository,
 
     @inject(TOKENS.OtpService)
-    private readonly _otpService: IOtpService
+    private readonly _otpService: IOtpService,
   ) {}
 
   async execute(
-    input: VerifyPasswordResetOtpDto
+    input: VerifyPasswordResetOtpDto,
   ): Promise<VerifyPasswordResetOtpResponseDto> {
     const normalizedEmail = input.email.toLowerCase().trim();
     const user = await this._userRepository.findByEmail(normalizedEmail);
 
-    if (!user || user.authProvider !== 'LOCAL' || !user.isActive) {
+    if (!user || user.authProvider !== "LOCAL" || !user.isActive) {
       throw new BadRequestError(MESSAGES.AUTH.INVALID_OTP);
     }
 

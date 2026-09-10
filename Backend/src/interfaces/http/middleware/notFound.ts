@@ -1,6 +1,6 @@
-import { Request, Response } from 'express';
-import { ApiResponse } from '../../../shared/ApiResponse';
-import { HTTP_STATUS } from '../../../shared/constants/httpStatus';
+import { Request, Response } from "express";
+import { ApiResponse } from "../../../shared/ApiResponse";
+import { HTTP_STATUS } from "../../../shared/constants/httpStatus";
 
 export const notFound = (req: Request, res: Response): void => {
   const response = res as any;
@@ -9,7 +9,7 @@ export const notFound = (req: Request, res: Response): void => {
     .json(
       ApiResponse.error(
         `Route ${req.method} ${req.path} not found`,
-        HTTP_STATUS.NOT_FOUND
-      )
+        HTTP_STATUS.NOT_FOUND,
+      ),
     );
 };
