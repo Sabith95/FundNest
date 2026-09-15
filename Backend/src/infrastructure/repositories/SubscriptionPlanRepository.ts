@@ -28,7 +28,7 @@ export class SubscriptionPlanRepository
       return null;
     }
 
-    return SubscriptionPlanPersistenceMapper.toEntity(plan);
+    return this.toEntity(plan);
   }
 
   protected toEntity(doc: SubscriptionPlanRecord): SubscriptionPlan {
