@@ -38,10 +38,7 @@ export const adminSubscriptionPlanService = {
     return response.data.data.plan;
   },
 
-  async updateStatus(
-    id: string,
-    isActive: boolean,
-  ): Promise<SubscriptionPlan> {
+  async updateStatus(id: string, isActive: boolean): Promise<SubscriptionPlan> {
     const response = await api.patch(
       API_ROUTES.SUPER_ADMIN.UPDATE_SUBSCRIPTION_PLAN_STATUS(id),
       { isActive },

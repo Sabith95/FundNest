@@ -29,10 +29,7 @@ const PLAN_ICONS: Record<PlanType, LucideIcon> = {
   PREMIUM: Building2,
 };
 
-const getErrorMessage = (
-  error: unknown,
-  fallback: string,
-): string => {
+const getErrorMessage = (error: unknown, fallback: string): string => {
   if (
     typeof error === "object" &&
     error !== null &&
@@ -56,9 +53,7 @@ export default function SubscriptionBilling() {
   const [plans, setPlans] = useState<SubscriptionPlan[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
-  const [editingPlan, setEditingPlan] = useState<SubscriptionPlan | null>(
-    null,
-  );
+  const [editingPlan, setEditingPlan] = useState<SubscriptionPlan | null>(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
 
   const loadPlans = useCallback(async () => {

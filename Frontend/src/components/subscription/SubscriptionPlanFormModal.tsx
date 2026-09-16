@@ -49,9 +49,7 @@ const isPositiveWholeNumber = (value: string): boolean => {
   const numberValue = Number(value);
 
   return (
-    value.trim() !== "" &&
-    Number.isInteger(numberValue) &&
-    numberValue > 0
+    value.trim() !== "" && Number.isInteger(numberValue) && numberValue > 0
   );
 };
 
@@ -112,8 +110,7 @@ export default function SubscriptionPlanFormModal({
     const validationErrors: FormErrors = {};
 
     if (!isEditing && !availablePlanTypes.includes(form.planType)) {
-      validationErrors.planType =
-        "Select an available subscription plan type.";
+      validationErrors.planType = "Select an available subscription plan type.";
     }
 
     const trimmedName = form.name.trim();
@@ -121,11 +118,9 @@ export default function SubscriptionPlanFormModal({
     if (!trimmedName) {
       validationErrors.name = "Plan name is required.";
     } else if (trimmedName.length < 2) {
-      validationErrors.name =
-        "Plan name must contain at least 2 characters.";
+      validationErrors.name = "Plan name must contain at least 2 characters.";
     } else if (trimmedName.length > 100) {
-      validationErrors.name =
-        "Plan name must not exceed 100 characters.";
+      validationErrors.name = "Plan name must not exceed 100 characters.";
     }
 
     const price = Number(form.price);
@@ -149,18 +144,12 @@ export default function SubscriptionPlanFormModal({
         "Duration must be a positive whole number.";
     }
 
-    if (
-      form.maxFunds.trim() !== "" &&
-      !isPositiveWholeNumber(form.maxFunds)
-    ) {
+    if (form.maxFunds.trim() !== "" && !isPositiveWholeNumber(form.maxFunds)) {
       validationErrors.maxFunds =
         "Maximum funds must be a positive whole number or left empty for unlimited.";
     }
 
-    if (
-      form.maxUsers.trim() !== "" &&
-      !isPositiveWholeNumber(form.maxUsers)
-    ) {
+    if (form.maxUsers.trim() !== "" && !isPositiveWholeNumber(form.maxUsers)) {
       validationErrors.maxUsers =
         "Maximum users must be a positive whole number or left empty for unlimited.";
     }
@@ -217,7 +206,9 @@ export default function SubscriptionPlanFormModal({
         <div className="flex items-center justify-between border-b border-slate-200 px-6 py-4">
           <div>
             <h2 className="text-lg font-bold text-slate-900">
-              {isEditing ? "Edit subscription plan" : "Create subscription plan"}
+              {isEditing
+                ? "Edit subscription plan"
+                : "Create subscription plan"}
             </h2>
             <p className="mt-1 text-sm text-slate-500">
               {isEditing
