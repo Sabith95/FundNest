@@ -1,7 +1,9 @@
 import { BillingCycle } from "../../shared/constants/enums/BillingCycle";
+import { PlanType } from "../../shared/constants/enums/PlanType";
 
 export interface SubscriptionPlanProps {
   id: string;
+  planType: PlanType;
   name: string;
   price: number;
 
@@ -83,6 +85,10 @@ export class SubscriptionPlan {
     return new Date(this._props.updatedAt);
   }
 
+  public get planType(): PlanType {
+    return this._props.planType;
+  }
+
   // domain behaviour
 
   public activate(): void {
@@ -90,7 +96,7 @@ export class SubscriptionPlan {
       return;
     }
 
-    this._props.isActive = false;
+    this._props.isActive = true;
     this.touch();
   }
 
@@ -99,7 +105,7 @@ export class SubscriptionPlan {
       return;
     }
 
-    this._props.isActive = true;
+    this._props.isActive = false;
     this.touch();
   }
 

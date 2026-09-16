@@ -51,6 +51,13 @@ export const ENDPOINTS = {
       },
     },
 
+    SUBSCRIPTION_PLAN: {
+      GET_ALL: "/subscription-plans",
+      CREATE: "/subscription-plans",
+      UPDATE: "/subscription-plans/:id",
+      UPDATE_STATUS: "/subscription-plans/:id/status",
+    },
+
     USER: {
       GET_ALL: "/users",
       GET_ONE: "/users/:id",

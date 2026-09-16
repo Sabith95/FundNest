@@ -92,6 +92,8 @@ export const MESSAGES = {
     PURCHASED: "Subscription purchased successfully",
     EXPIRED: "Subscription has expired",
     REQUIRED: "An active subscription is required",
+    ALREADY_EXISTS: "A  subscription plan already exists",
+    NOT_FOUND: "Subscription plan not found"
   },
 
   FUND: {

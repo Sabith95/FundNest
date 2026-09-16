@@ -2,7 +2,7 @@ import { Types } from "mongoose";
 
 import { SubscriptionPlan } from "../../../domain/entities/SubscriptionPlan";
 import { BillingCycle } from "../../../shared/constants/enums/BillingCycle";
-
+import { PlanType } from "../../../shared/constants/enums/PlanType";
 import { SubscriptionPlanDocument } from "../models/SubscriptionPlanModel";
 
 export type SubscriptionPlanRecord = SubscriptionPlanDocument & {
@@ -13,6 +13,7 @@ export class SubscriptionPlanPersistenceMapper {
   static toEntity(plan: SubscriptionPlanRecord): SubscriptionPlan {
     return SubscriptionPlan.create({
       id: plan._id.toString(),
+      planType: plan.planType as PlanType,
       name: plan.name,
       price: plan.price,
       billingCycle: plan.billingCycle as BillingCycle,

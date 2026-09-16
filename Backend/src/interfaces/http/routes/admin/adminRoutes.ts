@@ -8,10 +8,12 @@ import { authorize } from "../../middleware/authorize";
 import { ROLES } from "../../../../shared/constants/roles";
 import { AdminUserController } from "../../controllers/admin/AdminUserController";
 import { ENDPOINTS } from "../../../../shared/constants/endPoints";
+import { AdminSubscriptionPlanController } from "../../controllers/admin/AdminSubscriptionPlanController";
 
 const router = Router();
 const controller = container.resolve(AdminTenantController);
 const adminUserController = container.resolve(AdminUserController);
+const subscriptionPlanController = container.resolve(AdminSubscriptionPlanController)
 
 const authenticate = createAuthMiddleware(
   container.resolve<IJwtService>(TOKENS.JwtService),
@@ -82,6 +84,36 @@ router.patch(
   authenticate,
   authorize(ROLES.SUPER_ADMIN),
   adminUserController.updateStatus,
+);
+
+// subscription-plan routes
+
+router.get(
+  ENDPOINTS.SUPER_ADMIN.SUBSCRIPTION_PLAN.GET_ALL,
+  authenticate,
+  authorize(ROLES.SUPER_ADMIN),
+  subscriptionPlanController.getAll,
+);
+
+router.post(
+  ENDPOINTS.SUPER_ADMIN.SUBSCRIPTION_PLAN.CREATE,
+  authenticate,
+  authorize(ROLES.SUPER_ADMIN),
+  subscriptionPlanController.create,
+);
+
+router.patch(
+  ENDPOINTS.SUPER_ADMIN.SUBSCRIPTION_PLAN.UPDATE,
+  authenticate,
+  authorize(ROLES.SUPER_ADMIN),
+  subscriptionPlanController.update,
+);
+
+router.patch(
+  ENDPOINTS.SUPER_ADMIN.SUBSCRIPTION_PLAN.UPDATE_STATUS,
+  authenticate,
+  authorize(ROLES.SUPER_ADMIN),
+  subscriptionPlanController.updateStatus,
 );
 
 export default router;

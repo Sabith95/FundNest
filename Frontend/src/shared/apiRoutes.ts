@@ -14,6 +14,11 @@ export const API_ROUTES = {
     VERIFY_KYC_DOCUMENTS: (id: string) => `/admin/tenants/${id}/verify-kyc`,
     COMPLETE_TENANT_VERIFICATION: (id: string) =>
       `/admin/tenants/${id}/complete-verification`,
+    GET_SUBSCRIPTION_PLANS: "/admin/subscription-plans",
+    CREATE_SUBSCRIPTION_PLAN: "/admin/subscription-plans",
+    UPDATE_SUBSCRIPTION_PLAN: (id: string) => `/admin/subscription-plans/${id}`,
+    UPDATE_SUBSCRIPTION_PLAN_STATUS: (id: string) =>
+      `/admin/subscription-plans/${id}/status`,
   },
 
   USERS: {
