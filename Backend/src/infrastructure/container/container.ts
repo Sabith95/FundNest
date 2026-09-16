@@ -22,6 +22,8 @@ import { IUserRepository } from "../../domain/repositories/IUserRepository";
 import { UserRepository } from "../repositories/UserRepository";
 import { TenantRepository } from "../repositories/TenantRepository";
 import { ITenantRepository } from "../../domain/repositories/ITenantRepository";
+import { ISubscriptionPlanRepository } from "../../domain/repositories/ISubscriptionPlanRepository";
+import { SubscriptionPlanRepository } from "../repositories/SubscriptionPlanRepository";
 
 //use cases
 import { LoginSuperAdminUseCase } from "../../application/auth/use-cases/LoginSuperAdminUseCase";
@@ -98,6 +100,14 @@ import { ResetTenantPasswordUseCase } from "../../application/auth/use-cases/Res
 import { IRequestTenantPasswordResetOtpUseCase } from "../../application/interface/auth/IRequestTenantPasswordResetOtpUseCase";
 import { IVerifyTenantPasswordResetOtpUseCase } from "../../application/interface/auth/IVerifyTenantPasswordResetOtpUseCase";
 import { IResetTenantPasswordUseCase } from "../../application/interface/auth/IResetTenantPasswordUseCase";
+import { CreateSubscriptionPlanUseCase } from "../../application/admin/subscription/use-case/CreateSubscriptionPlanUseCase";
+import { ICreateSubscriptionPlanUseCase } from "../../application/interface/admin/subscription/ICreateSubsctiptionPlanUseCase";
+import { GetSubscriptionPlansUseCase } from "../../application/admin/subscription/use-case/GetSubscriptionPlansUseCase";
+import { IGetSubscriptionPlansUseCase } from "../../application/interface/admin/subscription/IGetSubscriptionPlansUseCase";
+import { UpdateSubscriptionPlanUseCase } from "../../application/admin/subscription/use-case/UpdateSubscriptionPlanUseCase";
+import { IUpdateSubscriptionPlanUseCase } from "../../application/interface/admin/subscription/IUpdateSubscriptionPlanUseCase";
+import { IUpdateSubscriptionPlanStatusUseCase } from "../../application/interface/admin/subscription/IUpdateSubscriptionPlanStatusUseCase";
+import { UpdateSubscriptionPlanStatusUseCase } from "../../application/admin/subscription/use-case/UpdateSubscriptionPlanStatusUseCase";
 
 // Services
 container.register<IJwtService>(TOKENS.JwtService, {
@@ -316,6 +326,34 @@ container.register<IResetTenantPasswordUseCase>(
   },
 );
 
+container.register<ICreateSubscriptionPlanUseCase>(
+  TOKENS.CreateSubscriptionPlanUseCase,
+  {
+    useClass: CreateSubscriptionPlanUseCase,
+  },
+);
+
+container.register<IGetSubscriptionPlansUseCase>(
+  TOKENS.GetSubscriptionPlansUseCase,
+  {
+    useClass: GetSubscriptionPlansUseCase,
+  },
+);
+
+container.register<IUpdateSubscriptionPlanUseCase>(
+  TOKENS.UpdateSubscriptionPlanUseCase,
+  {
+    useClass: UpdateSubscriptionPlanUseCase,
+  },
+);
+
+container.register<IUpdateSubscriptionPlanStatusUseCase>(
+  TOKENS.UpdateSubscriptionPlanStatusUseCase,
+  {
+    useClass: UpdateSubscriptionPlanStatusUseCase,
+  },
+);
+
 // Respository
 container.register<IUserRepository>(TOKENS.UserRepository, {
   useClass: UserRepository,
@@ -324,4 +362,11 @@ container.register<IUserRepository>(TOKENS.UserRepository, {
 container.register<ITenantRepository>(TOKENS.TenantRepository, {
   useClass: TenantRepository,
 });
+
+container.register<ISubscriptionPlanRepository>(
+  TOKENS.SubscriptionPlanRepository,
+  {
+    useClass: SubscriptionPlanRepository,
+  },
+);
 export { container };

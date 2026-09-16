@@ -24,7 +24,7 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Analytics", href: "/analytics", icon: BarChart3 },
 ];
 
-interface SidebarProps {
+interface SidebarProps {     
   activeHref: string;
   isOpen: boolean;
   onClose: () => void;

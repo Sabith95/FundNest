@@ -52,9 +52,16 @@ export const TOKENS = {
     "VerifyTenantPasswordResetOtpUseCase",
   ),
   ResetTenantPasswordUseCase: Symbol.for("ResetTenantPasswordUseCase"),
+  CreateSubscriptionPlanUseCase: Symbol.for("CreateSubscriptionPlanUseCase"),
+  GetSubscriptionPlansUseCase: Symbol.for("GetSubscriptionPlansUseCase"),
+  UpdateSubscriptionPlanUseCase: Symbol.for("UpdateSubscriptionPlanUseCase"),
+  UpdateSubscriptionPlanStatusUseCase: Symbol.for(
+    "UpdateSubscriptionPlanStatusUseCase",
+  ),
 
   //repositories
 
   TenantRepository: Symbol.for("TenantRepository"),
   UserRepository: Symbol.for("UserRepository"),
+  SubscriptionPlanRepository: Symbol.for("SubscriptionPlanRepository"),
 } as const;

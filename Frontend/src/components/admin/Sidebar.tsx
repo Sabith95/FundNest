@@ -41,7 +41,7 @@ const primaryNavItems: NavItem[] = [
     id: "billing",
     label: "Billing & Subscriptions",
     icon: CreditCard,
-    path: "/billing",
+    path: "/superadmin/subscription",
   },
   { id: "plans", label: "Plans & Pricing", icon: Package, path: "/plans" },
   { id: "analytics", label: "Analytics", icon: BarChart3, path: "/analytics" },
