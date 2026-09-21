@@ -10,6 +10,7 @@ import { TenantKycController } from "../../controllers/Tenant/TenantKycControlle
 import { authorize } from "../../middleware/authorize";
 import { ROLES } from "../../../../shared/constants/roles";
 import { TenantBankDetailsController } from "../../controllers/Tenant/TenantBankDetailsController";
+import { TenantSubscriptionPlanController } from "../../controllers/Tenant/TenantSubscriptionPlanController";
 
 const router = Router();
 const jwtService = container.resolve(TOKENS.JwtService) as JwtService;
@@ -21,6 +22,9 @@ const tenantBusinessInfoController = container.resolve(
 const tenantKycController = container.resolve(TenantKycController);
 const tenantBankDetailsController = container.resolve(
   TenantBankDetailsController,
+);
+const tenantSubscriptionPlanController = container.resolve(
+  TenantSubscriptionPlanController,
 );
 
 //tenant registration
@@ -81,5 +85,13 @@ router.post(
 router.post(
   ENDPOINTS.TENANT.PASSWORD.RESET,
   tenantAuthcontroller.resetPassword,
+);
+
+// tenant subscription
+router.get(
+  ENDPOINTS.TENANT.SUBSCRIPTION_PLAN.GET_AVAILABLE,
+  authenticate,
+  authorize(ROLES.TENANT_ADMIN),
+  tenantSubscriptionPlanController.getAvailable,
 );
 export default router;

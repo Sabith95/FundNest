@@ -108,7 +108,8 @@ import { UpdateSubscriptionPlanUseCase } from "../../application/admin/subscript
 import { IUpdateSubscriptionPlanUseCase } from "../../application/interface/admin/subscription/IUpdateSubscriptionPlanUseCase";
 import { IUpdateSubscriptionPlanStatusUseCase } from "../../application/interface/admin/subscription/IUpdateSubscriptionPlanStatusUseCase";
 import { UpdateSubscriptionPlanStatusUseCase } from "../../application/admin/subscription/use-case/UpdateSubscriptionPlanStatusUseCase";
-
+import { GetAvailableSubscriptionPlansUseCase } from "../../application/tenant/use-cases/GetAvailableSubscriptionPlansUseCase";
+import { IGetAvailableSubscriptionPlansUseCase } from "../../application/interface/tenant/IGetAvailableSubscriptionPlansUseCase";
 // Services
 container.register<IJwtService>(TOKENS.JwtService, {
   useClass: JwtService,
@@ -351,6 +352,13 @@ container.register<IUpdateSubscriptionPlanStatusUseCase>(
   TOKENS.UpdateSubscriptionPlanStatusUseCase,
   {
     useClass: UpdateSubscriptionPlanStatusUseCase,
+  },
+);
+
+container.register<IGetAvailableSubscriptionPlansUseCase>(
+  TOKENS.GetAvailableSubscriptionPlansUseCase,
+  {
+    useClass: GetAvailableSubscriptionPlansUseCase,
   },
 );
 

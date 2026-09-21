@@ -98,6 +98,9 @@ const TenantForgotPasswordOtpPage = lazyWithRetry(
 const TenantResetPasswordPage = lazyWithRetry(
   () => import("../pages/Tenant/auth/ResetPasswordPage"),
 );
+const SubscriptionPlans = lazyWithRetry(
+  () => import("../pages/Tenant/subscription/SubscriptionPlans"),
+);
 
 const AppRouter = () => {
   return (
@@ -233,6 +236,10 @@ const AppRouter = () => {
                   element={<BankingDetails />}
                 />
               </Route>
+              <Route
+                path={ROUTES.TENANT.SUBSCRIPTION}
+                element={<SubscriptionPlans />}
+              />
 
               <Route element={<TenantGuard requireOnboardingComplete={true} />}>
                 <Route

@@ -58,6 +58,9 @@ export const TOKENS = {
   UpdateSubscriptionPlanStatusUseCase: Symbol.for(
     "UpdateSubscriptionPlanStatusUseCase",
   ),
+  GetAvailableSubscriptionPlansUseCase: Symbol.for(
+    "GetAvailableSubscriptionPlansUseCase",
+  ),
 
   //repositories
 
