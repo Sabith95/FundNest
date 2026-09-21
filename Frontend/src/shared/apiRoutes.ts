@@ -52,5 +52,6 @@ export const API_ROUTES = {
     VERIFY_PASSWORD_RESET_OTP: "/tenants/forgot-password/verify-otp",
     CHANGE_PASSWORD: "/tenants/me/password",
     RESET_PASSWORD: "/tenants/forgot-password/reset",
+    GET_AVAILABLE_SUBSCRIPTION_PLANS: "/tenants/subscription-plans",
   },
 };

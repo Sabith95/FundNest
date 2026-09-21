@@ -97,6 +97,10 @@ export const ENDPOINTS = {
       BANK_DETAILS: "/bank-details",
     },
 
+    SUBSCRIPTION_PLAN: {
+      GET_AVAILABLE: "/subscription-plans",
+    },
+
     SESSION: {
       REFRESH_TOKEN: "/tenants/refresh-token",
       LOGOUT: "/tenants/logout",

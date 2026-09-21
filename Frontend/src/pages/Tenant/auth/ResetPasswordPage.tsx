@@ -279,7 +279,6 @@ const ResetPasswordPage: React.FC = () => {
   };
 
   const email = location.state?.email;
-  const resetToken = location.state?.resetToken;
 
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");

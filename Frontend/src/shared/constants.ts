@@ -38,7 +38,7 @@ export const ROUTES = {
     USER_MANAGEMENT: "/superadmin/users",
     TENANT_DETAILS: "/superadmin/tenants/:tenantId",
     KYC: "/superadmin/tenants/:tenantId/kyc",
-    SUBSCRIPTION: "/superadmin/subscription"
+    SUBSCRIPTION: "/superadmin/subscription",
   },
   TENANT: {
     LANDING: "/tenants",
@@ -52,6 +52,7 @@ export const ROUTES = {
     FORGOT_PASSWORD: "/tenants/forgot-password",
     RESET_PASSWORD: "/tenants/reset-password",
     FORGOT_PASSWORD_OTP: "/tenants/forgot-password/otp",
+    SUBSCRIPTION: "/tenants/subscription-billing",
   },
   USER: {
     LANDING: "/users",
