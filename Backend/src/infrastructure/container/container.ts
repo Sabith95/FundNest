@@ -24,6 +24,10 @@ import { TenantRepository } from "../repositories/TenantRepository";
 import { ITenantRepository } from "../../domain/repositories/ITenantRepository";
 import { ISubscriptionPlanRepository } from "../../domain/repositories/ISubscriptionPlanRepository";
 import { SubscriptionPlanRepository } from "../repositories/SubscriptionPlanRepository";
+import { ISubscriptionCheckoutRepository } from "../../domain/repositories/ISubscriptionCheckoutRepository";
+import { SubscriptionCheckoutRepository } from "../repositories/SubscriptionCheckoutRepository";
+import { ITenantSubscriptionRepository } from "../../domain/repositories/ITenantSubscriptionRepository";
+import { TenantSubscriptionRepository } from "../repositories/TenantSubscriptionRepository";
 
 //use cases
 import { LoginSuperAdminUseCase } from "../../application/auth/use-cases/LoginSuperAdminUseCase";
@@ -110,6 +114,15 @@ import { IUpdateSubscriptionPlanStatusUseCase } from "../../application/interfac
 import { UpdateSubscriptionPlanStatusUseCase } from "../../application/admin/subscription/use-case/UpdateSubscriptionPlanStatusUseCase";
 import { GetAvailableSubscriptionPlansUseCase } from "../../application/tenant/use-cases/GetAvailableSubscriptionPlansUseCase";
 import { IGetAvailableSubscriptionPlansUseCase } from "../../application/interface/tenant/IGetAvailableSubscriptionPlansUseCase";
+import { RazorpayPaymentService } from "../payment/RazorpayPaymentService";
+import { ICreateSubscriptionCheckoutUseCase } from "../../application/interface/tenant/ICreateSubscriptionCheckoutUseCase";
+import { CreateSubscriptionCheckoutUseCase } from "../../application/tenant/use-cases/CreateSubscriptionCheckoutUseCase";
+import { IVerifySubscriptionCheckoutUseCase } from "../../application/interface/tenant/IVerifySubscriptionCheckoutUseCase";
+import { VerifySubscriptionCheckoutUseCase } from "../../application/tenant/use-cases/VerifySubscriptionCheckoutUseCase";
+import { IGetCurrentTenantSubscriptionUseCase } from "../../application/interface/tenant/IGetCurrentTenantSubscriptionUseCase";
+import { GetCurrentTenantSubscriptionUseCase } from "../../application/tenant/use-cases/GetCurrentTenantSubscriptionUseCase";
+import { IHandlePaymentWebhookUseCase } from "../../application/interface/tenant/IHandlePaymentWebhookUseCase";
+import { HandlePaymentWebhookUseCase } from "../../application/tenant/use-cases/HandlePaymentWebhookUseCase";
 // Services
 container.register<IJwtService>(TOKENS.JwtService, {
   useClass: JwtService,
@@ -362,6 +375,27 @@ container.register<IGetAvailableSubscriptionPlansUseCase>(
   },
 );
 
+container.register<RazorpayPaymentService>(TOKENS.RazorpayPaymentService, {
+  useClass: RazorpayPaymentService,
+});
+
+container.register<ICreateSubscriptionCheckoutUseCase>(
+  TOKENS.CreateSubscriptionCheckoutUseCase,
+  { useClass: CreateSubscriptionCheckoutUseCase },
+);
+container.register<IVerifySubscriptionCheckoutUseCase>(
+  TOKENS.VerifySubscriptionCheckoutUseCase,
+  { useClass: VerifySubscriptionCheckoutUseCase },
+);
+container.register<IGetCurrentTenantSubscriptionUseCase>(
+  TOKENS.GetCurrentTenantSubscriptionUseCase,
+  { useClass: GetCurrentTenantSubscriptionUseCase },
+);
+container.register<IHandlePaymentWebhookUseCase>(
+  TOKENS.HandlePaymentWebhookUseCase,
+  { useClass: HandlePaymentWebhookUseCase },
+);
+
 // Respository
 container.register<IUserRepository>(TOKENS.UserRepository, {
   useClass: UserRepository,
@@ -376,5 +410,14 @@ container.register<ISubscriptionPlanRepository>(
   {
     useClass: SubscriptionPlanRepository,
   },
+);
+
+container.register<ISubscriptionCheckoutRepository>(
+  TOKENS.SubscriptionCheckoutRepository,
+  { useClass: SubscriptionCheckoutRepository },
+);
+container.register<ITenantSubscriptionRepository>(
+  TOKENS.TenantSubscriptionRepository,
+  { useClass: TenantSubscriptionRepository },
 );
 export { container };

@@ -101,6 +101,12 @@ const TenantResetPasswordPage = lazyWithRetry(
 const SubscriptionPlans = lazyWithRetry(
   () => import("../pages/Tenant/subscription/SubscriptionPlans"),
 );
+const PaymentResultPage = lazyWithRetry(
+  () => import("../pages/payment/PaymentResult"),
+);
+const TenantBillingDetailsPage = lazyWithRetry(
+  () => import("../pages/Tenant/subscription/TenantBillingDetailsPage"),
+);
 
 const AppRouter = () => {
   return (
@@ -239,6 +245,14 @@ const AppRouter = () => {
               <Route
                 path={ROUTES.TENANT.SUBSCRIPTION}
                 element={<SubscriptionPlans />}
+              />
+              <Route
+                path={ROUTES.TENANT.PAYMENT_RESULT}
+                element={<PaymentResultPage />}
+              />
+              <Route
+                path={ROUTES.TENANT.BILLING_DETAILS}
+                element={<TenantBillingDetailsPage />}
               />
 
               <Route element={<TenantGuard requireOnboardingComplete={true} />}>

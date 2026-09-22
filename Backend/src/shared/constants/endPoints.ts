@@ -99,6 +99,9 @@ export const ENDPOINTS = {
 
     SUBSCRIPTION_PLAN: {
       GET_AVAILABLE: "/subscription-plans",
+      CREATE_CHECKOUT: "/subscriptions/checkout",
+      VERIFY_CHECKOUT: "/subscriptions/checkout/verify",
+      CURRENT: "/subscriptions/current",
     },
 
     SESSION: {

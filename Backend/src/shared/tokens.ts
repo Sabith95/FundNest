@@ -61,10 +61,23 @@ export const TOKENS = {
   GetAvailableSubscriptionPlansUseCase: Symbol.for(
     "GetAvailableSubscriptionPlansUseCase",
   ),
+  CreateSubscriptionCheckoutUseCase: Symbol.for(
+    "CreateSubscriptionCheckoutUseCase",
+  ),
+  VerifySubscriptionCheckoutUseCase: Symbol.for(
+    "VerifySubscriptionCheckoutUseCase",
+  ),
+  GetCurrentTenantSubscriptionUseCase: Symbol.for(
+    "GetCurrentTenantSubscriptionUseCase",
+  ),
+  HandlePaymentWebhookUseCase: Symbol.for("HandlePaymentWebhookUseCase"),
+  RazorpayPaymentService: Symbol.for("RazorpayPaymentService"),
 
   //repositories
 
   TenantRepository: Symbol.for("TenantRepository"),
   UserRepository: Symbol.for("UserRepository"),
   SubscriptionPlanRepository: Symbol.for("SubscriptionPlanRepository"),
+  SubscriptionCheckoutRepository: Symbol.for("SubscriptionCheckoutRepository"),
+  TenantSubscriptionRepository: Symbol.for("TenantSubscriptionRepository"),
 } as const;

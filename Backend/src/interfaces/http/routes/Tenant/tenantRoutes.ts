@@ -11,6 +11,7 @@ import { authorize } from "../../middleware/authorize";
 import { ROLES } from "../../../../shared/constants/roles";
 import { TenantBankDetailsController } from "../../controllers/Tenant/TenantBankDetailsController";
 import { TenantSubscriptionPlanController } from "../../controllers/Tenant/TenantSubscriptionPlanController";
+import { TenantSubscriptionCheckoutController } from "../../controllers/Tenant/TenantSubscriptionCheckoutController";
 
 const router = Router();
 const jwtService = container.resolve(TOKENS.JwtService) as JwtService;
@@ -25,6 +26,9 @@ const tenantBankDetailsController = container.resolve(
 );
 const tenantSubscriptionPlanController = container.resolve(
   TenantSubscriptionPlanController,
+);
+const tenantSubscriptionCheckoutController = container.resolve(
+  TenantSubscriptionCheckoutController,
 );
 
 //tenant registration
@@ -93,5 +97,25 @@ router.get(
   authenticate,
   authorize(ROLES.TENANT_ADMIN),
   tenantSubscriptionPlanController.getAvailable,
+);
+router.post(
+  ENDPOINTS.TENANT.SUBSCRIPTION_PLAN.CREATE_CHECKOUT,
+  authenticate,
+  authorize(ROLES.TENANT_ADMIN),
+  tenantSubscriptionCheckoutController.createCheckout,
+);
+
+router.post(
+  ENDPOINTS.TENANT.SUBSCRIPTION_PLAN.VERIFY_CHECKOUT,
+  authenticate,
+  authorize(ROLES.TENANT_ADMIN),
+  tenantSubscriptionCheckoutController.verifyCheckout,
+);
+
+router.get(
+  ENDPOINTS.TENANT.SUBSCRIPTION_PLAN.CURRENT,
+  authenticate,
+  authorize(ROLES.TENANT_ADMIN),
+  tenantSubscriptionCheckoutController.getCurrent,
 );
 export default router;
