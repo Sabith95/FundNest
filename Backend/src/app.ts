@@ -8,6 +8,7 @@ import { requestLogger } from "./interfaces/http/middleware/requestLogger";
 import { errorHandler } from "./interfaces/http/middleware/errorHandler";
 import { notFound } from "./interfaces/http/middleware/notFound";
 import apiRouter from "./interfaces/http/routes/index";
+import paymentWebhookRoutes from "./interfaces/http/routes/paymentWebhookRoutes";
 
 const createApp = (): Application => {
   const app = express();
@@ -15,6 +16,12 @@ const createApp = (): Application => {
   app.use(helmet());
   app.use(cors(corsOptions));
   app.use(cookieParser());
+
+  app.use(
+    "/api/v1/payments",
+    express.raw({ type: "application/json" }),
+    paymentWebhookRoutes,
+  );
 
   app.use(express.json({ limit: "10mb" }));
   app.use(express.urlencoded({ extended: true, limit: "10mb" }));

@@ -53,5 +53,8 @@ export const API_ROUTES = {
     CHANGE_PASSWORD: "/tenants/me/password",
     RESET_PASSWORD: "/tenants/forgot-password/reset",
     GET_AVAILABLE_SUBSCRIPTION_PLANS: "/tenants/subscription-plans",
+    CREATE_SUBSCRIPTION_CHECKOUT: "/tenants/subscriptions/checkout",
+    VERIFY_SUBSCRIPTION_CHECKOUT: "/tenants/subscriptions/checkout/verify",
+    CURRENT_SUBSCRIPTION: "/tenants/subscriptions/current",
   },
 };

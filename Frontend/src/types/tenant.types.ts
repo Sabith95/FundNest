@@ -239,3 +239,36 @@ export interface TenantDetailsData {
   kycDocuments?: KycDocumentsData | null;
   bankDetails?: BankDetailsData | null;
 }
+
+
+export type BillingStatus = "PAID" | "FAILED" | "PENDING";
+export type PlanStatus = "ACTIVE" | "INACTIVE" | "CANCELLED";
+ 
+export interface BillingRecord {
+  id: string;
+  date: string;
+  amount: number;
+  status: BillingStatus;
+  invoiceUrl?: string;
+}
+ 
+export interface UsageMetric {
+  id: string;
+  label: string;
+  used: number;
+  total: number;
+  /** e.g. "funds", "users" — shown after the used/total count */
+  unitLabel: string;
+  /** Tailwind background class for the filled portion of the bar */
+  barColorClassName?: string;
+}
+ 
+export interface PlanDetails {
+  name: string;
+  status: PlanStatus;
+  price: number;
+  currency: string;
+  billingCycle: string;
+  description: string;
+  nextRenewalDate: string;
+}

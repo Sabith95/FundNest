@@ -53,6 +53,8 @@ export const ROUTES = {
     RESET_PASSWORD: "/tenants/reset-password",
     FORGOT_PASSWORD_OTP: "/tenants/forgot-password/otp",
     SUBSCRIPTION: "/tenants/subscription-billing",
+    PAYMENT_RESULT: "/payment/result",
+    BILLING_DETAILS: "/tenants/billing-details",
   },
   USER: {
     LANDING: "/users",

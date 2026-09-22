@@ -71,6 +71,8 @@ export const MESSAGES = {
     COMPLETE_BUSINESS_INFO:
       "Complete business information before uploading KYC documents.",
     TENANTS_FETCHED: "Tenants fetched successfully",
+    NOT_APPROVED:
+      "Only approved tenants with completed onboarding can purchase a subscription",
   },
 
   SUPER_ADMIN: {
@@ -93,7 +95,26 @@ export const MESSAGES = {
     EXPIRED: "Subscription has expired",
     REQUIRED: "An active subscription is required",
     ALREADY_EXISTS: "A  subscription plan already exists",
-    NOT_FOUND: "Subscription plan not found"
+    NOT_FOUND: "Subscription plan not found",
+    SUBSCRIPTION_ACTIVATED: "Subscription activated successfully",
+  },
+
+  PLAN: {
+    PLAN_NOT_FOUND: "The selected plan is unavailable",
+    ALREADY_ACTIVE: "This plan is already active for your tenant",
+    INVALID_PRICE: "The selected plan has an invalid price",
+  },
+
+  PAYMENT: {
+    CHECKOUT_CREATED: "Checkout created successfully",
+    ORDER_DETAILS_NOT_MATCHING: "Razorpay order details do not match the selected plan",
+    CHECKOUT_SESSION_NOT_FOUND: "Checkout session not found",
+    CHECKOUT_ORDER_MISMATCH: "Checkout order mismatch",
+    CHECKOUT_SESSSION_EXPIRED: "This checkout session has expired",
+    CHECKOUT_ALREADY_COMPLETED: "This checkout was already completed",
+    INVALID_PAYMENT_SIGNATURE: "Invalid Razorpay payment signature",
+    DETAILS_NOT_MATCHING: "Payment details do not match the checkout",
+    NOT_CAPTURED: "Payment is not captured yet. Please wait and check your subscription again.",
   },
 
   FUND: {

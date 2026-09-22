@@ -44,6 +44,16 @@ const envSchema = z.object({
   AWS_BUCKET_NAME: z.string().min(1, "AWS_S3_BUCKET_NAME is required"),
   AWS_ACCESS_KEY: z.string().min(1, "AWS_ACCESS_KEY_ID is required"),
   AWS_SECRET_KEY: z.string().min(1, "AWS_SECRET_ACCESS_KEY is required"),
+  RAZORPAY_KEY_ID: z.string().min(1, "RAZORPAY_KEY_ID is required"),
+  RAZORPAY_SECRET_KEY: z.string().min(1, "RAZORPAY_KEY_SECRET is required"),
+  RAZORPAY_WEBHOOK_SECRET: z.string().min(
+  1,
+  "RAZORPAY_WEBHOOK_SECRET is required",
+),
+RAZORPAY_CHECKOUT_TTL_MINUTES: z
+  .string()
+  .default("30")
+  .transform(Number),
 });
 
 const parsed = envSchema.safeParse(process.env);

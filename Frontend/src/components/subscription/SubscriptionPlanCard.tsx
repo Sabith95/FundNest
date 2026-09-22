@@ -201,6 +201,9 @@ interface SubscriptionPlanCardProps {
   icon?: LucideIcon;
   onEdit?: (plan: SubscriptionPlan) => void;
   onToggleStatus?: (plan: SubscriptionPlan) => void;
+  isCurrentPlan?: boolean;
+  isProcessing?: boolean;
+  onBuyNow?: (plan: SubscriptionPlan) => void;
 }
 
 const formatLimit = (value: number | null): string =>
@@ -212,6 +215,9 @@ export default function SubscriptionPlanCard({
   icon: Icon,
   onEdit,
   onToggleStatus,
+  isCurrentPlan,
+  isProcessing,
+  onBuyNow,
 }: SubscriptionPlanCardProps) {
   const isPopular = plan.planType === "PRO";
   const period = plan.billingCycle === "YEARLY" ? "year" : "month";
@@ -376,16 +382,32 @@ export default function SubscriptionPlanCard({
             isPopular ? "pt-2" : "border-t border-slate-200 pt-5"
           }`}
         >
-          <button
-            type="button"
-            className={`w-full rounded-lg px-4 py-2.5 text-sm font-semibold transition-colors ${
-              isPopular
-                ? "bg-white text-slate-900 hover:bg-white/90"
-                : "bg-indigo-600 text-white hover:bg-indigo-700"
-            }`}
-          >
-            Buy now
-          </button>
+          {isCurrentPlan ? (
+            <button
+              type="button"
+              disabled
+              className={`w-full rounded-lg px-4 py-2.5 text-sm font-semibold ${
+                isPopular
+                  ? "bg-white/10 text-white/60"
+                  : "bg-slate-100 text-slate-400"
+              }`}
+            >
+              Current plan
+            </button>
+          ) : (
+            <button
+              type="button"
+              disabled={isProcessing}
+              onClick={() => onBuyNow?.(plan)}
+              className={`w-full rounded-lg px-4 py-2.5 text-sm font-semibold transition-opacity disabled:cursor-not-allowed disabled:opacity-60 ${
+                isPopular
+                  ? "bg-white text-slate-900 hover:bg-white/90"
+                  : "bg-indigo-600 text-white hover:bg-indigo-700"
+              }`}
+            >
+              {isProcessing ? "Opening checkout…" : "Buy now"}
+            </button>
+          )}
         </div>
       )}
     </article>
