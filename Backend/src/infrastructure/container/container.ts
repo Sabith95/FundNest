@@ -28,6 +28,8 @@ import { ISubscriptionCheckoutRepository } from "../../domain/repositories/ISubs
 import { SubscriptionCheckoutRepository } from "../repositories/SubscriptionCheckoutRepository";
 import { ITenantSubscriptionRepository } from "../../domain/repositories/ITenantSubscriptionRepository";
 import { TenantSubscriptionRepository } from "../repositories/TenantSubscriptionRepository";
+import { ChitFundRepository } from "../repositories/ChitFundRepository";
+import { IChitFundRepository } from "../../domain/repositories/IChitFundRepository";
 
 //use cases
 import { LoginSuperAdminUseCase } from "../../application/auth/use-cases/LoginSuperAdminUseCase";
@@ -123,6 +125,12 @@ import { IGetCurrentTenantSubscriptionUseCase } from "../../application/interfac
 import { GetCurrentTenantSubscriptionUseCase } from "../../application/tenant/use-cases/GetCurrentTenantSubscriptionUseCase";
 import { IHandlePaymentWebhookUseCase } from "../../application/interface/tenant/IHandlePaymentWebhookUseCase";
 import { HandlePaymentWebhookUseCase } from "../../application/tenant/use-cases/HandlePaymentWebhookUseCase";
+import { CreateNormalChitFundUseCase } from "../../application/tenant/chitfund/use-cases/CreateNormalChitFundUseCase";
+import { CreateMultiDivisionChitFundUseCase } from "../../application/tenant/chitfund/use-cases/CreateMultiDivisionChitFundUseCase";
+import { BlockChitFundUseCase } from "../../application/tenant/chitfund/use-cases/BlockChitFundUseCase";
+import { UnblockChitFundUseCase } from "../../application/tenant/chitfund/use-cases/UnblockChitFundUseCase";
+import { GetTenantChitFundsUseCase } from "../../application/tenant/chitfund/use-cases/GetTenantChitFundsUseCase";
+
 // Services
 container.register<IJwtService>(TOKENS.JwtService, {
   useClass: JwtService,
@@ -395,6 +403,21 @@ container.register<IHandlePaymentWebhookUseCase>(
   TOKENS.HandlePaymentWebhookUseCase,
   { useClass: HandlePaymentWebhookUseCase },
 );
+container.register(TOKENS.CreateNormalChitFundUseCase, {
+  useClass: CreateNormalChitFundUseCase,
+});
+container.register(TOKENS.CreateMultiDivisionChitFundUseCase, {
+  useClass: CreateMultiDivisionChitFundUseCase,
+});
+container.register(TOKENS.BlockChitFundUseCase, {
+  useClass: BlockChitFundUseCase,
+});
+container.register(TOKENS.UnblockChitFundUseCase, {
+  useClass: UnblockChitFundUseCase,
+});
+container.register(TOKENS.GetTenantChitFundsUseCase, {
+  useClass: GetTenantChitFundsUseCase,
+});
 
 // Respository
 container.register<IUserRepository>(TOKENS.UserRepository, {
@@ -420,4 +443,7 @@ container.register<ITenantSubscriptionRepository>(
   TOKENS.TenantSubscriptionRepository,
   { useClass: TenantSubscriptionRepository },
 );
+container.register<IChitFundRepository>(TOKENS.ChitFundRepository, {
+  useClass: ChitFundRepository,
+});
 export { container };

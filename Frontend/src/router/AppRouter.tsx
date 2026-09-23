@@ -107,6 +107,9 @@ const PaymentResultPage = lazyWithRetry(
 const TenantBillingDetailsPage = lazyWithRetry(
   () => import("../pages/Tenant/subscription/TenantBillingDetailsPage"),
 );
+const TenantFundPageContainer = lazyWithRetry(
+  () => import("../pages/Tenant/Fund/TenantFundPageContainer"),
+);
 
 const AppRouter = () => {
   return (
@@ -242,6 +245,7 @@ const AppRouter = () => {
                   element={<BankingDetails />}
                 />
               </Route>
+
               <Route
                 path={ROUTES.TENANT.SUBSCRIPTION}
                 element={<SubscriptionPlans />}
@@ -259,6 +263,10 @@ const AppRouter = () => {
                 <Route
                   path={ROUTES.TENANT.DASHBOARD}
                   element={<TenantDashboardPage />}
+                />
+                <Route
+                  path={ROUTES.TENANT.FUND}
+                  element={<TenantFundPageContainer />}
                 />
               </Route>
             </Route>

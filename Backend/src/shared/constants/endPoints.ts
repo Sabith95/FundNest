@@ -108,5 +108,13 @@ export const ENDPOINTS = {
       REFRESH_TOKEN: "/tenants/refresh-token",
       LOGOUT: "/tenants/logout",
     },
+
+    CHIT_FUND: {
+      GET_ALL: "/chit-funds",
+      CREATE_NORMAL: "/chit-funds/normal",
+      CREATE_MULTI_DIVISION: "/chit-funds/multi-division",
+      BLOCK: "/chit-funds/:id/block",
+      UNBLOCK: "/chit-funds/:id/unblock",
+    },
   },
 } as const;

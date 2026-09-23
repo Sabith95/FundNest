@@ -55,6 +55,7 @@ export const ROUTES = {
     SUBSCRIPTION: "/tenants/subscription-billing",
     PAYMENT_RESULT: "/payment/result",
     BILLING_DETAILS: "/tenants/billing-details",
+    FUND: "/tenants/fund",
   },
   USER: {
     LANDING: "/users",

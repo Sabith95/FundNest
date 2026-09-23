@@ -12,6 +12,7 @@ import { ROLES } from "../../../../shared/constants/roles";
 import { TenantBankDetailsController } from "../../controllers/Tenant/TenantBankDetailsController";
 import { TenantSubscriptionPlanController } from "../../controllers/Tenant/TenantSubscriptionPlanController";
 import { TenantSubscriptionCheckoutController } from "../../controllers/Tenant/TenantSubscriptionCheckoutController";
+import { TenantChitFundController } from "../../controllers/Tenant/TenantChitFundController";
 
 const router = Router();
 const jwtService = container.resolve(TOKENS.JwtService) as JwtService;
@@ -30,6 +31,7 @@ const tenantSubscriptionPlanController = container.resolve(
 const tenantSubscriptionCheckoutController = container.resolve(
   TenantSubscriptionCheckoutController,
 );
+const tenantChitFundController = container.resolve(TenantChitFundController);
 
 //tenant registration
 router.post(
@@ -118,4 +120,37 @@ router.get(
   authorize(ROLES.TENANT_ADMIN),
   tenantSubscriptionCheckoutController.getCurrent,
 );
+
+// tenant chit funds
+router.get(
+  ENDPOINTS.TENANT.CHIT_FUND.GET_ALL,
+  authenticate,
+  authorize(ROLES.TENANT_ADMIN),
+  tenantChitFundController.getAll,
+);
+router.post(
+  ENDPOINTS.TENANT.CHIT_FUND.CREATE_NORMAL,
+  authenticate,
+  authorize(ROLES.TENANT_ADMIN),
+  tenantChitFundController.createNormal,
+);
+router.post(
+  ENDPOINTS.TENANT.CHIT_FUND.CREATE_MULTI_DIVISION,
+  authenticate,
+  authorize(ROLES.TENANT_ADMIN),
+  tenantChitFundController.createMultiDivision,
+);
+router.patch(
+  ENDPOINTS.TENANT.CHIT_FUND.BLOCK,
+  authenticate,
+  authorize(ROLES.TENANT_ADMIN),
+  tenantChitFundController.block,
+);
+router.patch(
+  ENDPOINTS.TENANT.CHIT_FUND.UNBLOCK,
+  authenticate,
+  authorize(ROLES.TENANT_ADMIN),
+  tenantChitFundController.unblock,
+);
+
 export default router;
