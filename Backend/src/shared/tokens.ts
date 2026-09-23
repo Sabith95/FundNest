@@ -72,6 +72,13 @@ export const TOKENS = {
   ),
   HandlePaymentWebhookUseCase: Symbol.for("HandlePaymentWebhookUseCase"),
   RazorpayPaymentService: Symbol.for("RazorpayPaymentService"),
+  CreateNormalChitFundUseCase: Symbol.for("CreateNormalChitFundUseCase"),
+  CreateMultiDivisionChitFundUseCase: Symbol.for(
+    "CreateMultiDivisionChitFundUseCase",
+  ),
+  BlockChitFundUseCase: Symbol.for("BlockChitFundUseCase"),
+  UnblockChitFundUseCase: Symbol.for("UnblockChitFundUseCase"),
+  GetTenantChitFundsUseCase: Symbol.for("GetTenantChitFundsUseCase"),
 
   //repositories
 
@@ -80,4 +87,5 @@ export const TOKENS = {
   SubscriptionPlanRepository: Symbol.for("SubscriptionPlanRepository"),
   SubscriptionCheckoutRepository: Symbol.for("SubscriptionCheckoutRepository"),
   TenantSubscriptionRepository: Symbol.for("TenantSubscriptionRepository"),
+  ChitFundRepository: Symbol.for("ChitFundRepository"),
 } as const;

@@ -107,14 +107,16 @@ export const MESSAGES = {
 
   PAYMENT: {
     CHECKOUT_CREATED: "Checkout created successfully",
-    ORDER_DETAILS_NOT_MATCHING: "Razorpay order details do not match the selected plan",
+    ORDER_DETAILS_NOT_MATCHING:
+      "Razorpay order details do not match the selected plan",
     CHECKOUT_SESSION_NOT_FOUND: "Checkout session not found",
     CHECKOUT_ORDER_MISMATCH: "Checkout order mismatch",
     CHECKOUT_SESSSION_EXPIRED: "This checkout session has expired",
     CHECKOUT_ALREADY_COMPLETED: "This checkout was already completed",
     INVALID_PAYMENT_SIGNATURE: "Invalid Razorpay payment signature",
     DETAILS_NOT_MATCHING: "Payment details do not match the checkout",
-    NOT_CAPTURED: "Payment is not captured yet. Please wait and check your subscription again.",
+    NOT_CAPTURED:
+      "Payment is not captured yet. Please wait and check your subscription again.",
   },
 
   FUND: {
@@ -122,6 +124,18 @@ export const MESSAGES = {
     UPDATED: "Fund updated successfully",
     NOT_FOUND: "Fund not found",
     CLOSED: "Fund has been closed",
+    DUPLICATE_NAME: "A chit fund with this name already exists",
+    BLOCKED: "Chit fund blocked successfully",
+    UNBLOCKED: "Chit fund unblocked successfully",
+    FETCHED: "Chit funds fetched successfully",
+    MULTI_DIVISION_FUND_MUST_HAVE_DIVISION:
+      "Multi-division chit fund must specify a valid division count (at least 2)",
+    NO_ACTIVE_SUBSCRIPTION:
+      "No active subscription plan found. Please purchase a subscription plan to create funds.",
+    MAX_FUNDS_EXCEEDED:
+      "You have reached the maximum number of funds allowed by your subscription plan.",
+    MAX_USERS_EXCEEDED:
+      "Creating this fund would exceed the total member limit allowed by your subscription plan.",
   },
 
   COMMON: {

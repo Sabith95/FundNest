@@ -17,7 +17,7 @@ import { ROUTES } from "../../shared/constants";
 const NAV_ITEMS: NavItem[] = [
   { label: "Dashboard", href: ROUTES.TENANT.DASHBOARD, icon: LayoutGrid },
   { label: "User Management", href: "/users", icon: Users },
-  { label: "Fund", href: "/fund", icon: Wallet },
+  { label: "Fund", href: ROUTES.TENANT.FUND, icon: Wallet },
   { label: "Lot Management", href: "/lots", icon: Package },
   { label: "Payments", href: "/payments", icon: CreditCard },
   { label: "Wallet and Transaction", href: "/wallet", icon: ArrowLeftRight },
