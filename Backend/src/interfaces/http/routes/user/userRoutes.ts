@@ -9,10 +9,12 @@ import { createAuthMiddleware } from "../../middleware/authenticate";
 import { authorize } from "../../middleware/authorize";
 import upload from "../../middleware/upload";
 import { ENDPOINTS } from "../../../../shared/constants/endPoints";
+import { UserChitFundController } from "../../controllers/user/UserChitFundController";
 
 const router = Router();
 const authController = container.resolve(AuthController);
 const userProfileController = container.resolve(UserProfileController);
+const userChitFundController = container.resolve(UserChitFundController);
 
 const jwtService = container.resolve<IJwtService>(TOKENS.JwtService);
 const authenticate = createAuthMiddleware(jwtService);
@@ -70,4 +72,13 @@ router.patch(
   userProfileController.changePassword,
 );
 
+// chit funds
+
+// Chit funds
+router.get(
+  ENDPOINTS.USER.CHIT_FUND.GET_AVAILABLE,
+  authenticate,
+  authorize(ROLES.USER),
+  userChitFundController.getAvailableFunds,
+);
 export default router;

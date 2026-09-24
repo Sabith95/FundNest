@@ -79,6 +79,14 @@ export const TOKENS = {
   BlockChitFundUseCase: Symbol.for("BlockChitFundUseCase"),
   UnblockChitFundUseCase: Symbol.for("UnblockChitFundUseCase"),
   GetTenantChitFundsUseCase: Symbol.for("GetTenantChitFundsUseCase"),
+  GetAvailableChitFundsUseCase: Symbol.for("GetAvailableChitFundsUseCase"),
+  GetTenantKycTemplateUseCase: Symbol.for("GetTenantKycTemplateUseCase"),
+  ConfigureTenantKycTemplateUseCase: Symbol.for(
+    "ConfigureTenantKycTemplateUseCase",
+  ),
+  GetKycRequirementsForFundUseCase: Symbol.for(
+    "GetKycRequirementsForFundUseCase",
+  ),
 
   //repositories
 
@@ -88,4 +96,5 @@ export const TOKENS = {
   SubscriptionCheckoutRepository: Symbol.for("SubscriptionCheckoutRepository"),
   TenantSubscriptionRepository: Symbol.for("TenantSubscriptionRepository"),
   ChitFundRepository: Symbol.for("ChitFundRepository"),
+  TenantKycTemplateRepository: Symbol.for("TenantKycTemplateRepository"),
 } as const;

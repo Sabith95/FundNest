@@ -55,6 +55,7 @@ const DashboardPage = lazyWithRetry(
 const ProfilePage = lazyWithRetry(
   () => import("../pages/user/profile/ProfilePage"),
 );
+const FundPage = lazyWithRetry(() => import("../pages/user/funds/FundsPage"));
 
 // Common & Landing Pages (Lazy Loaded)
 const LandingPage = lazyWithRetry(() => import("../pages/landing/LandingPage"));
@@ -109,6 +110,9 @@ const TenantBillingDetailsPage = lazyWithRetry(
 );
 const TenantFundPageContainer = lazyWithRetry(
   () => import("../pages/Tenant/Fund/TenantFundPageContainer"),
+);
+const KycConfigurationPage = lazyWithRetry(
+  () => import("../pages/Tenant/Kyc/kyc-config/KycConfigurationPage"),
 );
 
 const AppRouter = () => {
@@ -218,6 +222,7 @@ const AppRouter = () => {
                 path={ROUTES.USER.PROFILE_INFO}
                 element={<ProfilePage />}
               />
+              <Route path="/funds" element={<FundPage />} />
             </Route>
 
             {/* Tenant protected routes */}
@@ -246,19 +251,6 @@ const AppRouter = () => {
                 />
               </Route>
 
-              <Route
-                path={ROUTES.TENANT.SUBSCRIPTION}
-                element={<SubscriptionPlans />}
-              />
-              <Route
-                path={ROUTES.TENANT.PAYMENT_RESULT}
-                element={<PaymentResultPage />}
-              />
-              <Route
-                path={ROUTES.TENANT.BILLING_DETAILS}
-                element={<TenantBillingDetailsPage />}
-              />
-
               <Route element={<TenantGuard requireOnboardingComplete={true} />}>
                 <Route
                   path={ROUTES.TENANT.DASHBOARD}
@@ -267,6 +259,22 @@ const AppRouter = () => {
                 <Route
                   path={ROUTES.TENANT.FUND}
                   element={<TenantFundPageContainer />}
+                />
+                <Route
+                  path={ROUTES.TENANT.SUBSCRIPTION}
+                  element={<SubscriptionPlans />}
+                />
+                <Route
+                  path={ROUTES.TENANT.PAYMENT_RESULT}
+                  element={<PaymentResultPage />}
+                />
+                <Route
+                  path={ROUTES.TENANT.BILLING_DETAILS}
+                  element={<TenantBillingDetailsPage />}
+                />
+                <Route
+                  path={ROUTES.TENANT.KYC_CONFIG}
+                  element={<KycConfigurationPage />}
                 />
               </Route>
             </Route>

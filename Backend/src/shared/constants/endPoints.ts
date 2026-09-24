@@ -26,6 +26,10 @@ export const ENDPOINTS = {
       REFRESH_TOKEN: "/user/refresh-token",
       LOGOUT: "/user/logout",
     },
+
+    CHIT_FUND: {
+      GET_AVAILABLE: "/chit-funds",
+    },
   },
 
   SUPER_ADMIN: {
@@ -115,6 +119,11 @@ export const ENDPOINTS = {
       CREATE_MULTI_DIVISION: "/chit-funds/multi-division",
       BLOCK: "/chit-funds/:id/block",
       UNBLOCK: "/chit-funds/:id/unblock",
+    },
+
+    KYC_CONFIG: {
+      GET: "/kyc-config",
+      CONFIGURE: "/kyc-config",
     },
   },
 } as const;

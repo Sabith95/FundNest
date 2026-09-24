@@ -36,6 +36,7 @@ export const API_ROUTES = {
     UPDATE_PROFILE: "/users/me/profile",
     UPDATE_PROFILE_PHOTO: "/users/me/photo",
     CHANGE_PASSWORD: "/users/me/password",
+    GET_AVAILABLE_CHIT_FUNDS: "/users/chit-funds",
   },
 
   TENANTS: {
@@ -61,5 +62,7 @@ export const API_ROUTES = {
     CREATE_MULTI_DIVISION_CHIT_FUND: "/tenants/chit-funds/multi-division",
     BLOCK_CHIT_FUND: (id: string) => `/tenants/chit-funds/${id}/block`,
     UNBLOCK_CHIT_FUND: (id: string) => `/tenants/chit-funds/${id}/unblock`,
+    GET_KYC_TEMPLATE: "/tenants/kyc-config",
+    CONFIG_KYC: "/tenants/kyc-config"
   },
 };

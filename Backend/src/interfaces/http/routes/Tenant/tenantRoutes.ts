@@ -13,6 +13,7 @@ import { TenantBankDetailsController } from "../../controllers/Tenant/TenantBank
 import { TenantSubscriptionPlanController } from "../../controllers/Tenant/TenantSubscriptionPlanController";
 import { TenantSubscriptionCheckoutController } from "../../controllers/Tenant/TenantSubscriptionCheckoutController";
 import { TenantChitFundController } from "../../controllers/Tenant/TenantChitFundController";
+import { TenantKycConfigController } from "../../controllers/Tenant/TenantKycConfigController";
 
 const router = Router();
 const jwtService = container.resolve(TOKENS.JwtService) as JwtService;
@@ -32,6 +33,7 @@ const tenantSubscriptionCheckoutController = container.resolve(
   TenantSubscriptionCheckoutController,
 );
 const tenantChitFundController = container.resolve(TenantChitFundController);
+const tenantKycConfigController = container.resolve(TenantKycConfigController);
 
 //tenant registration
 router.post(
@@ -151,6 +153,23 @@ router.patch(
   authenticate,
   authorize(ROLES.TENANT_ADMIN),
   tenantChitFundController.unblock,
+);
+
+// kyc configuration
+
+// Tenant KYC Configuration
+router.get(
+  ENDPOINTS.TENANT.KYC_CONFIG.GET,
+  authenticate,
+  authorize(ROLES.TENANT_ADMIN),
+  tenantKycConfigController.getTemplate,
+);
+
+router.put(
+  ENDPOINTS.TENANT.KYC_CONFIG.CONFIGURE,
+  authenticate,
+  authorize(ROLES.TENANT_ADMIN),
+  tenantKycConfigController.configureTemplate,
 );
 
 export default router;

@@ -56,6 +56,7 @@ export const ROUTES = {
     PAYMENT_RESULT: "/payment/result",
     BILLING_DETAILS: "/tenants/billing-details",
     FUND: "/tenants/fund",
+    KYC_CONFIG: "/tenants/kyc-config"
   },
   USER: {
     LANDING: "/users",

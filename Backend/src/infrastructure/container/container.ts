@@ -30,6 +30,8 @@ import { ITenantSubscriptionRepository } from "../../domain/repositories/ITenant
 import { TenantSubscriptionRepository } from "../repositories/TenantSubscriptionRepository";
 import { ChitFundRepository } from "../repositories/ChitFundRepository";
 import { IChitFundRepository } from "../../domain/repositories/IChitFundRepository";
+import { ITenantKycTemplateRepository } from "../../domain/repositories/ITenantKycTemplateRepository";
+import { TenantKycTemplateRepository } from "../repositories/TenantKycTemplateRepository";
 
 //use cases
 import { LoginSuperAdminUseCase } from "../../application/auth/use-cases/LoginSuperAdminUseCase";
@@ -130,6 +132,14 @@ import { CreateMultiDivisionChitFundUseCase } from "../../application/tenant/chi
 import { BlockChitFundUseCase } from "../../application/tenant/chitfund/use-cases/BlockChitFundUseCase";
 import { UnblockChitFundUseCase } from "../../application/tenant/chitfund/use-cases/UnblockChitFundUseCase";
 import { GetTenantChitFundsUseCase } from "../../application/tenant/chitfund/use-cases/GetTenantChitFundsUseCase";
+import { IGetAvailableChitFundsUseCase } from "../../application/interface/user/IGetAvailableChitFundsUseCase";
+import { GetAvailableChitFundsUseCase } from "../../application/user/use-cases/GetAvailableChitFundsUseCase";
+import { IGetTenantKycTemplateUseCase } from "../../application/interface/tenant/kyc-config/IGetTenantKycTemplateUseCase";
+import { IConfigureTenantKycTemplateUseCase } from "../../application/interface/tenant/kyc-config/IConfigureTenantKycTemplateUseCase";
+import { GetKycRequirementsForFundUseCase } from "../../application/user/use-cases/GetKycRequirementsForFundUseCase";
+import { GetTenantKycTemplateUseCase } from "../../application/tenant/kyc-config/use-case/GetTenantKycTemplateUseCase";
+import { ConfigureTenantKycTemplateUseCase } from "../../application/tenant/kyc-config/use-case/ConfigureTenantKycTemplateUseCase";
+import { IGetKycRequirementsForFundUseCase } from "../../application/interface/tenant/kyc-config/IGetKycRequirementsForFundUseCase";
 
 // Services
 container.register<IJwtService>(TOKENS.JwtService, {
@@ -418,6 +428,24 @@ container.register(TOKENS.UnblockChitFundUseCase, {
 container.register(TOKENS.GetTenantChitFundsUseCase, {
   useClass: GetTenantChitFundsUseCase,
 });
+container.register<IGetAvailableChitFundsUseCase>(
+  TOKENS.GetAvailableChitFundsUseCase,
+  {
+    useClass: GetAvailableChitFundsUseCase,
+  },
+);
+container.register<IGetTenantKycTemplateUseCase>(
+  TOKENS.GetTenantKycTemplateUseCase,
+  { useClass: GetTenantKycTemplateUseCase },
+);
+container.register<IConfigureTenantKycTemplateUseCase>(
+  TOKENS.ConfigureTenantKycTemplateUseCase,
+  { useClass: ConfigureTenantKycTemplateUseCase },
+);
+container.register<IGetKycRequirementsForFundUseCase>(
+  TOKENS.GetKycRequirementsForFundUseCase,
+  { useClass: GetKycRequirementsForFundUseCase },
+);
 
 // Respository
 container.register<IUserRepository>(TOKENS.UserRepository, {
@@ -446,4 +474,8 @@ container.register<ITenantSubscriptionRepository>(
 container.register<IChitFundRepository>(TOKENS.ChitFundRepository, {
   useClass: ChitFundRepository,
 });
+container.register<ITenantKycTemplateRepository>(
+  TOKENS.TenantKycTemplateRepository,
+  { useClass: TenantKycTemplateRepository },
+);
 export { container };

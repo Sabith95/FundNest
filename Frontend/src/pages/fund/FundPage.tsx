@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Search,
   Plus,
@@ -11,10 +12,15 @@ import {
   Lock,
   Unlock,
   Loader2,
+  ShieldCheck,
 } from "lucide-react";
 import { toast } from "react-toastify";
 import type { TenantUser } from "../../types/tenant.types";
-import { tenantFundService,type  ChitFund } from "../../services/tenantFundService";
+import {
+  tenantFundService,
+  type ChitFund,
+} from "../../services/tenantFundService";
+import { confirmToast } from "../../utitls/confirmToast";
 import CreateFundModal from "../../components/fund/CreateFundModal";
 import ViewFundModal from "../../components/fund/ViewFundModal";
 
@@ -23,19 +29,24 @@ interface FundPageProps {
 }
 
 function formatCurrency(amount: number) {
-  return new Intl.NumberFormat("en-US", {
+  return new Intl.NumberFormat("en-IN", {
     style: "currency",
     currency: "INR",
     maximumFractionDigits: 0,
   }).format(amount);
 }
 
-export default function FundPage({ user }: FundPageProps) {
+export default function FundPage({ user: _user }: FundPageProps) {
+  const navigate = useNavigate();
   const [funds, setFunds] = useState<ChitFund[]>([]);
   const [loading, setLoading] = useState(true);
   const [query, setQuery] = useState("");
-  const [statusFilter, setStatusFilter] = useState<"ALL" | "ACTIVE" | "BLOCKED">("ALL");
-  const [typeFilter, setTypeFilter] = useState<"ALL" | "NORMAL" | "MULTI_DIVISION">("ALL");
+  const [statusFilter, setStatusFilter] = useState<
+    "ALL" | "ACTIVE" | "BLOCKED"
+  >("ALL");
+  const [typeFilter, setTypeFilter] = useState<
+    "ALL" | "NORMAL" | "MULTI_DIVISION"
+  >("ALL");
 
   const [createModalOpen, setCreateModalOpen] = useState(false);
   const [selectedFund, setSelectedFund] = useState<ChitFund | null>(null);
@@ -72,14 +83,21 @@ export default function FundPage({ user }: FundPageProps) {
         (statusFilter === "ACTIVE" && fund.isActive) ||
         (statusFilter === "BLOCKED" && !fund.isActive);
 
-      const matchesType =
-        typeFilter === "ALL" || fund.fundType === typeFilter;
+      const matchesType = typeFilter === "ALL" || fund.fundType === typeFilter;
 
       return matchesQuery && matchesStatus && matchesType;
     });
   }, [funds, query, statusFilter, typeFilter]);
 
   const handleToggleBlock = async (fund: ChitFund) => {
+    const action = fund.isActive ? "block" : "unblock";
+    const confirmed = await confirmToast(
+      fund.isActive
+        ? `Are you sure you want to block "${fund.name}"? Members will not be able to join this plan until it is unblocked.`
+        : `Are you sure you want to unblock "${fund.name}"? This plan will become available again.`,
+    );
+    if (!confirmed) return;
+
     try {
       setTogglingFundId(fund.id);
       if (fund.isActive) {
@@ -92,7 +110,9 @@ export default function FundPage({ user }: FundPageProps) {
       await fetchFunds();
     } catch (err: any) {
       console.error("Failed to update status:", err);
-      toast.error(err.response?.data?.message || "Action failed.");
+      toast.error(
+        err.response?.data?.message || `Failed to ${action} this plan.`,
+      );
     } finally {
       setTogglingFundId(null);
     }
@@ -100,15 +120,15 @@ export default function FundPage({ user }: FundPageProps) {
 
   const totalPoolValue = useMemo(
     () => funds.reduce((acc, f) => acc + f.chitValue, 0),
-    [funds]
+    [funds],
   );
   const activeCount = useMemo(
     () => funds.filter((f) => f.isActive).length,
-    [funds]
+    [funds],
   );
   const totalMembers = useMemo(
     () => funds.reduce((acc, f) => acc + f.currentMembersCount, 0),
-    [funds]
+    [funds],
   );
 
   const hasFunds = funds.length > 0;
@@ -122,7 +142,8 @@ export default function FundPage({ user }: FundPageProps) {
             Chit Funds
           </h1>
           <p className="mt-1 text-sm text-slate-500">
-            Create and manage your organization&apos;s chit fund schemes with live backend data.
+            Create and manage your organization&apos;s chit fund schemes with
+            live backend data.
           </p>
         </div>
 
@@ -133,6 +154,14 @@ export default function FundPage({ user }: FundPageProps) {
             title="Refresh Funds"
           >
             <RefreshCw className={`h-4 w-4 ${loading ? "animate-spin" : ""}`} />
+          </button>
+
+          <button
+            onClick={() => navigate("/tenants/kyc-config")}
+            className="inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition-colors hover:bg-slate-50"
+          >
+            <ShieldCheck className="h-4 w-4" />
+            KYC Configuration
           </button>
 
           {hasFunds && (
@@ -212,7 +241,9 @@ export default function FundPage({ user }: FundPageProps) {
       {loading && !hasFunds && (
         <div className="mt-12 flex flex-col items-center justify-center py-12">
           <Loader2 className="h-8 w-8 animate-spin text-indigo-600" />
-          <p className="mt-3 text-sm text-slate-500">Loading your chit funds...</p>
+          <p className="mt-3 text-sm text-slate-500">
+            Loading your chit funds...
+          </p>
         </div>
       )}
 
@@ -226,7 +257,8 @@ export default function FundPage({ user }: FundPageProps) {
             You don&apos;t have any funds yet
           </h2>
           <p className="mt-2 max-w-md text-sm text-slate-500 leading-relaxed">
-            Create your first chit fund plan to start pooling contributions, inviting subscribers, and managing monthly auctions.
+            Create your first chit fund plan to start pooling contributions,
+            inviting subscribers, and managing monthly auctions.
           </p>
           <button
             onClick={() => setCreateModalOpen(true)}
@@ -291,7 +323,10 @@ export default function FundPage({ user }: FundPageProps) {
               </thead>
               <tbody className="divide-y divide-slate-100">
                 {filteredFunds.map((fund) => (
-                  <tr key={fund.id} className="transition-colors hover:bg-slate-50/80">
+                  <tr
+                    key={fund.id}
+                    className="transition-colors hover:bg-slate-50/80"
+                  >
                     <td className="px-6 py-4">
                       <p className="text-sm font-bold text-slate-900">
                         {fund.name}

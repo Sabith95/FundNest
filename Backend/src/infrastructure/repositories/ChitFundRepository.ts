@@ -78,6 +78,17 @@ export class ChitFundRepository
     return fund ? this.toEntity(fund) : null;
   }
 
+  async findAvailableFunds(): Promise<ChitFund[]> {
+    const funds = await this.model
+      .find({
+        isActive: true,
+        $expr: { $lt: ["$currentMembersCount", "$totalMembers"] },
+      })
+      .sort({ createdAt: -1 })
+      .lean<ChitFundRecord[]>();
+    return funds.map((fund) => this.toEntity(fund));
+  }
+
   protected toEntity(doc: ChitFundRecord): ChitFund {
     return ChitFundPersistenceMapper.toEntity(doc);
   }
