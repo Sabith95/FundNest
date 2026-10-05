@@ -10,6 +10,7 @@ import { IVerifyTenantOtpUseCase } from "../../interface/tenant/IVerifyTenantOtp
 import { VerifyTenantOtpResponseDto } from "../dto/VerifyTenantOtpResponseDto";
 import { BadRequestError } from "../../../shared/errors/BadRequestError";
 import { MESSAGES } from "../../../shared/constants/messages";
+import { IPendingRegistrationRepository } from "../../../domain/interface/auth/IPendingRegistrationRepository";
 
 @injectable()
 export class VerifyTenantOtpUseCase implements IVerifyTenantOtpUseCase {
@@ -20,6 +21,8 @@ export class VerifyTenantOtpUseCase implements IVerifyTenantOtpUseCase {
     private readonly _otpService: IOtpService,
     @inject(TOKENS.JwtService)
     private readonly _jwtService: IJwtService,
+    @inject(TOKENS.PendingRegistrationRepository)
+    private readonly _pendingRegistrationRepository: IPendingRegistrationRepository,
   ) {}
 
   async execute(input: verifyOtpDto): Promise<VerifyTenantOtpResponseDto> {
@@ -29,9 +32,10 @@ export class VerifyTenantOtpUseCase implements IVerifyTenantOtpUseCase {
       purpose: OtpPurpose.TENANT_REGISTRATION,
     });
 
-    const pendingTenant = await this._otpService.getPendingTenantRegistration(
-      input.email,
-    );
+    const pendingTenant =
+      await this._pendingRegistrationRepository.getPendingTenantRegistration(
+        input.email,
+      );
 
     if (!pendingTenant) {
       throw new BadRequestError(MESSAGES.AUTH.REGISTRATION_EXPIRED);

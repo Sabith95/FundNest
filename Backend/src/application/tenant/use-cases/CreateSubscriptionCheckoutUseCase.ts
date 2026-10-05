@@ -3,7 +3,7 @@ import { ISubscriptionPlanRepository } from "../../../domain/repositories/ISubsc
 import { ITenantRepository } from "../../../domain/repositories/ITenantRepository";
 import { ISubscriptionCheckoutRepository } from "../../../domain/repositories/ISubscriptionCheckoutRepository";
 import { ITenantSubscriptionRepository } from "../../../domain/repositories/ITenantSubscriptionRepository";
-import { IRazorpayPaymentService } from "../../../domain/interface/payment/IRazorpayPaymentService";
+import { IPaymentService } from "../../../domain/interface/payment/IPaymentService";
 import { env } from "../../../infrastructure/config/env";
 import { TOKENS } from "../../../shared/tokens";
 import { OnboardingStep } from "../../../shared/constants/enums/OnboardingStep";
@@ -29,7 +29,7 @@ export class CreateSubscriptionCheckoutUseCase implements ICreateSubscriptionChe
     @inject(TOKENS.SubscriptionCheckoutRepository)
     private readonly _subscriptionCheckoutRepository: ISubscriptionCheckoutRepository,
     @inject(TOKENS.RazorpayPaymentService)
-    private readonly _razorpayPaymentService: IRazorpayPaymentService,
+    private readonly _razorpayPaymentService: IPaymentService,
   ) {}
 
   async execute(
@@ -94,7 +94,7 @@ export class CreateSubscriptionCheckoutUseCase implements ICreateSubscriptionChe
       amount,
       currency: "INR",
       durationDays: plan.durationDays,
-      razorpayOrderId: razorpayOrder.id,
+      razorpayOrderId: razorpayOrder.orderId,
       expiresAt: new Date(
         Date.now() + env.RAZORPAY_CHECKOUT_TTL_MINUTES * 60 * 1000,
       ),

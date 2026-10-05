@@ -8,14 +8,20 @@ import { BcryptService } from "../auth/BcryptService";
 import { JwtService } from "../auth/JwtService";
 import { IGoogleAuthService } from "../auth/interfaces/IGoogleAuthService";
 import { GoogleAuthService } from "../auth/GoogleAuthService";
-import { IOtpService } from "../../domain/interface/otp/IOtpService";
 import { RedisOtpService } from "../cache/RedisOtpService";
-import { IEmailService } from "../../domain/interface/notification/IEmailService";
 import { EmailService } from "../notification/EmailService";
 import { IImageStorageService } from "../../domain/interface/storage/IImageStorageService";
 import { CloudinaryImageStorageService } from "../storage/CloudinaryImageStorageService";
 import { IS3StorageService } from "../../domain/interface/storage/IS3StorageService";
 import { S3StorageService } from "../storage/S3StorageService";
+import { IOtpService } from "../../domain/interface/otp/IOtpService";
+import { IPasswordResetSessionService } from "../../domain/interface/auth/IPasswordResetSessionService";
+import { IPendingRegistrationRepository } from "../../domain/interface/auth/IPendingRegistrationRepository";
+import {
+  IEmailService,
+  IOtpEmailService,
+  ITenantVerificationEmailService,
+} from "../../domain/interface/notification/IEmailService";
 
 //Repository
 import { IUserRepository } from "../../domain/repositories/IUserRepository";
@@ -140,6 +146,7 @@ import { GetKycRequirementsForFundUseCase } from "../../application/user/use-cas
 import { GetTenantKycTemplateUseCase } from "../../application/tenant/kyc-config/use-case/GetTenantKycTemplateUseCase";
 import { ConfigureTenantKycTemplateUseCase } from "../../application/tenant/kyc-config/use-case/ConfigureTenantKycTemplateUseCase";
 import { IGetKycRequirementsForFundUseCase } from "../../application/interface/tenant/kyc-config/IGetKycRequirementsForFundUseCase";
+import { IPaymentService } from "../../domain/interface/payment/IPaymentService";
 
 // Services
 container.register<IJwtService>(TOKENS.JwtService, {
@@ -158,10 +165,6 @@ container.register<IEmailService>(TOKENS.EmailService, {
   useClass: EmailService,
 });
 
-container.register<IOtpService>(TOKENS.OtpService, {
-  useClass: RedisOtpService,
-});
-
 container.register<IImageStorageService>(TOKENS.ImageStorageService, {
   useClass: CloudinaryImageStorageService,
 });
@@ -169,6 +172,30 @@ container.register<IImageStorageService>(TOKENS.ImageStorageService, {
 container.register<IS3StorageService>(TOKENS.S3StorageService, {
   useClass: S3StorageService,
 });
+container.register<IOtpEmailService>(TOKENS.OtpEmailService, {
+  useClass: EmailService,
+});
+container.register<ITenantVerificationEmailService>(
+  TOKENS.TenantVerificationEmailService,
+  {
+    useClass: EmailService,
+  },
+);
+container.register<IOtpService>(TOKENS.OtpService, {
+  useClass: RedisOtpService,
+});
+container.register<IPasswordResetSessionService>(
+  TOKENS.PasswordResetSessionService,
+  {
+    useClass: RedisOtpService,
+  },
+);
+container.register<IPendingRegistrationRepository>(
+  TOKENS.PendingRegistrationRepository,
+  {
+    useClass: RedisOtpService,
+  },
+);
 
 //use cases
 container.register<ILoginSuperAdminUseCase>(TOKENS.LoginSuperAdminUseCase, {
@@ -393,7 +420,7 @@ container.register<IGetAvailableSubscriptionPlansUseCase>(
   },
 );
 
-container.register<RazorpayPaymentService>(TOKENS.RazorpayPaymentService, {
+container.register<IPaymentService>(TOKENS.RazorpayPaymentService, {
   useClass: RazorpayPaymentService,
 });
 

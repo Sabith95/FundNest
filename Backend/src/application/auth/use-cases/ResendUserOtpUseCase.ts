@@ -1,8 +1,8 @@
 import { inject, injectable } from "tsyringe";
 import { TOKENS } from "../../../shared/tokens";
 import { IUserRepository } from "../../../domain/repositories/IUserRepository";
-import { IEmailService } from "../../../domain/interface/notification/IEmailService";
 import { IOtpService } from "../../../domain/interface/otp/IOtpService";
+import { IOtpEmailService } from "../../../domain/interface/notification/IEmailService";
 import { generateOtp } from "../../../shared/utils/generateOtp";
 import { MESSAGES } from "../../../shared/constants/messages";
 import { env } from "../../../infrastructure/config/env";
@@ -18,8 +18,8 @@ export class ResendUserOtpUseCase implements IResendUserOtpUseCase {
     @inject(TOKENS.UserRepository)
     private readonly _userRepository: IUserRepository,
 
-    @inject(TOKENS.EmailService)
-    private readonly _emailService: IEmailService,
+    @inject(TOKENS.OtpEmailService)
+    private readonly _emailService: IOtpEmailService,
 
     @inject(TOKENS.OtpService)
     private readonly _otpService: IOtpService,

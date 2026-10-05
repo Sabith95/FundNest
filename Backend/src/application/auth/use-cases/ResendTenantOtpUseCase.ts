@@ -1,8 +1,8 @@
 import { inject, injectable } from "tsyringe";
 import { TOKENS } from "../../../shared/tokens";
 import { ITenantRepository } from "../../../domain/repositories/ITenantRepository";
-import { IEmailService } from "../../../domain/interface/notification/IEmailService";
 import { IOtpService } from "../../../domain/interface/otp/IOtpService";
+import { IOtpEmailService } from "../../../domain/interface/notification/IEmailService";
 import { generateOtp } from "../../../shared/utils/generateOtp";
 import { MESSAGES } from "../../../shared/constants/messages";
 import { ResendOtpDto, ResendOtpResponseDto } from "../dto/resendOtpDto";
@@ -17,8 +17,8 @@ export class ResendTenantOtpUseCase implements IResendTenantOtpUseCase {
   constructor(
     @inject(TOKENS.TenantRepository)
     private readonly _tenantRepository: ITenantRepository,
-    @inject(TOKENS.EmailService)
-    private readonly _emailService: IEmailService,
+    @inject(TOKENS.OtpEmailService)
+    private readonly _emailService: IOtpEmailService,
     @inject(TOKENS.OtpService)
     private readonly _otpService: IOtpService,
   ) {}

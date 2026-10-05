@@ -2,7 +2,10 @@ import crypto from "crypto";
 import { inject, injectable } from "tsyringe";
 import { ISubscriptionCheckoutRepository } from "../../../domain/repositories/ISubscriptionCheckoutRepository";
 import { ITenantSubscriptionRepository } from "../../../domain/repositories/ITenantSubscriptionRepository";
-import { IRazorpayPaymentService } from "../../../domain/interface/payment/IRazorpayPaymentService";
+import {
+  IPaymentService,
+  PaymentDetailsResult,
+} from "../../../domain/interface/payment/IPaymentService";
 import { env } from "../../../infrastructure/config/env";
 import { TOKENS } from "../../../shared/tokens";
 import { BadRequestError } from "../../../shared/errors/BadRequestError";
@@ -24,7 +27,7 @@ export class VerifySubscriptionCheckoutUseCase implements IVerifySubscriptionChe
     @inject(TOKENS.TenantSubscriptionRepository)
     private readonly _tenantSubscriptionRepository: ITenantSubscriptionRepository,
     @inject(TOKENS.RazorpayPaymentService)
-    private readonly _razorpayPaymentService: IRazorpayPaymentService,
+    private readonly _razorpayPaymentService: IPaymentService,
   ) {}
 
   async execute(
@@ -119,16 +122,10 @@ export class VerifySubscriptionCheckoutUseCase implements IVerifySubscriptionChe
 
   private assertPaymentMatchesCheckout(
     checkout: SubscriptionCheckout,
-    payment: {
-      id: string;
-      order_id: string;
-      amount: number;
-      currency: string;
-      status: string;
-    },
+    payment: PaymentDetailsResult,
   ): void {
     if (
-      payment.order_id !== checkout.razorpayOrderId ||
+      payment.orderId !== checkout.razorpayOrderId ||
       payment.amount !== checkout.amount ||
       payment.currency !== checkout.currency
     ) {
@@ -136,9 +133,7 @@ export class VerifySubscriptionCheckoutUseCase implements IVerifySubscriptionChe
     }
 
     if (payment.status !== "captured") {
-      throw new ConflictError(
-        MESSAGES.PAYMENT.NOT_CAPTURED,
-      );
+      throw new ConflictError(MESSAGES.PAYMENT.NOT_CAPTURED);
     }
   }
 

@@ -7,6 +7,7 @@ import { OtpPurpose } from "../../../shared/constants/enums/OtpPurpose";
 import { IVerifyUserOtpUseCase } from "../../interface/auth/IVerifyUserOtpUseCase";
 import { BadRequestError } from "../../../shared/errors/BadRequestError";
 import { MESSAGES } from "../../../shared/constants/messages";
+import { IPendingRegistrationRepository } from "../../../domain/interface/auth/IPendingRegistrationRepository";
 
 @injectable()
 export class VerifyUserOtpUseCase implements IVerifyUserOtpUseCase {
@@ -15,6 +16,8 @@ export class VerifyUserOtpUseCase implements IVerifyUserOtpUseCase {
     private readonly _userRepository: IUserRepository,
     @inject(TOKENS.OtpService)
     private readonly _otpService: IOtpService,
+    @inject(TOKENS.PendingRegistrationRepository)
+    private readonly _pendingRegistrationRepository: IPendingRegistrationRepository,
   ) {}
 
   async execute(input: verifyOtpDto): Promise<verifyOtpResponseDto> {
@@ -25,7 +28,9 @@ export class VerifyUserOtpUseCase implements IVerifyUserOtpUseCase {
     });
 
     const pendingRegistration =
-      await this._otpService.getPendingUserRegistration(input.email);
+      await this._pendingRegistrationRepository.getPendingUserRegistration(
+        input.email,
+      );
 
     if (!pendingRegistration) {
       throw new BadRequestError(MESSAGES.AUTH.REGISTRATION_EXPIRED);
@@ -46,7 +51,9 @@ export class VerifyUserOtpUseCase implements IVerifyUserOtpUseCase {
       },
     });
 
-    await this._otpService.deletePendingUserRegistration(input.email);
+    await this._pendingRegistrationRepository.deletePendingUserRegistration(
+      input.email,
+    );
 
     return {
       email: user.email,

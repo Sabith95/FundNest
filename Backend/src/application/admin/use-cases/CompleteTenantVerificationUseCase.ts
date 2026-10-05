@@ -1,7 +1,6 @@
 import { inject, injectable } from "tsyringe";
 import { ICompleteTenantVerificationUseCase } from "../../interface/admin/ICompleteTenantVerificationUseCase";
 import { ITenantRepository } from "../../../domain/repositories/ITenantRepository";
-import { IEmailService } from "../../../domain/interface/notification/IEmailService";
 import { Tenant } from "../../../domain/entities/Tenant";
 import { TOKENS } from "../../../shared/tokens";
 import { NotFoundError } from "../../../shared/errors/NotFoundError";
@@ -10,6 +9,7 @@ import { MESSAGES } from "../../../shared/constants/messages";
 import { VerificationStatus } from "../../../shared/constants/enums/VerificationStatus";
 import { TenantStatus } from "../../../shared/constants/enums/TenantStatus";
 import { OnboardingStep } from "../../../shared/constants/enums/OnboardingStep";
+import { ITenantVerificationEmailService } from "../../../domain/interface/notification/IEmailService";
 
 @injectable()
 export class CompleteTenantVerificationUseCase implements ICompleteTenantVerificationUseCase {
@@ -17,7 +17,7 @@ export class CompleteTenantVerificationUseCase implements ICompleteTenantVerific
     @inject(TOKENS.TenantRepository)
     private readonly _tenantRepository: ITenantRepository,
     @inject(TOKENS.EmailService)
-    private readonly _emailService: IEmailService,
+    private readonly _emailService: ITenantVerificationEmailService,
   ) {}
 
   async execute(tenantId: string): Promise<Tenant> {

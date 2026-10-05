@@ -2,7 +2,7 @@ import crypto from "crypto";
 import { inject, injectable } from "tsyringe";
 import { ISubscriptionCheckoutRepository } from "../../../domain/repositories/ISubscriptionCheckoutRepository";
 import { ITenantSubscriptionRepository } from "../../../domain/repositories/ITenantSubscriptionRepository";
-import { IRazorpayPaymentService } from "../../../domain/interface/payment/IRazorpayPaymentService";
+import { IPaymentService } from "../../../domain/interface/payment/IPaymentService";
 import { env } from "../../../infrastructure/config/env";
 import { TOKENS } from "../../../shared/tokens";
 import { ForbiddenError } from "../../../shared/errors/ForbiddenError";
@@ -16,7 +16,7 @@ export class HandlePaymentWebhookUseCase implements IHandlePaymentWebhookUseCase
     @inject(TOKENS.TenantSubscriptionRepository)
     private readonly _tenantSubscriptionRepository: ITenantSubscriptionRepository,
     @inject(TOKENS.RazorpayPaymentService)
-    private readonly _razorpayPaymentService: IRazorpayPaymentService,
+    private readonly _razorpayPaymentService: IPaymentService,
   ) {}
 
   async execute(rawBody: Buffer, signature: string | undefined): Promise<void> {
@@ -76,7 +76,7 @@ export class HandlePaymentWebhookUseCase implements IHandlePaymentWebhookUseCase
       );
 
       if (
-        verifiedPayment.order_id === checkout.razorpayOrderId &&
+        verifiedPayment.orderId === checkout.razorpayOrderId &&
         verifiedPayment.amount === checkout.amount &&
         verifiedPayment.currency === checkout.currency &&
         verifiedPayment.status === "captured"

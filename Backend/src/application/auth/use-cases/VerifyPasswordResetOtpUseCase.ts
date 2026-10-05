@@ -2,6 +2,7 @@ import { inject, injectable } from "tsyringe";
 import { TOKENS } from "../../../shared/tokens";
 import { IUserRepository } from "../../../domain/repositories/IUserRepository";
 import { IOtpService } from "../../../domain/interface/otp/IOtpService";
+import { IPasswordResetSessionService } from "../../../domain/interface/auth/IPasswordResetSessionService";
 import { MESSAGES } from "../../../shared/constants/messages";
 import {
   VerifyPasswordResetOtpDto,
@@ -19,6 +20,8 @@ export class VerifyPasswordResetOtpUseCase implements IVerifyPasswordResetOtpUse
 
     @inject(TOKENS.OtpService)
     private readonly _otpService: IOtpService,
+    @inject(TOKENS.PasswordResetSessionService)
+    private readonly _passwordResetSessionService: IPasswordResetSessionService,
   ) {}
 
   async execute(
@@ -41,7 +44,10 @@ export class VerifyPasswordResetOtpUseCase implements IVerifyPasswordResetOtpUse
       throw new BadRequestError(MESSAGES.AUTH.INVALID_OTP);
     }
 
-    await this._otpService.createPasswordResetSession(user.email, user.id);
+    await this._passwordResetSessionService.createPasswordResetSession(
+      user.email,
+      user.id,
+    );
 
     return {
       email: user.email,

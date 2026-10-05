@@ -6,7 +6,8 @@ import { ITenantRepository } from "../../../domain/repositories/ITenantRepositor
 import { IBcryptService } from "../../../infrastructure/auth/interfaces/IBcryptService";
 import { IEmailService } from "../../../domain/interface/notification/IEmailService";
 import { IOtpService } from "../../../domain/interface/otp/IOtpService";
-
+import { IOtpEmailService } from "../../../domain/interface/notification/IEmailService";
+import { IPendingRegistrationRepository } from "../../../domain/interface/auth/IPendingRegistrationRepository";
 import {
   RegisterTenantDto,
   RegisterTenantResponseDto,
@@ -26,10 +27,12 @@ export class RegisterTenantUseCase implements IRegisterTenantUseCase {
     private readonly _tenantRepository: ITenantRepository,
     @inject(TOKENS.BcryptService)
     private readonly _bcryptService: IBcryptService,
-    @inject(TOKENS.EmailService)
-    private readonly _emailService: IEmailService,
+    @inject(TOKENS.OtpEmailService)
+    private readonly _emailService: IOtpEmailService,
     @inject(TOKENS.OtpService)
     private readonly _otpService: IOtpService,
+    @inject(TOKENS.PendingRegistrationRepository)
+    private readonly _pendingRegistrationRepository: IPendingRegistrationRepository,
   ) {}
 
   async execute(input: RegisterTenantDto): Promise<RegisterTenantResponseDto> {
@@ -44,7 +47,7 @@ export class RegisterTenantUseCase implements IRegisterTenantUseCase {
       input.password,
     );
 
-    await this._otpService.storePendingTenantRegistration({
+    await this._pendingRegistrationRepository.storePendingTenantRegistration({
       companyName: input.companyName,
       ownerName: input.ownerName,
       email: input.email,

@@ -2,7 +2,7 @@ import { inject, injectable } from "tsyringe";
 import { TOKENS } from "../../../shared/tokens";
 import { IUserRepository } from "../../../domain/repositories/IUserRepository";
 import { IBcryptService } from "../../../infrastructure/auth/interfaces/IBcryptService";
-import { IOtpService } from "../../../domain/interface/otp/IOtpService";
+import { IPasswordResetSessionService } from "../../../domain/interface/auth/IPasswordResetSessionService";
 import { MESSAGES } from "../../../shared/constants/messages";
 import {
   ResetUserPasswordDto,
@@ -21,8 +21,8 @@ export class ResetUserPasswordUseCase implements IResetUserPasswordUseCase {
     @inject(TOKENS.BcryptService)
     private readonly _bcryptService: IBcryptService,
 
-    @inject(TOKENS.OtpService)
-    private readonly _otpService: IOtpService,
+    @inject(TOKENS.PasswordResetSessionService)
+    private readonly _passwordResetSessionService: IPasswordResetSessionService,
   ) {}
 
   async execute(
@@ -42,9 +42,10 @@ export class ResetUserPasswordUseCase implements IResetUserPasswordUseCase {
       throw new BadRequestError(MESSAGES.AUTH.GOOGLE_LOGIN);
     }
 
-    const session = await this._otpService.consumePasswordResetSession(
-      user.email,
-    );
+    const session =
+      await this._passwordResetSessionService.consumePasswordResetSession(
+        user.email,
+      );
 
     if (session.userId !== user.id) {
       throw new BadRequestError(

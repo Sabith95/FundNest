@@ -2,13 +2,12 @@ import { inject, injectable } from "tsyringe";
 import { TOKENS } from "../../../shared/tokens";
 import { ITenantRepository } from "../../../domain/repositories/ITenantRepository";
 import { IBcryptService } from "../../../infrastructure/auth/interfaces/IBcryptService";
-import { IOtpService } from "../../../domain/interface/otp/IOtpService";
+import { IPasswordResetSessionService } from "../../../domain/interface/auth/IPasswordResetSessionService";
 import { MESSAGES } from "../../../shared/constants/messages";
 import {
   ResetUserPasswordDto,
   ResetUserPasswordResponseDto,
 } from "../dto/PasswordResetDto";
-import { IResetUserPasswordUseCase } from "../../interface/auth/IResetUserPasswordUseCase";
 import { BadRequestError } from "../../../shared/errors/BadRequestError";
 import { NotFoundError } from "../../../shared/errors/NotFoundError";
 import { IResetTenantPasswordUseCase } from "../../interface/auth/IResetTenantPasswordUseCase";
@@ -22,8 +21,8 @@ export class ResetTenantPasswordUseCase implements IResetTenantPasswordUseCase {
     @inject(TOKENS.BcryptService)
     private readonly _bcryptService: IBcryptService,
 
-    @inject(TOKENS.OtpService)
-    private readonly _otpService: IOtpService,
+    @inject(TOKENS.PasswordResetSessionService)
+    private readonly _passwordResetSessionService: IPasswordResetSessionService,
   ) {}
 
   async execute(
@@ -39,9 +38,10 @@ export class ResetTenantPasswordUseCase implements IResetTenantPasswordUseCase {
       throw new NotFoundError(MESSAGES.TENANT.NOT_FOUND);
     }
 
-    const session = await this._otpService.consumePasswordResetSession(
-      tenant.email,
-    );
+    const session =
+      await this._passwordResetSessionService.consumePasswordResetSession(
+        tenant.email,
+      );
 
     if (session.userId !== tenant.id) {
       throw new BadRequestError(

@@ -7,6 +7,11 @@ export const TOKENS = {
   EmailService: Symbol.for("EmailService"),
   ImageStorageService: Symbol.for("ImageStorageService"),
   S3StorageService: Symbol.for("S3StorageService"),
+  RazorpayPaymentService: Symbol.for("RazorpayPaymentService"),
+  PasswordResetSessionService: Symbol.for("PasswordResetSessionService"),
+  PendingRegistrationRepository: Symbol.for("PendingRegistrationRepository"),
+  OtpEmailService: Symbol.for("OtpEmailService"),
+  TenantVerificationEmailService: Symbol.for("TenantVerificationEmailService"),
 
   //use cases
   LoginSuperAdminUseCase: Symbol.for("LoginSuperAdminUseCase"),
@@ -71,7 +76,6 @@ export const TOKENS = {
     "GetCurrentTenantSubscriptionUseCase",
   ),
   HandlePaymentWebhookUseCase: Symbol.for("HandlePaymentWebhookUseCase"),
-  RazorpayPaymentService: Symbol.for("RazorpayPaymentService"),
   CreateNormalChitFundUseCase: Symbol.for("CreateNormalChitFundUseCase"),
   CreateMultiDivisionChitFundUseCase: Symbol.for(
     "CreateMultiDivisionChitFundUseCase",

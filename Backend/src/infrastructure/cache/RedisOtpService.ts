@@ -7,9 +7,13 @@ import {
   StoreOtpData,
   VerifyOtpData,
   VerifiedOtpResult,
+} from "../../domain/interface/otp/IOtpService";
+import { IPasswordResetSessionService } from "../../domain/interface/auth/IPasswordResetSessionService";
+import {
+  IPendingRegistrationRepository,
   PendingRegistration,
   PendingTenantRegistration,
-} from "../../domain/interface/otp/IOtpService";
+} from "../../domain/interface/auth/IPendingRegistrationRepository";
 import { BadRequestError } from "../../shared/errors/BadRequestError";
 
 interface StoredOtpPayload {
@@ -25,7 +29,12 @@ interface PasswordResetSessionPayload {
 }
 
 @injectable()
-export class RedisOtpService implements IOtpService {
+export class RedisOtpService
+  implements
+    IOtpService,
+    IPasswordResetSessionService,
+    IPendingRegistrationRepository
+{
   async storeOtp(data: StoreOtpData): Promise<void> {
     const key = this.getOtpKey(data.purpose, data.email);
 

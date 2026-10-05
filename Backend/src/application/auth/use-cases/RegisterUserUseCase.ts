@@ -14,6 +14,8 @@ import { MESSAGES } from "../../../shared/constants/messages";
 import { OtpPurpose } from "../../../shared/constants/enums/OtpPurpose";
 import { IRegisterUserUseCase } from "../../interface/auth/IRegisterUseCase";
 import { ConflictError } from "../../../shared/errors/ConflictError";
+import { IOtpEmailService } from "../../../domain/interface/notification/IEmailService";
+import { IPendingRegistrationRepository } from "../../../domain/interface/auth/IPendingRegistrationRepository";
 
 @injectable()
 export class RegisterUserUseCase implements IRegisterUserUseCase {
@@ -23,9 +25,11 @@ export class RegisterUserUseCase implements IRegisterUserUseCase {
     @inject(TOKENS.BcryptService)
     private readonly _bcryptService: IBcryptService,
     @inject(TOKENS.EmailService)
-    private readonly _emailService: IEmailService,
+    private readonly _emailService: IOtpEmailService,
     @inject(TOKENS.OtpService)
     private readonly _otpService: IOtpService,
+    @inject(TOKENS.PendingRegistrationRepository)
+    private readonly _pendingRegistrationRepository: IPendingRegistrationRepository,
   ) {}
 
   async execute(input: RegisterUserDto): Promise<RegisterUserResponseDto> {
@@ -40,7 +44,7 @@ export class RegisterUserUseCase implements IRegisterUserUseCase {
       input.password,
     );
 
-    await this._otpService.storePendingUserRegistration({
+    await this._pendingRegistrationRepository.storePendingUserRegistration({
       name: input.name,
       email: email,
       phone: input.phone,
