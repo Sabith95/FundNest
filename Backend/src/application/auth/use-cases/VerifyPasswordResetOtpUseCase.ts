@@ -1,7 +1,7 @@
 import { inject, injectable } from "tsyringe";
 import { TOKENS } from "../../../shared/tokens";
 import { IUserRepository } from "../../../domain/repositories/IUserRepository";
-import { IOtpService } from "../../../infrastructure/cache/interfaces/IOtpService";
+import { IOtpService } from "../../../domain/interface/otp/IOtpService";
 import { MESSAGES } from "../../../shared/constants/messages";
 import {
   VerifyPasswordResetOtpDto,

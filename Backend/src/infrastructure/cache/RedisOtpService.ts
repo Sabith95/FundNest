@@ -9,7 +9,7 @@ import {
   VerifiedOtpResult,
   PendingRegistration,
   PendingTenantRegistration,
-} from "./interfaces/IOtpService";
+} from "../../domain/interface/otp/IOtpService";
 import { BadRequestError } from "../../shared/errors/BadRequestError";
 
 interface StoredOtpPayload {

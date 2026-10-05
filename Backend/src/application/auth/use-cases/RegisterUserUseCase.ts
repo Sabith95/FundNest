@@ -6,8 +6,8 @@ import {
   RegisterUserDto,
   RegisterUserResponseDto,
 } from "../dto/RegisterUserDto";
-import { IEmailService } from "../../../infrastructure/notification/interfaces/IEmailService";
-import { IOtpService } from "../../../infrastructure/cache/interfaces/IOtpService";
+import { IEmailService } from "../../../domain/interface/notification/IEmailService";
+import { IOtpService } from "../../../domain/interface/otp/IOtpService";
 import { generateOtp } from "../../../shared/utils/generateOtp";
 import { ROLES } from "../../../shared/constants/roles";
 import { MESSAGES } from "../../../shared/constants/messages";

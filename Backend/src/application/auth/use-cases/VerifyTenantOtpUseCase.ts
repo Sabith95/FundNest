@@ -1,6 +1,6 @@
 import { injectable, inject } from "tsyringe";
 import { TOKENS } from "../../../shared/tokens";
-import { IOtpService } from "../../../infrastructure/cache/interfaces/IOtpService";
+import { IOtpService } from "../../../domain/interface/otp/IOtpService";
 import { verifyOtpDto } from "../dto/verifyOtpDto";
 import { OtpPurpose } from "../../../shared/constants/enums/OtpPurpose";
 import { ITenantRepository } from "../../../domain/repositories/ITenantRepository";

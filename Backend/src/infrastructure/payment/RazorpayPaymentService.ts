@@ -5,7 +5,7 @@ import {
   IRazorpayPaymentService,
   RazorpayOrderResult,
   RazorpayPaymentResult,
-} from "../payment/interface/IRazorpayPaymentService";
+} from "../../domain/interface/payment/IRazorpayPaymentService";
 
 @injectable()
 export class RazorpayPaymentService implements IRazorpayPaymentService {

@@ -8,13 +8,13 @@ import { BcryptService } from "../auth/BcryptService";
 import { JwtService } from "../auth/JwtService";
 import { IGoogleAuthService } from "../auth/interfaces/IGoogleAuthService";
 import { GoogleAuthService } from "../auth/GoogleAuthService";
-import { IOtpService } from "../cache/interfaces/IOtpService";
+import { IOtpService } from "../../domain/interface/otp/IOtpService";
 import { RedisOtpService } from "../cache/RedisOtpService";
-import { IEmailService } from "../notification/interfaces/IEmailService";
+import { IEmailService } from "../../domain/interface/notification/IEmailService";
 import { EmailService } from "../notification/EmailService";
-import { IImageStorageService } from "../storage/interfaces/IImageStorageService";
+import { IImageStorageService } from "../../domain/interface/storage/IImageStorageService";
 import { CloudinaryImageStorageService } from "../storage/CloudinaryImageStorageService";
-import { IS3StorageService } from "../storage/interfaces/IS3StorageService";
+import { IS3StorageService } from "../../domain/interface/storage/IS3StorageService";
 import { S3StorageService } from "../storage/S3StorageService";
 
 //Repository

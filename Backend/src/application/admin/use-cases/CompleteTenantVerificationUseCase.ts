@@ -1,7 +1,7 @@
 import { inject, injectable } from "tsyringe";
 import { ICompleteTenantVerificationUseCase } from "../../interface/admin/ICompleteTenantVerificationUseCase";
 import { ITenantRepository } from "../../../domain/repositories/ITenantRepository";
-import { IEmailService } from "../../../infrastructure/notification/interfaces/IEmailService";
+import { IEmailService } from "../../../domain/interface/notification/IEmailService";
 import { Tenant } from "../../../domain/entities/Tenant";
 import { TOKENS } from "../../../shared/tokens";
 import { NotFoundError } from "../../../shared/errors/NotFoundError";

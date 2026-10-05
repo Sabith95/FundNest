@@ -4,8 +4,8 @@ import { TOKENS } from "../../../shared/tokens";
 import { ITenantRepository } from "../../../domain/repositories/ITenantRepository";
 
 import { IBcryptService } from "../../../infrastructure/auth/interfaces/IBcryptService";
-import { IEmailService } from "../../../infrastructure/notification/interfaces/IEmailService";
-import { IOtpService } from "../../../infrastructure/cache/interfaces/IOtpService";
+import { IEmailService } from "../../../domain/interface/notification/IEmailService";
+import { IOtpService } from "../../../domain/interface/otp/IOtpService";
 
 import {
   RegisterTenantDto,

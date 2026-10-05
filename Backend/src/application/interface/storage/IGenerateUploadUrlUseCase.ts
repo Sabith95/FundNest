@@ -1,4 +1,4 @@
-import { UploadUrlResponse } from "../../../infrastructure/storage/interfaces/IS3StorageService";
+import { UploadUrlResponse } from "../../../domain/interface/storage/IS3StorageService";
 import { GenerateUploadUrlDto } from "../../storage/Dto/GenerateUploadUrlDto";
 
 export interface IGenerateUploadUrlUseCase {

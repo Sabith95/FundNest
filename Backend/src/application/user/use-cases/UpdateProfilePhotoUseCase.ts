@@ -1,7 +1,7 @@
 import { inject, injectable } from "tsyringe";
 import { TOKENS } from "../../../shared/tokens";
 import { IUserRepository } from "../../../domain/repositories/IUserRepository";
-import { IImageStorageService } from "../../../infrastructure/storage/interfaces/IImageStorageService";
+import { IImageStorageService } from "../../../domain/interface/storage/IImageStorageService";
 import { MESSAGES } from "../../../shared/constants/messages";
 import { UpdateProfilePhotoDto, UserProfileDto } from "../dto/ProfileDto";
 import { IUpdateProfilePhotoUseCase } from "../../interface/user/IUpdateProfilePhotoUseCase";

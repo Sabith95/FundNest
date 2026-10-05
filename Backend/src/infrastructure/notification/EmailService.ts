@@ -1,5 +1,5 @@
 import nodemailer from "nodemailer";
-import { IEmailService } from "./interfaces/IEmailService";
+import { IEmailService } from "../../domain/interface/notification/IEmailService";
 import { injectable } from "tsyringe";
 import { env } from "../config/env";
 import { logger } from "../../shared/logger";

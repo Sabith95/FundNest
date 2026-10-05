@@ -14,7 +14,7 @@ import {
   GenerateUploadUrlInput,
   IS3StorageService,
   UploadUrlResponse,
-} from "./interfaces/IS3StorageService";
+} from "../../domain/interface/storage/IS3StorageService";
 
 @injectable()
 export class S3StorageService implements IS3StorageService {

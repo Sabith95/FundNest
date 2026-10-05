@@ -2,7 +2,7 @@ import { inject, injectable } from "tsyringe";
 import {
   IS3StorageService,
   UploadUrlResponse,
-} from "../../../infrastructure/storage/interfaces/IS3StorageService";
+} from "../../../domain/interface/storage/IS3StorageService";
 import { TOKENS } from "../../../shared/tokens";
 import { IGenerateUploadUrlUseCase } from "../../interface/storage/IGenerateUploadUrlUseCase";
 import { GenerateUploadUrlDto } from "../Dto/GenerateUploadUrlDto";

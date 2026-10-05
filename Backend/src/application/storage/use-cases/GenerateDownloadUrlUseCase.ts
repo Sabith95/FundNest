@@ -1,5 +1,5 @@
 import { inject, injectable } from "tsyringe";
-import { IS3StorageService } from "../../../infrastructure/storage/interfaces/IS3StorageService";
+import { IS3StorageService } from "../../../domain/interface/storage/IS3StorageService";
 import { TOKENS } from "../../../shared/tokens";
 import { IGenerateDownloadUrlUseCase } from "../../interface/storage/IGenerateDownloadUrlUseCase";
 import { BadRequestError } from "../../../shared/errors/BadRequestError";

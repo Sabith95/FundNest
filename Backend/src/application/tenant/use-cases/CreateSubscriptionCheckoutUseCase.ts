@@ -3,7 +3,7 @@ import { ISubscriptionPlanRepository } from "../../../domain/repositories/ISubsc
 import { ITenantRepository } from "../../../domain/repositories/ITenantRepository";
 import { ISubscriptionCheckoutRepository } from "../../../domain/repositories/ISubscriptionCheckoutRepository";
 import { ITenantSubscriptionRepository } from "../../../domain/repositories/ITenantSubscriptionRepository";
-import { IRazorpayPaymentService } from "../../../infrastructure/payment/interface/IRazorpayPaymentService";
+import { IRazorpayPaymentService } from "../../../domain/interface/payment/IRazorpayPaymentService";
 import { env } from "../../../infrastructure/config/env";
 import { TOKENS } from "../../../shared/tokens";
 import { OnboardingStep } from "../../../shared/constants/enums/OnboardingStep";

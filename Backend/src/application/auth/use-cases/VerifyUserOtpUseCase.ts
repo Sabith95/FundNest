@@ -1,7 +1,7 @@
 import { injectable, inject } from "tsyringe";
 import { TOKENS } from "../../../shared/tokens";
 import { IUserRepository } from "../../../domain/repositories/IUserRepository";
-import { IOtpService } from "../../../infrastructure/cache/interfaces/IOtpService";
+import { IOtpService } from "../../../domain/interface/otp/IOtpService";
 import { verifyOtpDto, verifyOtpResponseDto } from "../dto/verifyOtpDto";
 import { OtpPurpose } from "../../../shared/constants/enums/OtpPurpose";
 import { IVerifyUserOtpUseCase } from "../../interface/auth/IVerifyUserOtpUseCase";

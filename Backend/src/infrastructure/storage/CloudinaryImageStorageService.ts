@@ -7,7 +7,7 @@ import {
   IImageStorageService,
   UploadImage,
   UploadImageInput,
-} from "./interfaces/IImageStorageService";
+} from "../../domain/interface/storage/IImageStorageService";
 
 @injectable()
 export class CloudinaryImageStorageService implements IImageStorageService {

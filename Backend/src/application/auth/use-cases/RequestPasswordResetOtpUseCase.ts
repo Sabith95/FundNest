@@ -1,8 +1,8 @@
 import { inject, injectable } from "tsyringe";
 import { TOKENS } from "../../../shared/tokens";
 import { IUserRepository } from "../../../domain/repositories/IUserRepository";
-import { IEmailService } from "../../../infrastructure/notification/interfaces/IEmailService";
-import { IOtpService } from "../../../infrastructure/cache/interfaces/IOtpService";
+import { IEmailService } from "../../../domain/interface/notification/IEmailService";
+import { IOtpService } from "../../../domain/interface/otp/IOtpService";
 import { generateOtp } from "../../../shared/utils/generateOtp";
 import { env } from "../../../infrastructure/config/env";
 import {
