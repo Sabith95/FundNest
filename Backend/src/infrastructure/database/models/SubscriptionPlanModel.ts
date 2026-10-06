@@ -14,6 +14,8 @@ export interface SubscriptionPlanDocument {
   hasAutopay: boolean;
   hasFundSuggestions: boolean;
   isActive: boolean;
+  isDeleted: boolean;
+  deletedAt: Date | null;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -22,17 +24,14 @@ const subscriptionPlanSchema = new Schema<SubscriptionPlanDocument>(
   {
     planType: {
       type: String,
-      enum: Object.values(PlanType),
       required: true,
-      unique: true,
+      trim: true,
       index: true,
-      immutable: true,
     },
     name: {
       type: String,
       required: true,
       trim: true,
-      unique: true,
       index: true,
     },
     price: {
@@ -73,11 +72,26 @@ const subscriptionPlanSchema = new Schema<SubscriptionPlanDocument>(
       default: true,
       index: true,
     },
+    isDeleted: {
+      type: Boolean,
+      default: false,
+      index: true,
+    },
+    deletedAt: {
+      type: Date,
+      default: null,
+    },
   },
   {
     timestamps: true,
     collection: "subscriptionPlans",
   },
+);
+
+// Partial unique index: names must be unique only among non-deleted plans
+subscriptionPlanSchema.index(
+  { name: 1 },
+  { unique: true, partialFilterExpression: { isDeleted: false } },
 );
 
 export type HydratedSubscriptionPlanDocument =

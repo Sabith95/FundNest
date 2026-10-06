@@ -21,28 +21,16 @@ export class CreateSubscriptionPlanUseCase implements ICreateSubscriptionPlanUse
   async execute(
     data: CreateSubscriptionPlanDto,
   ): Promise<SubscriptionPlanResponseDto> {
-    const existingPlan = await this._subscriptionPlanRepository.findByPlanType(
-      data.planType,
-    );
-
-    if (existingPlan) {
-      throw new ConflictError(
-        MESSAGES.SUBSCRIPTION.ALREADY_EXISTS,
-      );
-    }
-
     const planWithSameName = await this._subscriptionPlanRepository.findByName(
       data.name.trim(),
     );
 
     if (planWithSameName) {
-      throw new ConflictError(
-        MESSAGES.SUBSCRIPTION.ALREADY_EXISTS,
-      );
+      throw new ConflictError(MESSAGES.SUBSCRIPTION.ALREADY_EXISTS);
     }
 
     const plan = await this._subscriptionPlanRepository.createPlan({
-      planType: data.planType,
+      planType: data.planType.trim(),
       name: data.name.trim(),
       price: data.price,
       billingCycle: data.billingCycle,

@@ -116,4 +116,11 @@ router.patch(
   subscriptionPlanController.updateStatus,
 );
 
+router.delete(
+  ENDPOINTS.SUPER_ADMIN.SUBSCRIPTION_PLAN.DELETE,
+  authenticate,
+  authorize(ROLES.SUPER_ADMIN),
+  subscriptionPlanController.delete,
+);
+
 export default router;

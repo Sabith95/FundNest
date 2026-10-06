@@ -15,6 +15,8 @@ export class SubscriptionPlanResponseDtoMapper {
       hasAutopay: plan.hasAutopay,
       hasFundSuggestions: plan.hasFundSuggestions,
       isActive: plan.isActive,
+      isDeleted: plan.isDeleted,
+      deletedAt: plan.deletedAt,
       createdAt: plan.createdAt,
       updatedAt: plan.updatedAt,
     };

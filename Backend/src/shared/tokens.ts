@@ -91,6 +91,7 @@ export const TOKENS = {
   GetKycRequirementsForFundUseCase: Symbol.for(
     "GetKycRequirementsForFundUseCase",
   ),
+  DeleteSubscriptionPlanUseCase: Symbol.for("DeleteSubscriptionPlanUseCase"),
 
   //repositories
 

@@ -60,6 +60,7 @@ export const ENDPOINTS = {
       CREATE: "/subscription-plans",
       UPDATE: "/subscription-plans/:id",
       UPDATE_STATUS: "/subscription-plans/:id/status",
+      DELETE: "/subscription-plans/:id",
     },
 
     USER: {

@@ -18,6 +18,7 @@ export interface UpsertSubscriptionData {
 export interface ITenantSubscriptionRepository extends IBaseRepository<TenantSubscription> {
   findByTenantId(tenantId: string): Promise<TenantSubscription | null>;
   findActiveByTenantId(tenantId: string): Promise<TenantSubscription | null>;
+  countActiveByPlanId(planId: string): Promise<number>;
   upsertSubscription(data: UpsertSubscriptionData): Promise<TenantSubscription>;
   markAsExpired(id: string): Promise<void>;
 }

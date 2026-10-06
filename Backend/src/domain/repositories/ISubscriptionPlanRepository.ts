@@ -26,14 +26,19 @@ export interface UpdateSubscriptionPlanData {
   hasAutopay?: boolean;
   hasFundSuggestions?: boolean;
   isActive?: boolean;
+  isDeleted?: boolean;
+  deletedAt?: Date | null;
 }
 
 export interface ISubscriptionPlanRepository extends IBaseRepository<SubscriptionPlan> {
   findByName(name: string): Promise<SubscriptionPlan | null>;
   findByPlanType(planType: PlanType): Promise<SubscriptionPlan | null>;
+  findNonDeleted(): Promise<SubscriptionPlan[]>;
+  findAvailable(): Promise<SubscriptionPlan[]>;
   createPlan(data: CreateSubscriptionPlanData): Promise<SubscriptionPlan>;
   updatePlan(
     id: string,
     data: UpdateSubscriptionPlanData,
   ): Promise<SubscriptionPlan | null>;
+  softDelete(id: string): Promise<SubscriptionPlan | null>;
 }

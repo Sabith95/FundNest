@@ -1,4 +1,4 @@
-export type PlanType = "BASIC" | "PRO" | "PREMIUM";
+export type PlanType = string;
 
 export type BillingCycle = "MONTHLY" | "YEARLY";
 
@@ -12,8 +12,10 @@ export interface SubscriptionPlan {
   maxFunds: number | null;
   maxUsers: number | null;
   hasAutopay: boolean;
-  hasFundSuggestions: boolean;
+  hasFundSuggestions?: boolean;
   isActive: boolean;
+  isDeleted?: boolean;
+  deletedAt?: string | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -27,7 +29,7 @@ export interface CreateSubscriptionPlanPayload {
   maxFunds: number | null;
   maxUsers: number | null;
   hasAutopay: boolean;
-  hasFundSuggestions: boolean;
+  hasFundSuggestions?: boolean;
 }
 
 export interface UpdateSubscriptionPlanPayload {
@@ -38,5 +40,5 @@ export interface UpdateSubscriptionPlanPayload {
   maxFunds: number | null;
   maxUsers: number | null;
   hasAutopay: boolean;
-  hasFundSuggestions: boolean;
+  hasFundSuggestions?: boolean;
 }

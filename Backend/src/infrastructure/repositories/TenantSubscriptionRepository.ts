@@ -42,6 +42,14 @@ export class TenantSubscriptionRepository
     return doc ? this.toEntity(doc) : null;
   }
 
+  async countActiveByPlanId(planId: string): Promise<number> {
+    return this.model.countDocuments({
+      planId: new Types.ObjectId(planId),
+      status: "ACTIVE",
+      endsAt: { $gt: new Date() },
+    });
+  }
+
   async upsertSubscription(
     data: UpsertSubscriptionData,
   ): Promise<TenantSubscription> {

@@ -5,6 +5,7 @@ import { ICreateSubscriptionPlanUseCase } from "../../../../application/interfac
 import { IGetSubscriptionPlansUseCase } from "../../../../application/interface/admin/subscription/IGetSubscriptionPlansUseCase";
 import { IUpdateSubscriptionPlanUseCase } from "../../../../application/interface/admin/subscription/IUpdateSubscriptionPlanUseCase";
 import { IUpdateSubscriptionPlanStatusUseCase } from "../../../../application/interface/admin/subscription/IUpdateSubscriptionPlanStatusUseCase";
+import { IDeleteSubscriptionPlanUseCase } from "../../../../application/interface/admin/subscription/IDeleteSubscriptionPlanUseCase";
 import { HTTP_STATUS } from "../../../../shared/constants/httpStatus";
 import { ResponseHandler } from "../../../../shared/ResponseHandler";
 import { TOKENS } from "../../../../shared/tokens";
@@ -13,6 +14,7 @@ import {
   updateSubscriptionPlanSchema,
   updateSubscriptionPlanStatusSchema,
 } from "../../../../interfaces/http/validators/admin/subscriptionPlanValidatior";
+import { MESSAGES } from "../../../../shared/constants/messages";
 
 @injectable()
 export class AdminSubscriptionPlanController {
@@ -28,6 +30,9 @@ export class AdminSubscriptionPlanController {
 
     @inject(TOKENS.UpdateSubscriptionPlanStatusUseCase)
     private readonly _updateSubscriptionPlanStatusUseCase: IUpdateSubscriptionPlanStatusUseCase,
+
+    @inject(TOKENS.DeleteSubscriptionPlanUseCase)
+    private readonly _deleteSubscriptionPlanUseCase: IDeleteSubscriptionPlanUseCase,
   ) {}
 
   getAll = async (
@@ -38,9 +43,14 @@ export class AdminSubscriptionPlanController {
     try {
       const plans = await this._getSubscriptionPlansUseCase.execute();
 
-      ResponseHandler.success(res, HTTP_STATUS.OK, "Plans fetched successfully", {
-        plans,
-      });
+      ResponseHandler.success(
+        res,
+        HTTP_STATUS.OK,
+        MESSAGES.PLAN.PLAN_FETCHED,
+        {
+          plans,
+        },
+      );
     } catch (error) {
       next(error);
     }
@@ -59,7 +69,7 @@ export class AdminSubscriptionPlanController {
       ResponseHandler.success(
         res,
         HTTP_STATUS.CREATED,
-        "Subscription plan created successfully",
+        MESSAGES.PLAN.PLAN_CREATED,
         { plan },
       );
     } catch (error) {
@@ -83,7 +93,7 @@ export class AdminSubscriptionPlanController {
       ResponseHandler.success(
         res,
         HTTP_STATUS.OK,
-        "Subscription plan updated successfully",
+        MESSAGES.PLAN.PLAN_UPDATED,
         { plan },
       );
     } catch (error) {
@@ -108,8 +118,28 @@ export class AdminSubscriptionPlanController {
         res,
         HTTP_STATUS.OK,
         plan.isActive
-          ? "Subscription plan unblocked successfully"
-          : "Subscription plan blocked successfully",
+          ? MESSAGES.PLAN.PLAN_BLOCKED
+          : MESSAGES.PLAN.PLAN_UNBLOCKED,
+        { plan },
+      );
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  delete = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> => {
+    try {
+      const plan = await this._deleteSubscriptionPlanUseCase.execute(
+        String(req.params.id),
+      );
+      ResponseHandler.success(
+        res,
+        HTTP_STATUS.OK,
+        MESSAGES.PLAN.PLAN_DELETED,
         { plan },
       );
     } catch (error) {

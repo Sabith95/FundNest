@@ -1,9 +1,12 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
+  AlertTriangle,
   Building2,
   PackageSearch,
   PiggyBank,
   Plus,
+  Sparkles,
+  Trash2,
   TreePine,
   type LucideIcon,
 } from "lucide-react";
@@ -16,17 +19,16 @@ import SubscriptionPlanFormModal from "../../../components/subscription/Subscrip
 import { adminSubscriptionPlanService } from "../../../services/adminSubscriptionPlanService";
 import type {
   CreateSubscriptionPlanPayload,
-  PlanType,
   SubscriptionPlan,
   UpdateSubscriptionPlanPayload,
 } from "../../../types/subsctiption.types";
 
-const PLAN_TYPES: PlanType[] = ["BASIC", "PRO", "PREMIUM"];
-
-const PLAN_ICONS: Record<PlanType, LucideIcon> = {
+const PLAN_ICONS: Record<string, LucideIcon> = {
   BASIC: PiggyBank,
   PRO: TreePine,
   PREMIUM: Building2,
+  PLATINUM: Sparkles,
+  ENTERPRISE: Building2,
 };
 
 const getErrorMessage = (error: unknown, fallback: string): string => {
@@ -56,15 +58,22 @@ export default function SubscriptionBilling() {
   const [editingPlan, setEditingPlan] = useState<SubscriptionPlan | null>(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
 
+  // Status toggle confirmation modal
+  const [planToToggle, setPlanToToggle] = useState<SubscriptionPlan | null>(null);
+  const [isUpdatingStatus, setIsUpdatingStatus] = useState(false);
+
+  // Soft delete confirmation modal
+  const [planToDelete, setPlanToDelete] = useState<SubscriptionPlan | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
+
   const loadPlans = useCallback(async () => {
     try {
       setIsLoading(true);
       const result = await adminSubscriptionPlanService.getAll();
 
+      // Sort plans by price ascending
       const sortedPlans = [...result].sort(
-        (first, second) =>
-          PLAN_TYPES.indexOf(first.planType) -
-          PLAN_TYPES.indexOf(second.planType),
+        (first, second) => first.price - second.price,
       );
 
       setPlans(sortedPlans);
@@ -79,22 +88,7 @@ export default function SubscriptionBilling() {
     void loadPlans();
   }, [loadPlans]);
 
-  const availablePlanTypes = useMemo(
-    () =>
-      PLAN_TYPES.filter(
-        (type) =>
-          !plans.some((plan) => plan.planType === type) ||
-          type === editingPlan?.planType,
-      ),
-    [editingPlan?.planType, plans],
-  );
-
   const openCreateModal = () => {
-    if (plans.length >= PLAN_TYPES.length) {
-      toast.info("All three subscription plans have already been created.");
-      return;
-    }
-
     setEditingPlan(null);
     setIsFormOpen(true);
   };
@@ -137,9 +131,7 @@ export default function SubscriptionBilling() {
 
         setPlans((current) =>
           [...current, createdPlan].sort(
-            (first, second) =>
-              PLAN_TYPES.indexOf(first.planType) -
-              PLAN_TYPES.indexOf(second.planType),
+            (first, second) => first.price - second.price,
           ),
         );
 
@@ -157,11 +149,21 @@ export default function SubscriptionBilling() {
     }
   };
 
-  const handleToggleStatus = async (plan: SubscriptionPlan) => {
+  // Toggle status with permission modal
+  const handleRequestToggleStatus = (plan: SubscriptionPlan) => {
+    setPlanToToggle(plan);
+  };
+
+  const handleConfirmToggleStatus = async () => {
+    if (!planToToggle) return;
+
     try {
+      setIsUpdatingStatus(true);
+      const nextActiveState = !planToToggle.isActive;
+
       const updatedPlan = await adminSubscriptionPlanService.updateStatus(
-        plan.id,
-        !plan.isActive,
+        planToToggle.id,
+        nextActiveState,
       );
 
       setPlans((current) =>
@@ -172,17 +174,46 @@ export default function SubscriptionBilling() {
 
       toast.success(
         updatedPlan.isActive
-          ? "Subscription plan unblocked successfully."
-          : "Subscription plan blocked successfully.",
+          ? `Plan "${updatedPlan.name}" unblocked successfully.`
+          : `Plan "${updatedPlan.name}" blocked successfully.`,
       );
+
+      setPlanToToggle(null);
     } catch (error) {
       toast.error(
         getErrorMessage(error, "Unable to update the subscription plan status"),
       );
+    } finally {
+      setIsUpdatingStatus(false);
     }
   };
 
-  const canCreatePlan = plans.length < PLAN_TYPES.length;
+  // Soft delete with permission modal
+  const handleRequestDelete = (plan: SubscriptionPlan) => {
+    setPlanToDelete(plan);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!planToDelete) return;
+
+    try {
+      setIsDeleting(true);
+      await adminSubscriptionPlanService.delete(planToDelete.id);
+
+      setPlans((current) =>
+        current.filter((item) => item.id !== planToDelete.id),
+      );
+
+      toast.success(`Plan "${planToDelete.name}" deleted successfully.`);
+      setPlanToDelete(null);
+    } catch (error) {
+      toast.error(
+        getErrorMessage(error, "Unable to delete the subscription plan"),
+      );
+    } finally {
+      setIsDeleting(false);
+    }
+  };
 
   return (
     <div className="flex min-h-screen bg-slate-50">
@@ -202,19 +233,18 @@ export default function SubscriptionBilling() {
                 Subscription plans
               </h1>
               <p className="mt-1 max-w-xl text-sm text-slate-500">
-                Create and manage the three subscription plans offered to
-                FundNest tenants.
+                Create and manage custom subscription plans offered to FundNest
+                tenants.
               </p>
             </div>
 
             <button
               type="button"
               onClick={openCreateModal}
-              disabled={!canCreatePlan}
-              className="flex shrink-0 items-center justify-center gap-2 rounded-full bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-indigo-700 disabled:cursor-not-allowed disabled:bg-slate-300"
+              className="flex shrink-0 items-center justify-center gap-2 rounded-full bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700"
             >
               <Plus className="h-4 w-4" />
-              {canCreatePlan ? "Create new plan" : "All plans created"}
+              Create new plan
             </button>
           </div>
 
@@ -228,9 +258,10 @@ export default function SubscriptionBilling() {
                 <SubscriptionPlanCard
                   key={plan.id}
                   plan={plan}
-                  icon={PLAN_ICONS[plan.planType]}
+                  icon={PLAN_ICONS[plan.planType] ?? Building2}
                   onEdit={openEditModal}
-                  onToggleStatus={handleToggleStatus}
+                  onToggleStatus={handleRequestToggleStatus}
+                  onDelete={handleRequestDelete}
                 />
               ))}
             </div>
@@ -243,8 +274,8 @@ export default function SubscriptionBilling() {
                 No subscription plans yet
               </h2>
               <p className="mt-1.5 max-w-sm text-sm text-slate-500">
-                Create a Basic, Pro, or Premium plan to begin offering
-                subscriptions to tenants.
+                Create subscription plans tailored to your needs to begin
+                offering subscriptions to tenants.
               </p>
               <button
                 type="button"
@@ -262,11 +293,127 @@ export default function SubscriptionBilling() {
       {isFormOpen && (
         <SubscriptionPlanFormModal
           plan={editingPlan}
-          availablePlanTypes={availablePlanTypes}
           isSubmitting={isSaving}
           onClose={closeForm}
           onSubmit={handleSubmit}
         />
+      )}
+
+      {/* Confirmation Modal for Block / Unblock */}
+      {planToToggle && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 p-4 backdrop-blur-sm"
+        >
+          <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl">
+            <div className="flex items-center gap-3">
+              <div
+                className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full ${
+                  planToToggle.isActive
+                    ? "bg-amber-100 text-amber-600"
+                    : "bg-emerald-100 text-emerald-600"
+                }`}
+              >
+                <AlertTriangle className="h-5 w-5" />
+              </div>
+              <div>
+                <h3 className="text-base font-semibold text-slate-900">
+                  {planToToggle.isActive
+                    ? "Block Subscription Plan?"
+                    : "Unblock Subscription Plan?"}
+                </h3>
+                <p className="text-xs text-slate-500">
+                  Plan: <span className="font-semibold text-slate-700">{planToToggle.name}</span>
+                </p>
+              </div>
+            </div>
+
+            <p className="mt-4 text-sm text-slate-600">
+              {planToToggle.isActive
+                ? "Blocking this plan prevents new tenants from selecting or purchasing it. Existing active tenant subscriptions will continue to function normally until their billing period expires."
+                : "Unblocking this plan will immediately make it active and available in the public catalog for tenants to purchase."}
+            </p>
+
+            <div className="mt-6 flex justify-end gap-3">
+              <button
+                type="button"
+                onClick={() => setPlanToToggle(null)}
+                disabled={isUpdatingStatus}
+                className="rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 disabled:cursor-not-allowed"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={() => void handleConfirmToggleStatus()}
+                disabled={isUpdatingStatus}
+                className={`rounded-lg px-4 py-2 text-sm font-medium text-white transition-colors disabled:cursor-not-allowed ${
+                  planToToggle.isActive
+                    ? "bg-amber-600 hover:bg-amber-700 disabled:bg-amber-300"
+                    : "bg-emerald-600 hover:bg-emerald-700 disabled:bg-emerald-300"
+                }`}
+              >
+                {isUpdatingStatus
+                  ? "Updating..."
+                  : planToToggle.isActive
+                    ? "Yes, Block Plan"
+                    : "Yes, Unblock Plan"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Confirmation Modal for Soft Delete */}
+      {planToDelete && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 p-4 backdrop-blur-sm"
+        >
+          <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl">
+            <div className="flex items-center gap-3">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-red-100 text-red-600">
+                <Trash2 className="h-5 w-5" />
+              </div>
+              <div>
+                <h3 className="text-base font-semibold text-slate-900">
+                  Delete Subscription Plan?
+                </h3>
+                <p className="text-xs text-slate-500">
+                  Plan: <span className="font-semibold text-slate-700">{planToDelete.name}</span>
+                </p>
+              </div>
+            </div>
+
+            <p className="mt-4 text-sm text-slate-600">
+              Are you sure you want to permanently delete this plan? This will remove it from all catalogs.
+            </p>
+            <p className="mt-2 text-xs text-slate-500">
+              Note: If any tenants currently have an active subscription on this plan, deletion will be blocked by system safety rules to protect customer accounts.
+            </p>
+
+            <div className="mt-6 flex justify-end gap-3">
+              <button
+                type="button"
+                onClick={() => setPlanToDelete(null)}
+                disabled={isDeleting}
+                className="rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 disabled:cursor-not-allowed"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={() => void handleConfirmDelete()}
+                disabled={isDeleting}
+                className="rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-red-700 disabled:cursor-not-allowed disabled:bg-red-300"
+              >
+                {isDeleting ? "Deleting..." : "Yes, Delete Plan"}
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

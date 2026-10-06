@@ -46,13 +46,11 @@ export class CreateSubscriptionCheckoutUseCase implements ICreateSubscriptionChe
       tenant.status !== TenantStatus.APPROVED ||
       tenant.onboardingStep !== OnboardingStep.COMPLETED
     ) {
-      throw new ForbiddenError(
-        MESSAGES.TENANT.NOT_APPROVED,
-      );
+      throw new ForbiddenError(MESSAGES.TENANT.NOT_APPROVED);
     }
 
     const plan = await this._subscriptionPlanRepository.findById(planId);
-    if (!plan || !plan.isActive) {
+    if (!plan || !plan.isActive || plan.isDeleted) {
       throw new NotFoundError(MESSAGES.PLAN.PLAN_NOT_FOUND);
     }
 

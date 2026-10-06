@@ -46,4 +46,11 @@ export const adminSubscriptionPlanService = {
 
     return response.data.data.plan;
   },
+
+  async delete(id: string): Promise<SubscriptionPlan> {
+    const response = await api.delete(
+      API_ROUTES.SUPER_ADMIN.DELETE_SUBSCRIPTION_PLAN(id),
+    );
+    return response.data.data.plan;
+  },
 };

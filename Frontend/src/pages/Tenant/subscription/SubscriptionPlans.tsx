@@ -5,6 +5,7 @@ import {
   Building2,
   PackageSearch,
   PiggyBank,
+  Sparkles,
   TreePine,
   type LucideIcon,
 } from "lucide-react";
@@ -29,6 +30,8 @@ const PLAN_ICONS: Record<string, LucideIcon> = {
   BASIC: PiggyBank,
   PRO: TreePine,
   PREMIUM: Building2,
+  PLATINUM: Sparkles,
+  ENTERPRISE: Building2,
 };
 
 export default function SubscriptionPlans() {
@@ -53,7 +56,11 @@ export default function SubscriptionPlans() {
         tenantSubscriptionPlanService.getCurrentSubscription(),
       ]);
 
-      setPlans(availablePlans);
+      const sortedPlans = [...availablePlans].sort(
+        (first, second) => first.price - second.price,
+      );
+
+      setPlans(sortedPlans);
       setCurrentSubscription(subscription);
     } catch (err) {
       setError(
@@ -73,98 +80,6 @@ export default function SubscriptionPlans() {
   if (!tenant) {
     return <Navigate to={ROUTES.TENANT.LOGIN} replace />;
   }
-
-  // const handleBuyNow = async (plan: SubscriptionPlan) => {
-  //   setProcessingPlanId(plan.id);
-  //   setError(null);
-  //   setNotice(null);
-  //   try {
-  //     const checkout = await tenantSubscriptionPlanService.createCheckout(
-  //       plan.id,
-  //     );
-  //     const checkoutResult = await openRazorpayCheckout({
-  //       key: checkout.razorpayKeyId,
-  //       amount: checkout.amount,
-  //       currency: checkout.currency,
-  //       name: "FundNest",
-  //       description: `${checkout.planName} subscription`,
-  //       order_id: checkout.razorpayOrderId,
-  //       prefill: {
-  //         name: checkout.tenant.name,
-  //         email: checkout.tenant.email,
-  //         contact: checkout.tenant.contact.replace(/\D/g, ""),
-  //       },
-  //       theme: {
-  //         color: "#4f46e5",
-  //       },
-  //     });
-  //     // 1. User closed checkout modal
-  //     if (checkoutResult.type === "DISMISSED") {
-  //       setNotice("Checkout was closed. No payment has been recorded.");
-  //       return;
-  //     }
-  //     // 2. Razorpay Payment Failed (Declined card, bank failure, etc.)
-  //     if (checkoutResult.type === "FAILED") {
-  //       const failureDetails: PaymentFailureDetails = {
-  //         status: "failed",
-  //         planName: checkout.planName,
-  //         planId: plan.id,
-  //         amount: checkout.amount / 100, // Converts paise to Rupees
-  //         currency: "₹",
-  //         reason:
-  //           checkoutResult.error.description ||
-  //           "Payment was declined or failed.",
-  //         errorCode: checkoutResult.error.code,
-  //       };
-  //       navigate(ROUTES.TENANT.PAYMENT_RESULT, { state: failureDetails });
-  //       return;
-  //     }
-  //     // 3. Razorpay Payment Succeeded
-  //     if (checkoutResult.type === "SUCCESS") {
-  //       try {
-  //         await tenantSubscriptionPlanService.verifyCheckout({
-  //           checkoutId: checkout.checkoutId,
-  //           razorpayOrderId: checkoutResult.response.razorpay_order_id,
-  //           razorpayPaymentId: checkoutResult.response.razorpay_payment_id,
-  //           razorpaySignature: checkoutResult.response.razorpay_signature,
-  //         });
-  //         const successDetails: PaymentSuccessDetails = {
-  //           status: "success",
-  //           transactionId: checkoutResult.response.razorpay_payment_id,
-  //           planName: checkout.planName,
-  //           planId: plan.id,
-  //           amount: checkout.amount / 100, // Converts paise to Rupees
-  //           currency: "₹",
-  //           paidAt: new Date().toISOString(),
-  //         };
-  //         navigate(ROUTES.TENANT.PAYMENT_RESULT, { state: successDetails });
-  //       } catch (err) {
-  //         // Verification failed on server
-  //         const failureDetails: PaymentFailureDetails = {
-  //           status: "failed",
-  //           planName: checkout.planName,
-  //           planId: plan.id,
-  //           amount: checkout.amount / 100,
-  //           currency: "₹",
-  //           reason:
-  //             err instanceof Error
-  //               ? err.message
-  //               : "Payment verification failed.",
-  //           errorCode: "VERIFICATION_FAILED",
-  //         };
-  //         navigate(ROUTES.TENANT.PAYMENT_RESULT, { state: failureDetails });
-  //       }
-  //     }
-  //   } catch (err) {
-  //     setError(
-  //       err instanceof Error
-  //         ? err.message
-  //         : "Failed to initiate checkout. Please try again.",
-  //     );
-  //   } finally {
-  //     setProcessingPlanId(null);
-  //   }
-  // };
 
   const handleBuyNow = async (plan: SubscriptionPlan) => {
     setProcessingPlanId(plan.id);
@@ -193,22 +108,15 @@ export default function SubscriptionPlans() {
         },
       });
 
-      // Handle user closing modal without paying (if you want it to show Failure Page as well)
+      // Handle checkout dismissal by user
       if (checkoutResult.type === "DISMISSED") {
-        const failureDetails: PaymentFailureDetails = {
-          status: "failed",
-          planName: checkout.planName,
-          planId: plan.id,
-          amount: checkout.amount / 100,
-          currency: "₹",
-          reason: "Payment window was closed before completion.",
-          errorCode: "CHECKOUT_CANCELLED",
-        };
-        navigate(ROUTES.TENANT.PAYMENT_RESULT, { state: failureDetails });
+        setNotice(
+          "Checkout was cancelled. You can retry whenever you are ready.",
+        );
         return;
       }
 
-      // Handle payment failure (e.g. card declined, bad OTP)
+      // Handle payment failure
       if (checkoutResult.type === "FAILED") {
         const failureDetails: PaymentFailureDetails = {
           status: "failed",
@@ -268,12 +176,13 @@ export default function SubscriptionPlans() {
       setError(
         err instanceof Error
           ? err.message
-          : "Failed to initiate checkout. Please try again.",
+          : "Failed to initiate subscription purchase.",
       );
     } finally {
       setProcessingPlanId(null);
     }
   };
+
   return (
     <div className="flex min-h-screen bg-slate-50">
       <Sidebar
@@ -293,38 +202,44 @@ export default function SubscriptionPlans() {
           onMenuClick={() => setSidebarOpen(true)}
         />
 
-        <main className="flex-1 px-4 py-6 sm:px-6 lg:px-8">
-          <h1 className="text-2xl font-bold tracking-tight text-slate-900">
-            Subscription plans
-          </h1>
-          <p className="mt-1 max-w-xl text-sm text-slate-500">
-            Review the available plans for your fund.
-          </p>
+        <main className="flex-1 px-4 py-8 sm:px-6 lg:px-8">
+          <div className="mb-6">
+            <h1 className="text-2xl font-bold tracking-tight text-slate-900">
+              Subscription plans
+            </h1>
+            <p className="mt-1 text-sm text-slate-500">
+              Choose the right plan to power your chit fund management on
+              FundNest.
+            </p>
+          </div>
 
-          <TenantCurrentPlanBanner subscription={currentSubscription} />
+          {currentSubscription && (
+            <div className="mb-8">
+              <TenantCurrentPlanBanner subscription={currentSubscription} />
+            </div>
+          )}
 
           {notice && (
-            <div className="mt-4 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
-              {notice}
+            <div className="mb-6 flex items-center gap-3 rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800">
+              <AlertTriangle className="h-5 w-5 shrink-0 text-amber-600" />
+              <span>{notice}</span>
+            </div>
+          )}
+
+          {error && (
+            <div className="mb-6 flex items-center gap-3 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">
+              <AlertTriangle className="h-5 w-5 shrink-0 text-red-600" />
+              <span>{error}</span>
             </div>
           )}
 
           {isLoading ? (
-            <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {[1, 2, 3].map((item) => (
-                <div
-                  key={item}
-                  className="h-[420px] animate-pulse rounded-2xl border border-slate-200 bg-slate-100"
-                />
-              ))}
+            <div className="py-24 text-center text-sm text-slate-500">
+              Loading available subscription plans...
             </div>
-          ) : error ? (
-            <div className="mt-8 flex flex-col items-center rounded-2xl border border-red-200 bg-red-50 px-6 py-16 text-center">
-              <AlertTriangle className="h-6 w-6 text-red-500" />
-              <h2 className="mt-4 text-lg font-semibold text-slate-900">
-                Couldn&apos;t load subscription plans
-              </h2>
-              <p className="mt-2 text-sm text-slate-500">{error}</p>
+          ) : error && plans.length === 0 ? (
+            <div className="rounded-2xl border border-dashed border-red-200 bg-red-50/50 p-12 text-center">
+              <p className="text-sm font-medium text-red-600">{error}</p>
               <button
                 type="button"
                 onClick={() => void loadPlans()}
@@ -340,7 +255,7 @@ export default function SubscriptionPlans() {
                   key={plan.id}
                   plan={plan}
                   variant="tenant"
-                  icon={PLAN_ICONS[plan.planType]}
+                  icon={PLAN_ICONS[plan.planType] ?? Building2}
                   isCurrentPlan={
                     currentSubscription?.status === "ACTIVE" &&
                     currentSubscription.planId === plan.id

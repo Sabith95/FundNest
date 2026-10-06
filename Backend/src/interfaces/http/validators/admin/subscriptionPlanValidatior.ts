@@ -1,7 +1,6 @@
 import { z } from "zod";
 
 import { BillingCycle } from "../../../../shared/constants/enums/BillingCycle";
-import { PlanType } from "../../../../shared/constants/enums/PlanType";
 
 const nullablePositiveInteger = z
   .number()
@@ -34,12 +33,16 @@ const planFieldsSchema = z.object({
 
   hasAutopay: z.boolean(),
 
-  hasFundSuggestions: z.boolean(),
+  hasFundSuggestions: z.boolean().optional().default(false),
 });
 
 export const createSubscriptionPlanSchema = planFieldsSchema
   .extend({
-    planType: z.nativeEnum(PlanType),
+    planType: z
+      .string()
+      .trim()
+      .min(2, "Plan type must contain at least 2 characters")
+      .max(50, "Plan type must not exceed 50 characters"),
   })
   .strict();
 

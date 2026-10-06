@@ -22,6 +22,7 @@ import {
   IOtpEmailService,
   ITenantVerificationEmailService,
 } from "../../domain/interface/notification/IEmailService";
+import { IPaymentService } from "../../domain/interface/payment/IPaymentService";
 
 //Repository
 import { IUserRepository } from "../../domain/repositories/IUserRepository";
@@ -146,7 +147,9 @@ import { GetKycRequirementsForFundUseCase } from "../../application/user/use-cas
 import { GetTenantKycTemplateUseCase } from "../../application/tenant/kyc-config/use-case/GetTenantKycTemplateUseCase";
 import { ConfigureTenantKycTemplateUseCase } from "../../application/tenant/kyc-config/use-case/ConfigureTenantKycTemplateUseCase";
 import { IGetKycRequirementsForFundUseCase } from "../../application/interface/tenant/kyc-config/IGetKycRequirementsForFundUseCase";
-import { IPaymentService } from "../../domain/interface/payment/IPaymentService";
+
+import { IDeleteSubscriptionPlanUseCase } from "../../application/interface/admin/subscription/IDeleteSubscriptionPlanUseCase";
+import { DeleteSubscriptionPlanUseCase } from "../../application/admin/subscription/use-case/DeleteSubscriptionPlanUseCase";
 
 // Services
 container.register<IJwtService>(TOKENS.JwtService, {
@@ -472,6 +475,12 @@ container.register<IConfigureTenantKycTemplateUseCase>(
 container.register<IGetKycRequirementsForFundUseCase>(
   TOKENS.GetKycRequirementsForFundUseCase,
   { useClass: GetKycRequirementsForFundUseCase },
+);
+container.register<IDeleteSubscriptionPlanUseCase>(
+  TOKENS.DeleteSubscriptionPlanUseCase,
+  {
+    useClass: DeleteSubscriptionPlanUseCase,
+  },
 );
 
 // Respository

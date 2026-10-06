@@ -3,6 +3,7 @@ import { inject, injectable } from "tsyringe";
 import { ISubscriptionPlanRepository } from "../../../../domain/repositories/ISubscriptionPlanRepository";
 import { TOKENS } from "../../../../shared/tokens";
 import { NotFoundError } from "../../../../shared/errors/NotFoundError";
+import { BadRequestError } from "../../../../shared/errors/BadRequestError";
 import { SubscriptionPlanResponseDtoMapper } from "../../../mapper/SubscriptionPlanDtoMapper";
 import { SubscriptionPlanResponseDto } from "../dto/SubscriptionPlanDto";
 import { IUpdateSubscriptionPlanStatusUseCase } from "../../../interface/admin/subscription/IUpdateSubscriptionPlanStatusUseCase";
@@ -23,6 +24,10 @@ export class UpdateSubscriptionPlanStatusUseCase implements IUpdateSubscriptionP
 
     if (!plan) {
       throw new NotFoundError(MESSAGES.SUBSCRIPTION.NOT_FOUND);
+    }
+
+    if (plan.isDeleted) {
+      throw new BadRequestError("Cannot activate or deactivate a deleted subscription plan.");
     }
 
     if (isActive) {

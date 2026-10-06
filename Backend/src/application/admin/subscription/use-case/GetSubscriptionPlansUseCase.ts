@@ -14,7 +14,8 @@ export class GetSubscriptionPlansUseCase implements IGetSubscriptionPlansUseCase
   ) {}
 
   async execute(): Promise<SubscriptionPlanResponseDto[]> {
-    const plans = await this._subscriptionPlanRepository.find();
+    // Only return non-deleted plans to super admin
+    const plans = await this._subscriptionPlanRepository.findNonDeleted();
 
     return plans.map(SubscriptionPlanResponseDtoMapper.toDto);
   }

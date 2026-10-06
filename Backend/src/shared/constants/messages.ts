@@ -94,15 +94,25 @@ export const MESSAGES = {
     PURCHASED: "Subscription purchased successfully",
     EXPIRED: "Subscription has expired",
     REQUIRED: "An active subscription is required",
-    ALREADY_EXISTS: "A  subscription plan already exists",
+    ALREADY_EXISTS: "A subscription plan with this name already exists",
     NOT_FOUND: "Subscription plan not found",
     SUBSCRIPTION_ACTIVATED: "Subscription activated successfully",
+    DELETED: "Subscription plan deleted successfully",
+    CANNOT_DELETE_ACTIVE_SUBSCRIBERS:
+      "Cannot delete this subscription plan because active tenant subscriptions currently exist. Please deactivate/block the plan instead so no new tenants can subscribe.",
+    ALREADY_DELETED: "Subscription plan has already been deleted",
   },
 
   PLAN: {
     PLAN_NOT_FOUND: "The selected plan is unavailable",
     ALREADY_ACTIVE: "This plan is already active for your tenant",
     INVALID_PRICE: "The selected plan has an invalid price",
+    PLAN_FETCHED: "Plan fetched successfully",
+    PLAN_CREATED: "Subscription plan created successfully",
+    PLAN_UPDATED: "Subscription plan updated successfully",
+    PLAN_BLOCKED: "Subscription plan blocked successfully",
+    PLAN_UNBLOCKED: "Subscription plan unblocked successfully",
+    PLAN_DELETED: "Subscription plan deleted successfully"
   },
 
   PAYMENT: {

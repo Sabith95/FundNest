@@ -11,7 +11,7 @@ import type {
 
 interface SubscriptionPlanFormModalProps {
   plan: SubscriptionPlan | null;
-  availablePlanTypes: PlanType[];
+  availablePlanTypes?: PlanType[];
   isSubmitting: boolean;
   onClose: () => void;
   onSubmit: (
@@ -20,7 +20,7 @@ interface SubscriptionPlanFormModalProps {
 }
 
 interface FormValues {
-  planType: PlanType;
+  planType: string;
   name: string;
   price: string;
   billingCycle: BillingCycle;
@@ -28,13 +28,12 @@ interface FormValues {
   maxFunds: string;
   maxUsers: string;
   hasAutopay: boolean;
-  hasFundSuggestions: boolean;
 }
 
 type FormErrors = Partial<Record<keyof FormValues, string>>;
 
-const createEmptyForm = (planType: PlanType): FormValues => ({
-  planType,
+const createEmptyForm = (initialType: string = ""): FormValues => ({
+  planType: initialType,
   name: "",
   price: "",
   billingCycle: "MONTHLY",
@@ -42,7 +41,6 @@ const createEmptyForm = (planType: PlanType): FormValues => ({
   maxFunds: "",
   maxUsers: "",
   hasAutopay: false,
-  hasFundSuggestions: false,
 });
 
 const isPositiveWholeNumber = (value: string): boolean => {
@@ -58,14 +56,11 @@ const getOptionalLimit = (value: string): number | null =>
 
 export default function SubscriptionPlanFormModal({
   plan,
-  availablePlanTypes,
   isSubmitting,
   onClose,
   onSubmit,
 }: SubscriptionPlanFormModalProps) {
-  const [form, setForm] = useState<FormValues>(
-    createEmptyForm(availablePlanTypes[0] ?? "BASIC"),
-  );
+  const [form, setForm] = useState<FormValues>(createEmptyForm(""));
   const [errors, setErrors] = useState<FormErrors>({});
 
   const isEditing = Boolean(plan);
@@ -81,14 +76,13 @@ export default function SubscriptionPlanFormModal({
         maxFunds: plan.maxFunds === null ? "" : String(plan.maxFunds),
         maxUsers: plan.maxUsers === null ? "" : String(plan.maxUsers),
         hasAutopay: plan.hasAutopay,
-        hasFundSuggestions: plan.hasFundSuggestions,
       });
     } else {
-      setForm(createEmptyForm(availablePlanTypes[0] ?? "BASIC"));
+      setForm(createEmptyForm(""));
     }
 
     setErrors({});
-  }, [plan, availablePlanTypes]);
+  }, [plan]);
 
   const updateField = <K extends keyof FormValues>(
     field: K,
@@ -109,8 +103,16 @@ export default function SubscriptionPlanFormModal({
   const validateForm = (): FormErrors => {
     const validationErrors: FormErrors = {};
 
-    if (!isEditing && !availablePlanTypes.includes(form.planType)) {
-      validationErrors.planType = "Select an available subscription plan type.";
+    if (!isEditing) {
+      const trimmedPlanType = form.planType.trim();
+      if (!trimmedPlanType) {
+        validationErrors.planType = "Plan type is required.";
+      } else if (trimmedPlanType.length < 2) {
+        validationErrors.planType =
+          "Plan type must contain at least 2 characters.";
+      } else if (trimmedPlanType.length > 50) {
+        validationErrors.planType = "Plan type must not exceed 50 characters.";
+      }
     }
 
     const trimmedName = form.name.trim();
@@ -161,59 +163,71 @@ export default function SubscriptionPlanFormModal({
     event.preventDefault();
 
     const validationErrors = validateForm();
-
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
       return;
     }
 
-    const payload: CreateSubscriptionPlanPayload = {
-      planType: form.planType,
-      name: form.name.trim(),
-      price: Number(form.price),
-      billingCycle: form.billingCycle,
-      durationDays: Number(form.durationDays),
-      maxFunds: getOptionalLimit(form.maxFunds),
-      maxUsers: getOptionalLimit(form.maxUsers),
-      hasAutopay: form.hasAutopay,
-      hasFundSuggestions: form.hasFundSuggestions,
-    };
+    const price = Number(form.price);
+    const durationDays = Number(form.durationDays);
+    const maxFunds = getOptionalLimit(form.maxFunds);
+    const maxUsers = getOptionalLimit(form.maxUsers);
 
     if (isEditing) {
-      const { planType: _planType, ...updatePayload } = payload;
-      await onSubmit(updatePayload);
+      const payload: UpdateSubscriptionPlanPayload = {
+        name: form.name.trim(),
+        price,
+        billingCycle: form.billingCycle,
+        durationDays,
+        maxFunds,
+        maxUsers,
+        hasAutopay: form.hasAutopay,
+        hasFundSuggestions: false,
+      };
+
+      await onSubmit(payload);
       return;
     }
+
+    const payload: CreateSubscriptionPlanPayload = {
+      planType: form.planType.trim().toUpperCase(),
+      name: form.name.trim(),
+      price,
+      billingCycle: form.billingCycle,
+      durationDays,
+      maxFunds,
+      maxUsers,
+      hasAutopay: form.hasAutopay,
+      hasFundSuggestions: false,
+    };
 
     await onSubmit(payload);
   };
 
   const inputClassName = (hasError: boolean) =>
-    `w-full rounded-lg border px-3 py-2.5 text-sm outline-none disabled:bg-slate-100 ${
+    `w-full rounded-lg border px-3.5 py-2.5 text-sm text-slate-900 transition-colors focus:outline-none focus:ring-2 ${
       hasError
-        ? "border-red-400 focus:border-red-500 focus:ring-2 focus:ring-red-100"
-        : "border-slate-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+        ? "border-red-300 focus:border-red-500 focus:ring-red-200"
+        : "border-slate-300 focus:border-indigo-600 focus:ring-indigo-100"
     }`;
 
   const errorText = (message?: string) =>
-    message ? (
-      <p className="mt-1.5 text-xs font-medium text-red-600">{message}</p>
-    ) : null;
+    message ? <p className="mt-1 text-xs text-red-600">{message}</p> : null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/50 p-4">
+    <div
+      role="dialog"
+      aria-modal="true"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 p-4 backdrop-blur-sm"
+    >
       <div className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-2xl bg-white shadow-2xl">
         <div className="flex items-center justify-between border-b border-slate-200 px-6 py-4">
           <div>
             <h2 className="text-lg font-bold text-slate-900">
-              {isEditing
-                ? "Edit subscription plan"
-                : "Create subscription plan"}
+              {isEditing ? "Edit subscription plan" : "Create subscription plan"}
             </h2>
-            <p className="mt-1 text-sm text-slate-500">
-              {isEditing
-                ? "Update pricing, limits, and available features."
-                : "Each subscription plan type can be created once."}
+            <p className="text-xs text-slate-500">
+              Configure plan pricing, limits, and supported features.
             </p>
           </div>
 
@@ -232,22 +246,28 @@ export default function SubscriptionPlanFormModal({
           <div className="grid gap-5 sm:grid-cols-2">
             <label className="block">
               <span className="mb-1.5 block text-sm font-semibold text-slate-700">
-                Plan type
+                Plan type / Tier code
               </span>
-              <select
+              <input
+                type="text"
+                list="plan-type-presets"
                 value={form.planType}
                 disabled={isEditing || isSubmitting}
                 onChange={(event) =>
-                  updateField("planType", event.target.value as PlanType)
+                  updateField("planType", event.target.value.toUpperCase())
                 }
+                placeholder="Example: BASIC, PRO, ENTERPRISE"
                 className={inputClassName(Boolean(errors.planType))}
-              >
-                {availablePlanTypes.map((planType) => (
-                  <option key={planType} value={planType}>
-                    {planType}
-                  </option>
-                ))}
-              </select>
+              />
+              <datalist id="plan-type-presets">
+                <option value="BASIC" />
+                <option value="PRO" />
+                <option value="PREMIUM" />
+                <option value="ENTERPRISE" />
+                <option value="STARTER" />
+                <option value="GROWTH" />
+                <option value="CUSTOM" />
+              </datalist>
               {errorText(errors.planType)}
             </label>
 
@@ -260,7 +280,7 @@ export default function SubscriptionPlanFormModal({
                 value={form.name}
                 disabled={isSubmitting}
                 onChange={(event) => updateField("name", event.target.value)}
-                placeholder="Example: Basic"
+                placeholder="Example: Growth Tier"
                 className={inputClassName(Boolean(errors.name))}
               />
               {errorText(errors.name)}
@@ -268,7 +288,7 @@ export default function SubscriptionPlanFormModal({
 
             <label className="block">
               <span className="mb-1.5 block text-sm font-semibold text-slate-700">
-                Price
+                Price (₹)
               </span>
               <input
                 type="number"
@@ -277,7 +297,7 @@ export default function SubscriptionPlanFormModal({
                 value={form.price}
                 disabled={isSubmitting}
                 onChange={(event) => updateField("price", event.target.value)}
-                placeholder="Example: 299"
+                placeholder="Example: 499"
                 className={inputClassName(Boolean(errors.price))}
               />
               {errorText(errors.price)}
@@ -306,7 +326,7 @@ export default function SubscriptionPlanFormModal({
 
             <label className="block">
               <span className="mb-1.5 block text-sm font-semibold text-slate-700">
-                Duration in days
+                Duration (Days)
               </span>
               <input
                 type="number"
@@ -317,6 +337,7 @@ export default function SubscriptionPlanFormModal({
                 onChange={(event) =>
                   updateField("durationDays", event.target.value)
                 }
+                placeholder="Example: 30"
                 className={inputClassName(Boolean(errors.durationDays))}
               />
               {errorText(errors.durationDays)}
@@ -332,16 +353,14 @@ export default function SubscriptionPlanFormModal({
                 step="1"
                 value={form.maxFunds}
                 disabled={isSubmitting}
-                onChange={(event) =>
-                  updateField("maxFunds", event.target.value)
-                }
+                onChange={(event) => updateField("maxFunds", event.target.value)}
                 placeholder="Leave blank for unlimited"
                 className={inputClassName(Boolean(errors.maxFunds))}
               />
               {errorText(errors.maxFunds)}
             </label>
 
-            <label className="block">
+            <label className="block sm:col-span-2">
               <span className="mb-1.5 block text-sm font-semibold text-slate-700">
                 Maximum users
               </span>
@@ -351,9 +370,7 @@ export default function SubscriptionPlanFormModal({
                 step="1"
                 value={form.maxUsers}
                 disabled={isSubmitting}
-                onChange={(event) =>
-                  updateField("maxUsers", event.target.value)
-                }
+                onChange={(event) => updateField("maxUsers", event.target.value)}
                 placeholder="Leave blank for unlimited"
                 className={inputClassName(Boolean(errors.maxUsers))}
               />
@@ -361,54 +378,36 @@ export default function SubscriptionPlanFormModal({
             </label>
           </div>
 
-          <div className="space-y-3 rounded-xl bg-slate-50 p-4">
-            <label className="flex cursor-pointer items-center justify-between gap-4">
-              <span>
-                <span className="block text-sm font-semibold text-slate-800">
-                  Autopay
-                </span>
-                <span className="text-xs text-slate-500">
-                  Allow automatic payment collection.
-                </span>
-              </span>
-              <input
-                type="checkbox"
-                checked={form.hasAutopay}
-                disabled={isSubmitting}
-                onChange={(event) =>
-                  updateField("hasAutopay", event.target.checked)
-                }
-                className="h-4 w-4 accent-indigo-600"
-              />
-            </label>
+          <div className="rounded-xl border border-slate-200 bg-slate-50/70 p-4">
+            <h3 className="text-sm font-semibold text-slate-900">
+              Feature toggles
+            </h3>
+            <p className="mt-0.5 text-xs text-slate-500">
+              Configure feature access granted with this plan.
+            </p>
 
-            <label className="flex cursor-pointer items-center justify-between gap-4">
-              <span>
-                <span className="block text-sm font-semibold text-slate-800">
-                  Fund suggestions
-                </span>
-                <span className="text-xs text-slate-500">
-                  Enable automated fund suggestions.
-                </span>
-              </span>
-              <input
-                type="checkbox"
-                checked={form.hasFundSuggestions}
-                disabled={isSubmitting}
-                onChange={(event) =>
-                  updateField("hasFundSuggestions", event.target.checked)
-                }
-                className="h-4 w-4 accent-indigo-600"
-              />
-            </label>
+            <div className="mt-4 space-y-3">
+              <label className="flex items-center gap-3 text-sm text-slate-700">
+                <input
+                  type="checkbox"
+                  checked={form.hasAutopay}
+                  disabled={isSubmitting}
+                  onChange={(event) =>
+                    updateField("hasAutopay", event.target.checked)
+                  }
+                  className="h-4 w-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"
+                />
+                <span>Include Autopay support</span>
+              </label>
+            </div>
           </div>
 
-          <div className="flex justify-end gap-3 border-t border-slate-200 pt-5">
+          <div className="flex justify-end gap-3 pt-2">
             <button
               type="button"
               onClick={onClose}
               disabled={isSubmitting}
-              className="rounded-lg border border-slate-300 px-4 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50 disabled:cursor-not-allowed"
+              className="rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 disabled:cursor-not-allowed"
             >
               Cancel
             </button>
@@ -416,7 +415,7 @@ export default function SubscriptionPlanFormModal({
             <button
               type="submit"
               disabled={isSubmitting}
-              className="rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-60"
+              className="flex items-center gap-2 rounded-lg bg-indigo-600 px-5 py-2 text-sm font-medium text-white hover:bg-indigo-700 disabled:cursor-not-allowed disabled:bg-indigo-400"
             >
               {isSubmitting
                 ? "Saving..."

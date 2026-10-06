@@ -17,6 +17,8 @@ export interface SubscriptionPlanProps {
   hasFundSuggestions: boolean;
 
   isActive: boolean;
+  isDeleted: boolean;
+  deletedAt: Date | null;
 
   createdAt: Date;
   updatedAt: Date;
@@ -30,6 +32,8 @@ export class SubscriptionPlan {
 
     return new SubscriptionPlan({
       ..._props,
+      isDeleted: _props.isDeleted ?? false,
+      deletedAt: _props.deletedAt ? new Date(_props.deletedAt) : null,
       createdAt: new Date(_props.createdAt),
       updatedAt: new Date(_props.updatedAt),
     });
@@ -77,6 +81,14 @@ export class SubscriptionPlan {
     return this._props.isActive;
   }
 
+  public get isDeleted(): boolean {
+    return this._props.isDeleted;
+  }
+
+  public get deletedAt(): Date | null {
+    return this._props.deletedAt ? new Date(this._props.deletedAt) : null;
+  }
+
   public get createdAt(): Date {
     return new Date(this._props.createdAt);
   }
@@ -92,6 +104,10 @@ export class SubscriptionPlan {
   // domain behaviour
 
   public activate(): void {
+    if (this._props.isDeleted) {
+      throw new Error("Cannot activate a deleted subscription plan");
+    }
+
     if (this._props.isActive) {
       return;
     }
@@ -109,8 +125,19 @@ export class SubscriptionPlan {
     this.touch();
   }
 
+  public softDelete(): void {
+    if (this._props.isDeleted) {
+      return;
+    }
+
+    this._props.isDeleted = true;
+    this._props.deletedAt = new Date();
+    this._props.isActive = false;
+    this.touch();
+  }
+
   public canCreateFund(currentFundCount: number): boolean {
-    if (!this._props.isActive) {
+    if (!this._props.isActive || this._props.isDeleted) {
       return false;
     }
 
@@ -122,7 +149,7 @@ export class SubscriptionPlan {
   }
 
   public canAddUser(currentUserCount: number): boolean {
-    if (!this._props.isActive) {
+    if (!this._props.isActive || this._props.isDeleted) {
       return false;
     }
 

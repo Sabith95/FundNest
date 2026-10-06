@@ -25,7 +25,7 @@ export class SubscriptionPlanRepository
 
   async findByName(name: string): Promise<SubscriptionPlan | null> {
     const plan = await this.model
-      .findOne({ name })
+      .findOne({ name, isDeleted: false })
       .lean<SubscriptionPlanRecord>();
 
     return plan ? this.toEntity(plan) : null;
@@ -33,16 +33,38 @@ export class SubscriptionPlanRepository
 
   async findByPlanType(planType: PlanType): Promise<SubscriptionPlan | null> {
     const plan = await this.model
-      .findOne({ planType })
+      .findOne({ planType, isDeleted: false })
       .lean<SubscriptionPlanRecord>();
 
     return plan ? this.toEntity(plan) : null;
   }
 
+  async findNonDeleted(): Promise<SubscriptionPlan[]> {
+    const docs = await this.model
+      .find({ isDeleted: false })
+      .sort({ createdAt: -1 })
+      .lean<SubscriptionPlanRecord[]>();
+
+    return docs.map((doc) => this.toEntity(doc));
+  }
+
+  async findAvailable(): Promise<SubscriptionPlan[]> {
+    const docs = await this.model
+      .find({ isActive: true, isDeleted: false })
+      .sort({ price: 1 })
+      .lean<SubscriptionPlanRecord[]>();
+
+    return docs.map((doc) => this.toEntity(doc));
+  }
+
   async createPlan(
     data: CreateSubscriptionPlanData,
   ): Promise<SubscriptionPlan> {
-    const plan = await this.model.create(data);
+    const plan = await this.model.create({
+      ...data,
+      isDeleted: false,
+      deletedAt: null,
+    });
 
     return this.toEntity(plan.toObject());
   }
@@ -56,6 +78,24 @@ export class SubscriptionPlanRepository
         new: true,
         runValidators: true,
       })
+      .lean<SubscriptionPlanRecord>();
+
+    return plan ? this.toEntity(plan) : null;
+  }
+
+  async softDelete(id: string): Promise<SubscriptionPlan | null> {
+    const plan = await this.model
+      .findByIdAndUpdate(
+        id,
+        {
+          $set: {
+            isDeleted: true,
+            isActive: false,
+            deletedAt: new Date(),
+          },
+        },
+        { new: true, runValidators: true },
+      )
       .lean<SubscriptionPlanRecord>();
 
     return plan ? this.toEntity(plan) : null;

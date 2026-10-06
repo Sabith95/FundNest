@@ -13,9 +13,8 @@ export class GetAvailableSubscriptionPlansUseCase implements IGetAvailableSubscr
   ) {}
 
   async execute(): Promise<AvailableSubscriptionPlanDto[]> {
-    const plans = await this._subscriptionPlanRepository.find({
-      isActive: true,
-    });
+    // Only return active, non-deleted plans to tenants
+    const plans = await this._subscriptionPlanRepository.findAvailable();
 
     return plans.map(AvailableSubscriptionPlanMapper.toDto);
   }

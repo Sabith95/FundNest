@@ -19,6 +19,7 @@ export const API_ROUTES = {
     UPDATE_SUBSCRIPTION_PLAN: (id: string) => `/admin/subscription-plans/${id}`,
     UPDATE_SUBSCRIPTION_PLAN_STATUS: (id: string) =>
       `/admin/subscription-plans/${id}/status`,
+    DELETE_SUBSCRIPTION_PLAN: (id: string) => `/admin/subscription-plans/${id}`,
   },
 
   USERS: {
@@ -63,6 +64,6 @@ export const API_ROUTES = {
     BLOCK_CHIT_FUND: (id: string) => `/tenants/chit-funds/${id}/block`,
     UNBLOCK_CHIT_FUND: (id: string) => `/tenants/chit-funds/${id}/unblock`,
     GET_KYC_TEMPLATE: "/tenants/kyc-config",
-    CONFIG_KYC: "/tenants/kyc-config"
+    CONFIG_KYC: "/tenants/kyc-config",
   },
 };
