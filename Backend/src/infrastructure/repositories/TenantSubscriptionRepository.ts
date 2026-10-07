@@ -69,7 +69,6 @@ export class TenantSubscriptionRepository
             maxFunds: data.maxFunds,
             maxUsers: data.maxUsers,
             hasAutopay: data.hasAutopay,
-            hasFundSuggestions: data.hasFundSuggestions,
             startsAt: data.startsAt,
             endsAt: data.endsAt,
             status: data.status,

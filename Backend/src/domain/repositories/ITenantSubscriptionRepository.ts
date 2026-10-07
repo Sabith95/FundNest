@@ -13,7 +13,6 @@ export interface UpsertSubscriptionData {
   maxFunds: number | null;
   maxUsers: number | null;
   hasAutopay: boolean;
-  hasFundSuggestions: boolean;
   startsAt: Date;
   endsAt: Date;
   status: "ACTIVE";

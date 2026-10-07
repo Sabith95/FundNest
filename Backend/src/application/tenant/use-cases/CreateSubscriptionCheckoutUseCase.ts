@@ -60,7 +60,6 @@ export class CreateSubscriptionCheckoutUseCase implements ICreateSubscriptionChe
     const currentSubscription =
       await this._tenantSubscriptionRepository.findActiveByTenantId(tenantId);
 
-    // Cannot re-purchase identical active plan
     if (
       currentSubscription &&
       !currentSubscription.isExpired() &&
@@ -69,8 +68,7 @@ export class CreateSubscriptionCheckoutUseCase implements ICreateSubscriptionChe
       throw new ConflictError(MESSAGES.PLAN.ALREADY_ACTIVE);
     }
 
-    // Downgrade Resource Validation
-    // If tenant has an active subscription and is changing plans, check if existing resources fit target plan limits
+    // Downgrade validation
     if (currentSubscription && !currentSubscription.isExpired()) {
       const existingFunds = await this._chitFundRepository.findByTenantId(tenantId);
 
@@ -96,11 +94,10 @@ export class CreateSubscriptionCheckoutUseCase implements ICreateSubscriptionChe
       }
     }
 
-    // Price & Proration Calculation in Paise (1 INR = 100 paise)
+    // Proration Calculation in Paise
     const targetPlanAmountPaise = Math.round(targetPlan.price * 100);
     let finalAmountPaise = targetPlanAmountPaise;
 
-    //  Prorated credit calculation if active subscription exists
     if (currentSubscription && !currentSubscription.isExpired()) {
       const now = Date.now();
       const startsAtTime = currentSubscription.startsAt.getTime();
@@ -111,11 +108,7 @@ export class CreateSubscriptionCheckoutUseCase implements ICreateSubscriptionChe
       if (remainingTimeMs > 0 && totalDurationMs > 0) {
         const remainingFraction = Math.min(1, Math.max(0, remainingTimeMs / totalDurationMs));
         const unusedCreditPaise = Math.round(currentSubscription.amount * remainingFraction);
-
-        // Prorated charge: new plan price minus unused credit
         const proratedAmount = targetPlanAmountPaise - unusedCreditPaise;
-
-        // Minimum charge is 100 paise (₹1.00) required by payment gateways like Razorpay
         finalAmountPaise = Math.max(100, proratedAmount);
       }
     }
@@ -154,7 +147,6 @@ export class CreateSubscriptionCheckoutUseCase implements ICreateSubscriptionChe
       maxFunds: targetPlan.maxFunds,
       maxUsers: targetPlan.maxUsers,
       hasAutopay: targetPlan.hasAutopay,
-      hasFundSuggestions: targetPlan.hasFundSuggestions,
       razorpayOrderId: razorpayOrder.orderId,
       expiresAt: new Date(
         Date.now() + env.RAZORPAY_CHECKOUT_TTL_MINUTES * 60 * 1000,

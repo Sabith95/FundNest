@@ -123,6 +123,13 @@ router.get(
   tenantSubscriptionCheckoutController.getCurrent,
 );
 
+router.get(
+  ENDPOINTS.TENANT.SUBSCRIPTION_PLAN.INVOICES,
+  authenticate,
+  authorize(ROLES.TENANT_ADMIN),
+  tenantSubscriptionCheckoutController.getInvoices,
+);
+
 // tenant chit funds
 router.get(
   ENDPOINTS.TENANT.CHIT_FUND.GET_ALL,

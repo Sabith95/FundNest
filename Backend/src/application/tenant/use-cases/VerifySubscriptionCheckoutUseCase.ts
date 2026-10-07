@@ -100,7 +100,6 @@ export class VerifySubscriptionCheckoutUseCase implements IVerifySubscriptionChe
         maxFunds: checkout.maxFunds,
         maxUsers: checkout.maxUsers,
         hasAutopay: checkout.hasAutopay,
-        hasFundSuggestions: checkout.hasFundSuggestions,
         startsAt,
         endsAt,
         status: "ACTIVE",

@@ -1,15 +1,29 @@
 import { API_ROUTES } from "../shared/apiRoutes";
 import type { SubscriptionPlan } from "../types/subsctiption.types";
-import type { TenantBillingOverview } from "../types/billing.types";
+import type { TenantBillingOverview, InvoiceRecord } from "../types/billing.types";
+import { tenantFundService } from "./tenantFundService";
 import api from "./api";
 
 export interface CurrentTenantSubscription {
+  id: string;
+  tenantId: string;
   planId: string;
   planName: string;
-  status: "ACTIVE" | "EXPIRED";
+  planType: string;
+  amount: number;
+  currency: "INR";
+  billingCycle: string;
+  durationDays: number;
+  maxFunds: number | null;
+  maxUsers: number | null;
+  hasAutopay: boolean;
   startsAt: string;
   endsAt: string;
+  status: "ACTIVE" | "EXPIRED";
+  razorpayOrderId: string;
   razorpayPaymentId: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 interface CheckoutData {
@@ -64,49 +78,93 @@ export const tenantSubscriptionPlanService = {
     return response.data.data.subscription;
   },
 
+  async getInvoices(): Promise<InvoiceRecord[]> {
+    const response = await api.get(API_ROUTES.TENANTS.SUBSCRIPTION_INVOICES);
+    const invoices = response.data.data.invoices || [];
+
+    return invoices.map((inv: any) => ({
+      id: inv.id,
+      invoiceNumber: inv.invoiceNumber,
+      date: new Date(inv.date || inv.periodStart || inv.createdAt).toLocaleDateString("en-IN", {
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+      }),
+      planName: inv.planName,
+      amount: inv.amount > 1000 ? Math.round(inv.amount / 100) : inv.amount,
+      currency: inv.currency === "INR" || !inv.currency ? "₹" : inv.currency,
+      status: inv.status,
+      razorpayPaymentId: inv.razorpayPaymentId || "—",
+      razorpayOrderId: inv.razorpayOrderId,
+      periodStart: inv.periodStart,
+      periodEnd: inv.periodEnd,
+    }));
+  },
+
   async getBillingOverview(): Promise<TenantBillingOverview> {
-    try {
-      const response = await api.get("/tenants/subscriptions/billing-overview");
-      return response.data.data;
-    } catch {
-      // Fallback structure when API endpoint is pending
-      const sub = await this.getCurrentSubscription();
-      return {
-        currentPlan: sub
-          ? {
-              planId: sub.planId,
-              planName: sub.planName,
-              planType: "PRO",
-              price: 4999,
-              billingCycle: "Monthly",
-              startsAt: sub.startsAt,
-              endsAt: sub.endsAt,
-              status: sub.status,
-              razorpayPaymentId: sub.razorpayPaymentId,
-            }
-          : null,
-        usage: {
-          funds: { used: 3, limit: 10 },
-          users: { used: 5, limit: 15 },
-          hasAutopay: true,
-          hasFundSuggestions: true,
-        },
-        invoices: sub
+    const [sub, funds, invoiceHistory] = await Promise.all([
+      this.getCurrentSubscription().catch(() => null),
+      tenantFundService.getTenantFunds().catch(() => []),
+      this.getInvoices().catch(() => []),
+    ]);
+
+    const activeFunds = funds.filter((f) => f.isActive);
+    const totalMembersUsed = activeFunds.reduce(
+      (sum, f) => sum + (f.totalMembers || 0),
+      0,
+    );
+
+    const invoices: InvoiceRecord[] =
+      invoiceHistory && invoiceHistory.length > 0
+        ? invoiceHistory
+        : sub
           ? [
               {
-                id: "inv_1",
-                invoiceNumber: `INV-${sub.razorpayPaymentId.slice(-8).toUpperCase()}`,
-                date: new Date(sub.startsAt).toLocaleDateString("en-IN"),
+                id: sub.id || sub.razorpayPaymentId,
+                invoiceNumber: `INV-${(sub.razorpayPaymentId || sub.id).slice(-8).toUpperCase()}`,
+                date: new Date(sub.startsAt).toLocaleDateString("en-IN", {
+                  day: "numeric",
+                  month: "short",
+                  year: "numeric",
+                }),
                 planName: sub.planName,
-                amount: 4999,
+                amount: Math.round(sub.amount / 100),
                 currency: "₹",
                 status: "PAID",
                 razorpayPaymentId: sub.razorpayPaymentId,
-                razorpayOrderId: "order_sample_123",
+                razorpayOrderId: sub.razorpayOrderId,
+                periodStart: sub.startsAt,
+                periodEnd: sub.endsAt,
               },
             ]
-          : [],
-      };
-    }
+          : [];
+
+    return {
+      currentPlan: sub
+        ? {
+            planId: sub.planId,
+            planName: sub.planName,
+            planType: sub.planType,
+            price: Math.round(sub.amount / 100),
+            billingCycle: sub.billingCycle,
+            startsAt: sub.startsAt,
+            endsAt: sub.endsAt,
+            status: sub.status,
+            razorpayPaymentId: sub.razorpayPaymentId,
+          }
+        : null,
+      usage: {
+        funds: {
+          used: activeFunds.length,
+          limit: sub ? sub.maxFunds : null,
+        },
+        users: {
+          used: totalMembersUsed,
+          limit: sub ? sub.maxUsers : null,
+        },
+        hasAutopay: sub ? sub.hasAutopay : false,
+      },
+      invoices,
+    };
   },
 };

@@ -14,7 +14,6 @@ export interface SubscriptionCheckoutDocument {
   maxFunds: number | null;
   maxUsers: number | null;
   hasAutopay: boolean;
-  hasFundSuggestions: boolean;
   razorpayOrderId: string;
   razorpayPaymentId?: string;
   status: SubscriptionCheckoutStatus;
@@ -47,7 +46,6 @@ const subscriptionCheckoutSchema = new Schema<SubscriptionCheckoutDocument>(
     maxFunds: { type: Number, default: null },
     maxUsers: { type: Number, default: null },
     hasAutopay: { type: Boolean, default: false },
-    hasFundSuggestions: { type: Boolean, default: false },
     razorpayOrderId: {
       type: String,
       required: true,

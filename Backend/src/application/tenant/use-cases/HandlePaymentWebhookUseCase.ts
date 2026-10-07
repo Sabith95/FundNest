@@ -105,7 +105,6 @@ export class HandlePaymentWebhookUseCase implements IHandlePaymentWebhookUseCase
           maxFunds: checkout.maxFunds,
           maxUsers: checkout.maxUsers,
           hasAutopay: checkout.hasAutopay,
-          hasFundSuggestions: checkout.hasFundSuggestions,
           startsAt,
           endsAt,
           status: "ACTIVE",

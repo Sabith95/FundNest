@@ -32,8 +32,6 @@ const planFieldsSchema = z.object({
   maxUsers: nullablePositiveInteger,
 
   hasAutopay: z.boolean(),
-
-  hasFundSuggestions: z.boolean().optional().default(false),
 });
 
 export const createSubscriptionPlanSchema = planFieldsSchema

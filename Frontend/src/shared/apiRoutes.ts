@@ -58,6 +58,7 @@ export const API_ROUTES = {
     CREATE_SUBSCRIPTION_CHECKOUT: "/tenants/subscriptions/checkout",
     VERIFY_SUBSCRIPTION_CHECKOUT: "/tenants/subscriptions/checkout/verify",
     CURRENT_SUBSCRIPTION: "/tenants/subscriptions/current",
+    SUBSCRIPTION_INVOICES: "/tenants/subscriptions/invoices",
     GET_CHIT_FUNDS: "/tenants/chit-funds",
     CREATE_NORMAL_CHIT_FUND: "/tenants/chit-funds/normal",
     CREATE_MULTI_DIVISION_CHIT_FUND: "/tenants/chit-funds/multi-division",

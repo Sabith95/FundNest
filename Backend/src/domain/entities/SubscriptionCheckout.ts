@@ -13,7 +13,6 @@ export interface SubscriptionCheckoutProps {
   maxFunds: number | null;
   maxUsers: number | null;
   hasAutopay: boolean;
-  hasFundSuggestions: boolean;
   razorpayOrderId: string;
   razorpayPaymentId?: string;
   status: SubscriptionCheckoutStatus;
@@ -72,9 +71,6 @@ export class SubscriptionCheckout {
   }
   public get hasAutopay(): boolean {
     return this._props.hasAutopay;
-  }
-  public get hasFundSuggestions(): boolean {
-    return this._props.hasFundSuggestions;
   }
   public get razorpayOrderId(): string {
     return this._props.razorpayOrderId;

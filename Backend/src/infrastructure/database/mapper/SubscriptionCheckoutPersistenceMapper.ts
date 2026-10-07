@@ -23,7 +23,6 @@ export class SubscriptionCheckoutPersistenceMapper {
       maxFunds: doc.maxFunds ?? null,
       maxUsers: doc.maxUsers ?? null,
       hasAutopay: doc.hasAutopay ?? false,
-      hasFundSuggestions: doc.hasFundSuggestions ?? false,
       razorpayOrderId: doc.razorpayOrderId,
       razorpayPaymentId: doc.razorpayPaymentId,
       status: doc.status,

@@ -45,8 +45,8 @@ export default function InvoiceHistoryTable({ invoices }: InvoiceHistoryTablePro
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
-                {invoices.map((inv) => (
-                  <tr key={inv.id} className="hover:bg-slate-50/80 transition-colors">
+                {invoices.map((inv, idx) => (
+                  <tr key={inv.id || `${inv.invoiceNumber}-${idx}`} className="hover:bg-slate-50/80 transition-colors">
                     <td className="px-6 py-4 font-mono text-xs font-semibold text-slate-900">
                       {inv.invoiceNumber}
                     </td>

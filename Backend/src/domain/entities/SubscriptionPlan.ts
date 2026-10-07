@@ -14,7 +14,6 @@ export interface SubscriptionPlanProps {
   maxUsers: number | null;
 
   hasAutopay: boolean;
-  hasFundSuggestions: boolean;
 
   isActive: boolean;
   isDeleted: boolean;
@@ -71,10 +70,6 @@ export class SubscriptionPlan {
 
   public get hasAutopay(): boolean {
     return this._props.hasAutopay;
-  }
-
-  public get hasFundSuggestions(): boolean {
-    return this._props.hasFundSuggestions;
   }
 
   public get isActive(): boolean {
@@ -164,10 +159,6 @@ export class SubscriptionPlan {
     return this._props.hasAutopay;
   }
 
-  public supportsFundSuggestions(): boolean {
-    return this._props.hasFundSuggestions;
-  }
-
   public updateDetails(
     details: Partial<
       Pick<
@@ -179,7 +170,6 @@ export class SubscriptionPlan {
         | "maxFunds"
         | "maxUsers"
         | "hasAutopay"
-        | "hasFundSuggestions"
       >
     >,
   ): void {

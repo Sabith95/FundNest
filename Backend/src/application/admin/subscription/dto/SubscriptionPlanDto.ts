@@ -10,7 +10,6 @@ export interface CreateSubscriptionPlanDto {
   maxFunds: number | null;
   maxUsers: number | null;
   hasAutopay: boolean;
-  hasFundSuggestions?: boolean;
 }
 
 export interface UpdateSubscriptionPlanDto {
@@ -21,7 +20,6 @@ export interface UpdateSubscriptionPlanDto {
   maxFunds: number | null;
   maxUsers: number | null;
   hasAutopay: boolean;
-  hasFundSuggestions?: boolean;
 }
 
 export interface SubscriptionPlanResponseDto {
@@ -34,7 +32,6 @@ export interface SubscriptionPlanResponseDto {
   maxFunds: number | null;
   maxUsers: number | null;
   hasAutopay: boolean;
-  hasFundSuggestions: boolean;
   isActive: boolean;
   isDeleted: boolean;
   deletedAt: Date | null;

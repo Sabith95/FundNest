@@ -13,7 +13,6 @@ export interface TenantSubscriptionProps {
   maxFunds: number | null;
   maxUsers: number | null;
   hasAutopay: boolean;
-  hasFundSuggestions: boolean;
   startsAt: Date;
   endsAt: Date;
   status: TenantSubscriptionStatus;
@@ -72,9 +71,6 @@ export class TenantSubscription {
   public get hasAutopay(): boolean {
     return this._props.hasAutopay;
   }
-  public get hasFundSuggestions(): boolean {
-    return this._props.hasFundSuggestions;
-  }
   public get startsAt(): Date {
     return new Date(this._props.startsAt);
   }
@@ -131,9 +127,5 @@ export class TenantSubscription {
 
   public supportsAutopay(): boolean {
     return !this.isExpired() && this._props.hasAutopay;
-  }
-
-  public supportsFundSuggestions(): boolean {
-    return !this.isExpired() && this._props.hasFundSuggestions;
   }
 }

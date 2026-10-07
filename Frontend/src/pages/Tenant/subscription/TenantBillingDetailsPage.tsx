@@ -8,6 +8,7 @@ import {
   Zap,
   RefreshCw,
   Loader2,
+  AlertCircle,
 } from "lucide-react";
 
 import Header from "../../../components/tenant/Header";
@@ -114,7 +115,13 @@ export default function TenantBillingDetailsPage() {
                   <p className="mt-2 text-xl font-bold text-slate-900">
                     {currentPlan?.planName ?? "No Active Plan"}
                   </p>
-                  <span className="mt-1 inline-flex items-center rounded-full bg-emerald-50 px-2 py-0.5 text-xs font-semibold text-emerald-700">
+                  <span
+                    className={`mt-1 inline-flex items-center rounded-full px-2 py-0.5 text-xs font-semibold ${
+                      currentPlan?.status === "ACTIVE"
+                        ? "bg-emerald-50 text-emerald-700"
+                        : "bg-slate-100 text-slate-600"
+                    }`}
+                  >
                     {currentPlan?.status ?? "Inactive"}
                   </span>
                 </div>
@@ -150,7 +157,9 @@ export default function TenantBillingDetailsPage() {
                         })
                       : "N/A"}
                   </p>
-                  <p className="mt-1 text-xs text-slate-500">Auto-renewal enabled</p>
+                  <p className="mt-1 text-xs text-slate-500">
+                    {currentPlan?.status === "ACTIVE" ? "Active subscription" : "Expired"}
+                  </p>
                 </div>
 
                 <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
@@ -166,6 +175,16 @@ export default function TenantBillingDetailsPage() {
                   <p className="mt-1 text-xs text-slate-500">Razorpay verified</p>
                 </div>
               </div>
+
+              {/* No Plan Notice */}
+              {!currentPlan && (
+                <div className="flex items-center gap-3 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800">
+                  <AlertCircle className="h-5 w-5 shrink-0 text-amber-600" />
+                  <span>
+                    You do not currently have an active subscription. Click "Change / Upgrade Plan" to select a plan.
+                  </span>
+                </div>
+              )}
 
               {/* Usage Limits */}
               {billingData?.usage && <UsageLimitCard usage={billingData.usage} />}

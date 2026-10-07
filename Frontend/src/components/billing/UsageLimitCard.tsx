@@ -105,18 +105,6 @@ export default function UsageLimitCard({ usage }: UsageLimitCardProps) {
                 </span>
               )}
             </li>
-            <li className="flex items-center justify-between">
-              <span className="text-slate-600">Fund Suggestions</span>
-              {usage.hasFundSuggestions ? (
-                <span className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-600">
-                  <CheckCircle className="h-4 w-4" /> Enabled
-                </span>
-              ) : (
-                <span className="inline-flex items-center gap-1 text-xs font-medium text-slate-400">
-                  <ShieldAlert className="h-4 w-4" /> Not Included
-                </span>
-              )}
-            </li>
           </ul>
         </div>
       </div>

@@ -75,6 +75,7 @@ export const TOKENS = {
   GetCurrentTenantSubscriptionUseCase: Symbol.for(
     "GetCurrentTenantSubscriptionUseCase",
   ),
+  GetTenantInvoicesUseCase: Symbol.for("GetTenantInvoicesUseCase"),
   HandlePaymentWebhookUseCase: Symbol.for("HandlePaymentWebhookUseCase"),
   CreateNormalChitFundUseCase: Symbol.for("CreateNormalChitFundUseCase"),
   CreateMultiDivisionChitFundUseCase: Symbol.for(

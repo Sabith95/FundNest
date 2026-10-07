@@ -21,7 +21,6 @@ export class TenantSubscriptionPersistenceMapper {
       maxFunds: doc.maxFunds ?? null,
       maxUsers: doc.maxUsers ?? null,
       hasAutopay: doc.hasAutopay ?? false,
-      hasFundSuggestions: doc.hasFundSuggestions ?? false,
       startsAt: doc.startsAt,
       endsAt: doc.endsAt,
       status: doc.status,

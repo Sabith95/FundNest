@@ -182,7 +182,6 @@ export default function SubscriptionPlanFormModal({
         maxFunds,
         maxUsers,
         hasAutopay: form.hasAutopay,
-        hasFundSuggestions: false,
       };
 
       await onSubmit(payload);
@@ -198,7 +197,6 @@ export default function SubscriptionPlanFormModal({
       maxFunds,
       maxUsers,
       hasAutopay: form.hasAutopay,
-      hasFundSuggestions: false,
     };
 
     await onSubmit(payload);

@@ -13,7 +13,6 @@ export interface CreateCheckoutData {
   maxFunds: number | null;
   maxUsers: number | null;
   hasAutopay: boolean;
-  hasFundSuggestions: boolean;
   razorpayOrderId: string;
   expiresAt: Date;
 }
@@ -21,6 +20,7 @@ export interface CreateCheckoutData {
 export interface ISubscriptionCheckoutRepository extends IBaseRepository<SubscriptionCheckout> {
   create(data: CreateCheckoutData): Promise<SubscriptionCheckout>;
   findByRazorpayOrderId(orderId: string): Promise<SubscriptionCheckout | null>;
+  findAllByTenantId(tenantId: string): Promise<SubscriptionCheckout[]>;
   markAsPaid(
     id: string,
     paymentId: string,

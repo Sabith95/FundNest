@@ -3,6 +3,7 @@ import { inject, injectable } from "tsyringe";
 import { ICreateSubscriptionCheckoutUseCase } from "../../../../application/interface/tenant/ICreateSubscriptionCheckoutUseCase";
 import { IVerifySubscriptionCheckoutUseCase } from "../../../../application/interface/tenant/IVerifySubscriptionCheckoutUseCase";
 import { IGetCurrentTenantSubscriptionUseCase } from "../../../../application/interface/tenant/IGetCurrentTenantSubscriptionUseCase";
+import { IGetTenantInvoicesUseCase } from "../../../../application/interface/tenant/IGetTenantInvoicesUseCase";
 import { IHandlePaymentWebhookUseCase } from "../../../../application/interface/tenant/IHandlePaymentWebhookUseCase";
 import {
   createSubscriptionCheckoutSchema,
@@ -23,6 +24,8 @@ export class TenantSubscriptionCheckoutController {
     private readonly _verifyCheckoutUseCase: IVerifySubscriptionCheckoutUseCase,
     @inject(TOKENS.GetCurrentTenantSubscriptionUseCase)
     private readonly _getCurrentSubscriptionUseCase: IGetCurrentTenantSubscriptionUseCase,
+    @inject(TOKENS.GetTenantInvoicesUseCase)
+    private readonly _getTenantInvoicesUseCase: IGetTenantInvoicesUseCase,
     @inject(TOKENS.HandlePaymentWebhookUseCase)
     private readonly _handleWebhookUseCase: IHandlePaymentWebhookUseCase,
   ) {}
@@ -95,6 +98,28 @@ export class TenantSubscriptionCheckoutController {
         HTTP_STATUS.OK,
         "Current subscription fetched successfully",
         { subscription },
+      );
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  getInvoices = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> => {
+    try {
+      const tenantId = req.user?.id;
+      if (!tenantId) throw new UnauthorizedError(MESSAGES.TENANT.NOT_AUTHENTICATED);
+
+      const invoices = await this._getTenantInvoicesUseCase.execute(tenantId);
+
+      ResponseHandler.success(
+        res,
+        HTTP_STATUS.OK,
+        "Tenant invoices fetched successfully",
+        { invoices },
       );
     } catch (error) {
       next(error);

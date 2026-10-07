@@ -12,7 +12,6 @@ export interface SubscriptionPlanDocument {
   maxFunds: number | null;
   maxUsers: number | null;
   hasAutopay: boolean;
-  hasFundSuggestions: boolean;
   isActive: boolean;
   isDeleted: boolean;
   deletedAt: Date | null;
@@ -63,10 +62,6 @@ const subscriptionPlanSchema = new Schema<SubscriptionPlanDocument>(
       type: Boolean,
       default: false,
     },
-    hasFundSuggestions: {
-      type: Boolean,
-      default: false,
-    },
     isActive: {
       type: Boolean,
       default: true,
@@ -88,7 +83,6 @@ const subscriptionPlanSchema = new Schema<SubscriptionPlanDocument>(
   },
 );
 
-// Partial unique index: names must be unique only among non-deleted plans
 subscriptionPlanSchema.index(
   { name: 1 },
   { unique: true, partialFilterExpression: { isDeleted: false } },

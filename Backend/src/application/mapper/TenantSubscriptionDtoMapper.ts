@@ -18,7 +18,6 @@ export class TenantSubscriptionDtoMapper {
       maxFunds: subscription.maxFunds,
       maxUsers: subscription.maxUsers,
       hasAutopay: subscription.hasAutopay,
-      hasFundSuggestions: subscription.hasFundSuggestions,
       startsAt: subscription.startsAt,
       endsAt: subscription.endsAt,
       status: subscription.status,

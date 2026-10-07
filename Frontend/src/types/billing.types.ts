@@ -7,7 +7,6 @@ export interface SubscriptionUsage {
   funds: UsageMetric;
   users: UsageMetric;
   hasAutopay: boolean;
-  hasFundSuggestions: boolean;
 }
 
 export interface InvoiceRecord {

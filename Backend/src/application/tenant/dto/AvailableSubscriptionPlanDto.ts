@@ -11,5 +11,4 @@ export interface AvailableSubscriptionPlanDto {
   maxFunds: number | null;
   maxUsers: number | null;
   hasAutopay: boolean;
-  hasFundSuggestions: boolean;
 }

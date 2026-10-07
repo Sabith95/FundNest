@@ -38,7 +38,6 @@ export class CreateSubscriptionPlanUseCase implements ICreateSubscriptionPlanUse
       maxFunds: data.maxFunds,
       maxUsers: data.maxUsers,
       hasAutopay: data.hasAutopay,
-      hasFundSuggestions: data.hasFundSuggestions,
       isActive: true,
     });
 

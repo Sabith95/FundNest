@@ -34,7 +34,6 @@ export class SubscriptionCheckoutRepository
       maxFunds: data.maxFunds,
       maxUsers: data.maxUsers,
       hasAutopay: data.hasAutopay,
-      hasFundSuggestions: data.hasFundSuggestions,
       razorpayOrderId: data.razorpayOrderId,
       expiresAt: data.expiresAt,
       status: "CREATED",
@@ -51,6 +50,15 @@ export class SubscriptionCheckoutRepository
       .lean<SubscriptionCheckoutRecord>();
 
     return doc ? this.toEntity(doc) : null;
+  }
+
+  async findAllByTenantId(tenantId: string): Promise<SubscriptionCheckout[]> {
+    const docs = await this.model
+      .find({ tenantId: new Types.ObjectId(tenantId) })
+      .sort({ createdAt: -1 })
+      .lean<SubscriptionCheckoutRecord[]>();
+
+    return docs.map((doc) => this.toEntity(doc));
   }
 
   async markAsPaid(

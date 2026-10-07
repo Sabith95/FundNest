@@ -21,7 +21,6 @@ export class SubscriptionPlanPersistenceMapper {
       maxFunds: plan.maxFunds,
       maxUsers: plan.maxUsers,
       hasAutopay: plan.hasAutopay,
-      hasFundSuggestions: plan.hasFundSuggestions,
       isActive: plan.isActive,
       isDeleted: plan.isDeleted ?? false,
       deletedAt: plan.deletedAt ? new Date(plan.deletedAt) : null,

@@ -13,7 +13,6 @@ export class SubscriptionPlanResponseDtoMapper {
       maxFunds: plan.maxFunds,
       maxUsers: plan.maxUsers,
       hasAutopay: plan.hasAutopay,
-      hasFundSuggestions: plan.hasFundSuggestions,
       isActive: plan.isActive,
       isDeleted: plan.isDeleted,
       deletedAt: plan.deletedAt,

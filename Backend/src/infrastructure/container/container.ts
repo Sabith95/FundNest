@@ -132,6 +132,8 @@ import { IVerifySubscriptionCheckoutUseCase } from "../../application/interface/
 import { VerifySubscriptionCheckoutUseCase } from "../../application/tenant/use-cases/VerifySubscriptionCheckoutUseCase";
 import { IGetCurrentTenantSubscriptionUseCase } from "../../application/interface/tenant/IGetCurrentTenantSubscriptionUseCase";
 import { GetCurrentTenantSubscriptionUseCase } from "../../application/tenant/use-cases/GetCurrentTenantSubscriptionUseCase";
+import { IGetTenantInvoicesUseCase } from "../../application/interface/tenant/IGetTenantInvoicesUseCase";
+import { GetTenantInvoicesUseCase } from "../../application/tenant/use-cases/GetTenantInvoicesUseCase";
 import { IHandlePaymentWebhookUseCase } from "../../application/interface/tenant/IHandlePaymentWebhookUseCase";
 import { HandlePaymentWebhookUseCase } from "../../application/tenant/use-cases/HandlePaymentWebhookUseCase";
 import { CreateNormalChitFundUseCase } from "../../application/tenant/chitfund/use-cases/CreateNormalChitFundUseCase";
@@ -438,6 +440,10 @@ container.register<IVerifySubscriptionCheckoutUseCase>(
 container.register<IGetCurrentTenantSubscriptionUseCase>(
   TOKENS.GetCurrentTenantSubscriptionUseCase,
   { useClass: GetCurrentTenantSubscriptionUseCase },
+);
+container.register<IGetTenantInvoicesUseCase>(
+  TOKENS.GetTenantInvoicesUseCase,
+  { useClass: GetTenantInvoicesUseCase },
 );
 container.register<IHandlePaymentWebhookUseCase>(
   TOKENS.HandlePaymentWebhookUseCase,

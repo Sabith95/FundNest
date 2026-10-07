@@ -13,7 +13,6 @@ export class AvailableSubscriptionPlanMapper {
       maxFunds: plan.maxFunds,
       maxUsers: plan.maxUsers,
       hasAutopay: plan.hasAutopay,
-      hasFundSuggestions: plan.hasFundSuggestions,
     };
   }
 }

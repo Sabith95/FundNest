@@ -49,7 +49,6 @@ export class UpdateSubscriptionPlanUseCase implements IUpdateSubscriptionPlanUse
       maxFunds: data.maxFunds,
       maxUsers: data.maxUsers,
       hasAutopay: data.hasAutopay,
-      hasFundSuggestions: data.hasFundSuggestions,
     });
 
     const updatedPlan = await this._subscriptionPlanRepository.updatePlan(
@@ -62,7 +61,6 @@ export class UpdateSubscriptionPlanUseCase implements IUpdateSubscriptionPlanUse
         maxFunds: existingPlan.maxFunds,
         maxUsers: existingPlan.maxUsers,
         hasAutopay: existingPlan.hasAutopay,
-        hasFundSuggestions: existingPlan.hasFundSuggestions,
       },
     );
 

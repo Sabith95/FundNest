@@ -14,7 +14,6 @@ export interface TenantSubscriptionDocument {
   maxFunds: number | null;
   maxUsers: number | null;
   hasAutopay: boolean;
-  hasFundSuggestions: boolean;
   startsAt: Date;
   endsAt: Date;
   status: TenantSubscriptionStatus;
@@ -47,7 +46,6 @@ const tenantSubscriptionSchema = new Schema<TenantSubscriptionDocument>(
     maxFunds: { type: Number, default: null },
     maxUsers: { type: Number, default: null },
     hasAutopay: { type: Boolean, default: false },
-    hasFundSuggestions: { type: Boolean, default: false },
     startsAt: { type: Date, required: true },
     endsAt: { type: Date, required: true, index: true },
     status: {

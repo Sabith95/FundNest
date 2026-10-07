@@ -107,6 +107,7 @@ export const ENDPOINTS = {
       CREATE_CHECKOUT: "/subscriptions/checkout",
       VERIFY_CHECKOUT: "/subscriptions/checkout/verify",
       CURRENT: "/subscriptions/current",
+      INVOICES: "/subscriptions/invoices",
     },
 
     SESSION: {

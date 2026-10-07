@@ -12,7 +12,6 @@ export interface SubscriptionPlan {
   maxFunds: number | null;
   maxUsers: number | null;
   hasAutopay: boolean;
-  hasFundSuggestions?: boolean;
   isActive: boolean;
   isDeleted?: boolean;
   deletedAt?: string | null;
@@ -29,7 +28,6 @@ export interface CreateSubscriptionPlanPayload {
   maxFunds: number | null;
   maxUsers: number | null;
   hasAutopay: boolean;
-  hasFundSuggestions?: boolean;
 }
 
 export interface UpdateSubscriptionPlanPayload {
@@ -40,5 +38,4 @@ export interface UpdateSubscriptionPlanPayload {
   maxFunds: number | null;
   maxUsers: number | null;
   hasAutopay: boolean;
-  hasFundSuggestions?: boolean;
 }
