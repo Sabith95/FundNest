@@ -152,6 +152,8 @@ import { IGetKycRequirementsForFundUseCase } from "../../application/interface/t
 
 import { IDeleteSubscriptionPlanUseCase } from "../../application/interface/admin/subscription/IDeleteSubscriptionPlanUseCase";
 import { DeleteSubscriptionPlanUseCase } from "../../application/admin/subscription/use-case/DeleteSubscriptionPlanUseCase";
+import { IGetAdminBillingHistoryUseCase } from "../../application/interface/admin/subscription/IGetAdminBillingHistoryUseCase";
+import { GetAdminBillingHistoryUseCase } from "../../application/admin/subscription/use-case/GetAdminBillingHistoryUseCase";
 
 // Services
 container.register<IJwtService>(TOKENS.JwtService, {
@@ -486,6 +488,12 @@ container.register<IDeleteSubscriptionPlanUseCase>(
   TOKENS.DeleteSubscriptionPlanUseCase,
   {
     useClass: DeleteSubscriptionPlanUseCase,
+  },
+);
+container.register<IGetAdminBillingHistoryUseCase>(
+  TOKENS.GetAdminBillingHistoryUseCase,
+  {
+    useClass: GetAdminBillingHistoryUseCase,
   },
 );
 

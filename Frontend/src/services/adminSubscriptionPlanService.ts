@@ -1,5 +1,6 @@
 import { API_ROUTES } from "../shared/apiRoutes";
 import type {
+  AdminBillingRecord,
   CreateSubscriptionPlanPayload,
   SubscriptionPlan,
   UpdateSubscriptionPlanPayload,
@@ -52,5 +53,18 @@ export const adminSubscriptionPlanService = {
       API_ROUTES.SUPER_ADMIN.DELETE_SUBSCRIPTION_PLAN(id),
     );
     return response.data.data.plan;
+  },
+
+  async getBillingHistory(): Promise<AdminBillingRecord[]> {
+    const response = await api.get(
+      API_ROUTES.SUPER_ADMIN.GET_BILLING_HISTORY,
+    );
+    const history = response.data.data.history || [];
+
+    return history.map((item: any) => ({
+      ...item,
+      amount: item.amount > 1000 ? Math.round(item.amount / 100) : item.amount,
+      currency: item.currency === "INR" || !item.currency ? "₹" : item.currency,
+    }));
   },
 };

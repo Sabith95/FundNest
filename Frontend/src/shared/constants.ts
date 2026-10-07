@@ -39,6 +39,7 @@ export const ROUTES = {
     TENANT_DETAILS: "/superadmin/tenants/:tenantId",
     KYC: "/superadmin/tenants/:tenantId/kyc",
     SUBSCRIPTION: "/superadmin/subscription",
+    BILLING_HISTORY: "/superadmin/subscription/billing-history",
   },
   TENANT: {
     LANDING: "/tenants",

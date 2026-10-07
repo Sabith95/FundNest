@@ -20,6 +20,7 @@ export const API_ROUTES = {
     UPDATE_SUBSCRIPTION_PLAN_STATUS: (id: string) =>
       `/admin/subscription-plans/${id}/status`,
     DELETE_SUBSCRIPTION_PLAN: (id: string) => `/admin/subscription-plans/${id}`,
+    GET_BILLING_HISTORY: "/admin/subscription-plans/billing-history",
   },
 
   USERS: {

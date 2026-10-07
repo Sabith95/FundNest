@@ -58,6 +58,7 @@ export const ENDPOINTS = {
     SUBSCRIPTION_PLAN: {
       GET_ALL: "/subscription-plans",
       CREATE: "/subscription-plans",
+      BILLING_HISTORY: "/subscription-plans/billing-history",
       UPDATE: "/subscription-plans/:id",
       UPDATE_STATUS: "/subscription-plans/:id/status",
       DELETE: "/subscription-plans/:id",

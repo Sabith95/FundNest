@@ -1,7 +1,9 @@
 import { useCallback, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   AlertTriangle,
   Building2,
+  History,
   PackageSearch,
   PiggyBank,
   Plus,
@@ -17,6 +19,7 @@ import Sidebar from "../../../components/admin/Sidebar";
 import SubscriptionPlanCard from "../../../components/subscription/SubscriptionPlanCard";
 import SubscriptionPlanFormModal from "../../../components/subscription/SubscriptionPlanFormModal";
 import { adminSubscriptionPlanService } from "../../../services/adminSubscriptionPlanService";
+import { ROUTES } from "../../../shared/constants";
 import type {
   CreateSubscriptionPlanPayload,
   SubscriptionPlan,
@@ -51,6 +54,7 @@ const getErrorMessage = (error: unknown, fallback: string): string => {
 };
 
 export default function SubscriptionBilling() {
+  const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [plans, setPlans] = useState<SubscriptionPlan[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -238,14 +242,25 @@ export default function SubscriptionBilling() {
               </p>
             </div>
 
-            <button
-              type="button"
-              onClick={openCreateModal}
-              className="flex shrink-0 items-center justify-center gap-2 rounded-full bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700"
-            >
-              <Plus className="h-4 w-4" />
-              Create new plan
-            </button>
+            <div className="flex shrink-0 items-center gap-3">
+              <button
+                type="button"
+                onClick={() => navigate(ROUTES.SUPER_ADMIN.BILLING_HISTORY)}
+                className="flex items-center justify-center gap-2 rounded-full border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 shadow-sm hover:bg-slate-50 transition-colors"
+              >
+                <History className="h-4 w-4 text-slate-500" />
+                View billing history
+              </button>
+
+              <button
+                type="button"
+                onClick={openCreateModal}
+                className="flex items-center justify-center gap-2 rounded-full bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 transition-colors"
+              >
+                <Plus className="h-4 w-4" />
+                Create new plan
+              </button>
+            </div>
           </div>
 
           {isLoading ? (

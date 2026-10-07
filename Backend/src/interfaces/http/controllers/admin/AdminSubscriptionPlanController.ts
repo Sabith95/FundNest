@@ -6,6 +6,7 @@ import { IGetSubscriptionPlansUseCase } from "../../../../application/interface/
 import { IUpdateSubscriptionPlanUseCase } from "../../../../application/interface/admin/subscription/IUpdateSubscriptionPlanUseCase";
 import { IUpdateSubscriptionPlanStatusUseCase } from "../../../../application/interface/admin/subscription/IUpdateSubscriptionPlanStatusUseCase";
 import { IDeleteSubscriptionPlanUseCase } from "../../../../application/interface/admin/subscription/IDeleteSubscriptionPlanUseCase";
+import { IGetAdminBillingHistoryUseCase } from "../../../../application/interface/admin/subscription/IGetAdminBillingHistoryUseCase";
 import { HTTP_STATUS } from "../../../../shared/constants/httpStatus";
 import { ResponseHandler } from "../../../../shared/ResponseHandler";
 import { TOKENS } from "../../../../shared/tokens";
@@ -33,6 +34,9 @@ export class AdminSubscriptionPlanController {
 
     @inject(TOKENS.DeleteSubscriptionPlanUseCase)
     private readonly _deleteSubscriptionPlanUseCase: IDeleteSubscriptionPlanUseCase,
+
+    @inject(TOKENS.GetAdminBillingHistoryUseCase)
+    private readonly _getAdminBillingHistoryUseCase: IGetAdminBillingHistoryUseCase,
   ) {}
 
   getAll = async (
@@ -141,6 +145,25 @@ export class AdminSubscriptionPlanController {
         HTTP_STATUS.OK,
         MESSAGES.PLAN.PLAN_DELETED,
         { plan },
+      );
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  getBillingHistory = async (
+    _req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> => {
+    try {
+      const history = await this._getAdminBillingHistoryUseCase.execute();
+
+      ResponseHandler.success(
+        res,
+        HTTP_STATUS.OK,
+        "Billing history fetched successfully",
+        { history },
       );
     } catch (error) {
       next(error);

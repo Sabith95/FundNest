@@ -4,6 +4,7 @@ import { ITenantSubscriptionRepository } from "../../../domain/repositories/ITen
 import { TOKENS } from "../../../shared/tokens";
 import { TenantInvoiceResponseDto } from "../dto/TenantInvoiceDto";
 import { IGetTenantInvoicesUseCase } from "../../interface/tenant/IGetTenantInvoicesUseCase";
+import { TenantInvoiceDtoMapper } from "../../mapper/TenantInvoiceDtoMapper";
 
 @injectable()
 export class GetTenantInvoicesUseCase implements IGetTenantInvoicesUseCase {
@@ -32,39 +33,10 @@ export class GetTenantInvoicesUseCase implements IGetTenantInvoicesUseCase {
         seenOrderIds.add(checkout.razorpayOrderId);
       }
 
-      let status: "PAID" | "FAILED" | "PENDING";
-      if (checkout.status === "PAID") {
-        status = "PAID";
-      } else if (checkout.status === "FAILED") {
-        status = "FAILED";
-      } else {
-        if (checkout.isExpired()) {
-          continue; // Skip abandoned checkout sessions
-        }
-        status = "PENDING";
+      const invoiceDto = TenantInvoiceDtoMapper.fromCheckout(checkout);
+      if (invoiceDto) {
+        invoices.push(invoiceDto);
       }
-
-      const invoiceDate = checkout.paidAt || checkout.createdAt;
-      const periodEnd = new Date(
-        invoiceDate.getTime() + checkout.durationDays * 24 * 60 * 60 * 1000,
-      );
-
-      invoices.push({
-        id: checkout.id,
-        invoiceNumber: `INV-${(checkout.razorpayPaymentId || checkout.id).slice(-8).toUpperCase()}`,
-        planName: checkout.planName,
-        planType: checkout.planType,
-        amount: checkout.amount,
-        currency: checkout.currency,
-        billingCycle: checkout.billingCycle,
-        status,
-        razorpayPaymentId: checkout.razorpayPaymentId || "",
-        razorpayOrderId: checkout.razorpayOrderId,
-        date: invoiceDate,
-        periodStart: invoiceDate,
-        periodEnd,
-        createdAt: checkout.createdAt,
-      });
     }
 
     // Include current subscription if not already covered by checkouts
@@ -75,22 +47,9 @@ export class GetTenantInvoicesUseCase implements IGetTenantInvoicesUseCase {
       (!currentSubscription.razorpayOrderId ||
         !seenOrderIds.has(currentSubscription.razorpayOrderId))
     ) {
-      invoices.unshift({
-        id: currentSubscription.id,
-        invoiceNumber: `INV-${(currentSubscription.razorpayPaymentId || currentSubscription.id).slice(-8).toUpperCase()}`,
-        planName: currentSubscription.planName,
-        planType: currentSubscription.planType,
-        amount: currentSubscription.amount,
-        currency: currentSubscription.currency,
-        billingCycle: currentSubscription.billingCycle,
-        status: "PAID",
-        razorpayPaymentId: currentSubscription.razorpayPaymentId,
-        razorpayOrderId: currentSubscription.razorpayOrderId,
-        date: currentSubscription.startsAt,
-        periodStart: currentSubscription.startsAt,
-        periodEnd: currentSubscription.endsAt,
-        createdAt: currentSubscription.createdAt,
-      });
+      invoices.unshift(
+        TenantInvoiceDtoMapper.fromSubscription(currentSubscription),
+      );
     }
 
     invoices.sort(

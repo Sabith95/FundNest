@@ -31,6 +31,9 @@ const KycReview = lazyWithRetry(
 const SubscriptionBilling = lazyWithRetry(
   () => import("../pages/superAdmin/subscription/SubsctiptionBilling"),
 );
+const AdminBillingHistoryPage = lazyWithRetry(
+  () => import("../pages/superAdmin/subscription/AdminBillingHistoryPage"),
+);
 
 // User Pages (Lazy Loaded)
 const UserRegisterPage = lazyWithRetry(
@@ -204,6 +207,10 @@ const AppRouter = () => {
               <Route
                 path={ROUTES.SUPER_ADMIN.SUBSCRIPTION}
                 element={<SubscriptionBilling />}
+              />
+              <Route
+                path={ROUTES.SUPER_ADMIN.BILLING_HISTORY}
+                element={<AdminBillingHistoryPage />}
               />
             </Route>
 

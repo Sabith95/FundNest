@@ -95,6 +95,13 @@ router.get(
   subscriptionPlanController.getAll,
 );
 
+router.get(
+  ENDPOINTS.SUPER_ADMIN.SUBSCRIPTION_PLAN.BILLING_HISTORY,
+  authenticate,
+  authorize(ROLES.SUPER_ADMIN),
+  subscriptionPlanController.getBillingHistory,
+);
+
 router.post(
   ENDPOINTS.SUPER_ADMIN.SUBSCRIPTION_PLAN.CREATE,
   authenticate,

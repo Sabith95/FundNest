@@ -39,3 +39,21 @@ export interface UpdateSubscriptionPlanPayload {
   maxUsers: number | null;
   hasAutopay: boolean;
 }
+
+export interface AdminBillingRecord {
+  id: string;
+  tenantId: string;
+  tenantName: string;
+  tenantEmail: string;
+  planName: string;
+  planType: string;
+  billingCycle: string;
+  amount: number;
+  currency: string;
+  status: "ACTIVE" | "EXPIRED" | "PAID" | "FAILED";
+  startsAt: string;
+  renewalDate: string;
+  razorpayPaymentId?: string;
+  razorpayOrderId?: string;
+  createdAt: string;
+}
