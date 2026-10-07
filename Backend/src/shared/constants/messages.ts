@@ -101,6 +101,10 @@ export const MESSAGES = {
     CANNOT_DELETE_ACTIVE_SUBSCRIBERS:
       "Cannot delete this subscription plan because active tenant subscriptions currently exist. Please deactivate/block the plan instead so no new tenants can subscribe.",
     ALREADY_DELETED: "Subscription plan has already been deleted",
+    DOWNGRADE_RESOURCE_LIMIT_EXCEEDED:
+      "Cannot downgrade to this plan because your current number of active funds exceeds the new plan's limit.",
+    DOWNGRADE_USER_LIMIT_EXCEEDED:
+      "Cannot downgrade to this plan because your total members exceed the new plan's limit.",
   },
 
   PLAN: {
@@ -112,7 +116,7 @@ export const MESSAGES = {
     PLAN_UPDATED: "Subscription plan updated successfully",
     PLAN_BLOCKED: "Subscription plan blocked successfully",
     PLAN_UNBLOCKED: "Subscription plan unblocked successfully",
-    PLAN_DELETED: "Subscription plan deleted successfully"
+    PLAN_DELETED: "Subscription plan deleted successfully",
   },
 
   PAYMENT: {
