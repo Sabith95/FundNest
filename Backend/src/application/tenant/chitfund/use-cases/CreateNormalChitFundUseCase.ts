@@ -2,7 +2,6 @@ import { inject, injectable } from "tsyringe";
 
 import { IChitFundRepository } from "../../../../domain/repositories/IChitFundRepository";
 import { ITenantSubscriptionRepository } from "../../../../domain/repositories/ITenantSubscriptionRepository";
-import { ISubscriptionPlanRepository } from "../../../../domain/repositories/ISubscriptionPlanRepository";
 import { TOKENS } from "../../../../shared/tokens";
 import { ConflictError } from "../../../../shared/errors/ConflictError";
 import { ForbiddenError } from "../../../../shared/errors/ForbiddenError";
@@ -20,8 +19,6 @@ export class CreateNormalChitFundUseCase implements ICreateNormalChitFundUseCase
     private readonly _chitFundRepository: IChitFundRepository,
     @inject(TOKENS.TenantSubscriptionRepository)
     private readonly _tenantSubscriptionRepository: ITenantSubscriptionRepository,
-    @inject(TOKENS.SubscriptionPlanRepository)
-    private readonly _subscriptionPlanRepository: ISubscriptionPlanRepository,
   ) {}
 
   async execute(
@@ -38,22 +35,17 @@ export class CreateNormalChitFundUseCase implements ICreateNormalChitFundUseCase
       throw new ForbiddenError(MESSAGES.FUND.NO_ACTIVE_SUBSCRIPTION);
     }
 
-    const plan = await this._subscriptionPlanRepository.findById(
-      subscription.planId,
-    );
-
-    if (!plan || !plan.isActive) {
-      throw new ForbiddenError(MESSAGES.FUND.NO_ACTIVE_SUBSCRIPTION);
-    }
-
     const existingFunds =
       await this._chitFundRepository.findByTenantId(tenantId);
 
-    if (!plan.canCreateFund(existingFunds.length)) {
+    // Evaluated against the tenant's purchased subscription snapshot,
+    // not the live plan catalog. Even if the admin blocks the plan,
+    // the tenant's active subscription remains valid until it expires.
+    if (!subscription.canCreateFund(existingFunds.length)) {
       throw new ForbiddenError(MESSAGES.FUND.MAX_FUNDS_EXCEEDED);
     }
 
-    if (plan.maxUsers !== null) {
+    if (subscription.maxUsers !== null) {
       const currentTotalMemberSlots = existingFunds.reduce(
         (sum, fund) => sum + fund.totalMembers,
         0,
@@ -61,7 +53,7 @@ export class CreateNormalChitFundUseCase implements ICreateNormalChitFundUseCase
       const projectedTotalMemberSlots =
         currentTotalMemberSlots + dto.totalMembers;
 
-      if (projectedTotalMemberSlots > plan.maxUsers) {
+      if (projectedTotalMemberSlots > subscription.maxUsers) {
         throw new ForbiddenError(MESSAGES.FUND.MAX_USERS_EXCEEDED);
       }
     }

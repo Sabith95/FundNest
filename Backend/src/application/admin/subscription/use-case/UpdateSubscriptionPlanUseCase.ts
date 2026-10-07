@@ -1,6 +1,7 @@
 import { inject, injectable } from "tsyringe";
 
 import { ISubscriptionPlanRepository } from "../../../../domain/repositories/ISubscriptionPlanRepository";
+import { ITenantSubscriptionRepository } from "../../../../domain/repositories/ITenantSubscriptionRepository";
 import { TOKENS } from "../../../../shared/tokens";
 import { NotFoundError } from "../../../../shared/errors/NotFoundError";
 import { ConflictError } from "../../../../shared/errors/ConflictError";
@@ -17,6 +18,8 @@ export class UpdateSubscriptionPlanUseCase implements IUpdateSubscriptionPlanUse
   constructor(
     @inject(TOKENS.SubscriptionPlanRepository)
     private readonly _subscriptionPlanRepository: ISubscriptionPlanRepository,
+    @inject(TOKENS.TenantSubscriptionRepository)
+    private readonly _tenantSubscriptionRepository: ITenantSubscriptionRepository,
   ) {}
 
   async execute(

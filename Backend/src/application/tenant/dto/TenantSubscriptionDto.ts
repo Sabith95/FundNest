@@ -6,6 +6,12 @@ export interface TenantSubscriptionResponseDto {
   planType: string;
   amount: number;
   currency: "INR";
+  billingCycle: string;
+  durationDays: number;
+  maxFunds: number | null;
+  maxUsers: number | null;
+  hasAutopay: boolean;
+  hasFundSuggestions: boolean;
   startsAt: Date;
   endsAt: Date;
   status: "ACTIVE" | "EXPIRED";

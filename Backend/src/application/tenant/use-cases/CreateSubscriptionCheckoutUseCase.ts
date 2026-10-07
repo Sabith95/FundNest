@@ -91,7 +91,12 @@ export class CreateSubscriptionCheckoutUseCase implements ICreateSubscriptionChe
       planType: plan.planType,
       amount,
       currency: "INR",
+      billingCycle: plan.billingCycle,
       durationDays: plan.durationDays,
+      maxFunds: plan.maxFunds,
+      maxUsers: plan.maxUsers,
+      hasAutopay: plan.hasAutopay,
+      hasFundSuggestions: plan.hasFundSuggestions,
       razorpayOrderId: razorpayOrder.orderId,
       expiresAt: new Date(
         Date.now() + env.RAZORPAY_CHECKOUT_TTL_MINUTES * 60 * 1000,

@@ -8,6 +8,12 @@ export interface TenantSubscriptionProps {
   planType: string;
   amount: number;
   currency: "INR";
+  billingCycle: string;
+  durationDays: number;
+  maxFunds: number | null;
+  maxUsers: number | null;
+  hasAutopay: boolean;
+  hasFundSuggestions: boolean;
   startsAt: Date;
   endsAt: Date;
   status: TenantSubscriptionStatus;
@@ -51,6 +57,24 @@ export class TenantSubscription {
   public get currency(): "INR" {
     return this._props.currency;
   }
+  public get billingCycle(): string {
+    return this._props.billingCycle;
+  }
+  public get durationDays(): number {
+    return this._props.durationDays;
+  }
+  public get maxFunds(): number | null {
+    return this._props.maxFunds;
+  }
+  public get maxUsers(): number | null {
+    return this._props.maxUsers;
+  }
+  public get hasAutopay(): boolean {
+    return this._props.hasAutopay;
+  }
+  public get hasFundSuggestions(): boolean {
+    return this._props.hasFundSuggestions;
+  }
   public get startsAt(): Date {
     return new Date(this._props.startsAt);
   }
@@ -83,5 +107,33 @@ export class TenantSubscription {
   public markAsExpired(): void {
     this._props.status = "EXPIRED";
     this._props.updatedAt = new Date();
+  }
+
+  public canCreateFund(currentFundCount: number): boolean {
+    if (this.isExpired()) {
+      return false;
+    }
+    if (this._props.maxFunds === null) {
+      return true;
+    }
+    return currentFundCount < this._props.maxFunds;
+  }
+
+  public canAddUser(currentUserCount: number): boolean {
+    if (this.isExpired()) {
+      return false;
+    }
+    if (this._props.maxUsers === null) {
+      return true;
+    }
+    return currentUserCount < this._props.maxUsers;
+  }
+
+  public supportsAutopay(): boolean {
+    return !this.isExpired() && this._props.hasAutopay;
+  }
+
+  public supportsFundSuggestions(): boolean {
+    return !this.isExpired() && this._props.hasFundSuggestions;
   }
 }

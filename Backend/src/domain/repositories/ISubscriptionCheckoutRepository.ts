@@ -8,7 +8,12 @@ export interface CreateCheckoutData {
   planType: string;
   amount: number;
   currency: "INR";
+  billingCycle: string;
   durationDays: number;
+  maxFunds: number | null;
+  maxUsers: number | null;
+  hasAutopay: boolean;
+  hasFundSuggestions: boolean;
   razorpayOrderId: string;
   expiresAt: Date;
 }

@@ -8,7 +8,12 @@ export interface SubscriptionCheckoutProps {
   planType: string;
   amount: number;
   currency: "INR";
+  billingCycle: string;
   durationDays: number;
+  maxFunds: number | null;
+  maxUsers: number | null;
+  hasAutopay: boolean;
+  hasFundSuggestions: boolean;
   razorpayOrderId: string;
   razorpayPaymentId?: string;
   status: SubscriptionCheckoutStatus;
@@ -53,8 +58,23 @@ export class SubscriptionCheckout {
   public get currency(): "INR" {
     return this._props.currency;
   }
+  public get billingCycle(): string {
+    return this._props.billingCycle;
+  }
   public get durationDays(): number {
     return this._props.durationDays;
+  }
+  public get maxFunds(): number | null {
+    return this._props.maxFunds;
+  }
+  public get maxUsers(): number | null {
+    return this._props.maxUsers;
+  }
+  public get hasAutopay(): boolean {
+    return this._props.hasAutopay;
+  }
+  public get hasFundSuggestions(): boolean {
+    return this._props.hasFundSuggestions;
   }
   public get razorpayOrderId(): string {
     return this._props.razorpayOrderId;
