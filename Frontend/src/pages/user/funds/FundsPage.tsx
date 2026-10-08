@@ -122,7 +122,6 @@ const FundsPage: React.FC = () => {
     fetchFunds();
   }, [fetchFunds]);
 
-
   const visibleFunds = useMemo(
     () => funds.filter((f) => matchesFilters(f, filters)),
     [funds, filters],

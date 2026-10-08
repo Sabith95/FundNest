@@ -59,6 +59,12 @@ const ProfilePage = lazyWithRetry(
   () => import("../pages/user/profile/ProfilePage"),
 );
 const FundPage = lazyWithRetry(() => import("../pages/user/funds/FundsPage"));
+const FundDetailsPage = lazyWithRetry(
+  () => import("../pages/user/funds/FundDetailsPage"),
+);
+const FundKycUploadPage = lazyWithRetry(
+  () => import("../pages/user/funds/FundKycUploadPage"),
+);
 
 // Common & Landing Pages (Lazy Loaded)
 const LandingPage = lazyWithRetry(() => import("../pages/landing/LandingPage"));
@@ -116,6 +122,9 @@ const TenantFundPageContainer = lazyWithRetry(
 );
 const KycConfigurationPage = lazyWithRetry(
   () => import("../pages/Tenant/Kyc/kyc-config/KycConfigurationPage"),
+);
+const TenantFundRequestsPage = lazyWithRetry(
+  () => import("../pages/Tenant/Fund/TenantFundRequestsPage"),
 );
 
 const AppRouter = () => {
@@ -229,7 +238,15 @@ const AppRouter = () => {
                 path={ROUTES.USER.PROFILE_INFO}
                 element={<ProfilePage />}
               />
-              <Route path="/funds" element={<FundPage />} />
+              <Route path={ROUTES.USER.FUNDS} element={<FundPage />} />
+              <Route
+                path={ROUTES.USER.FUND_DETAILS}
+                element={<FundDetailsPage />}
+              />
+              <Route
+                path={ROUTES.USER.FUND_KYC}
+                element={<FundKycUploadPage />}
+              />
             </Route>
 
             {/* Tenant protected routes */}
@@ -266,6 +283,10 @@ const AppRouter = () => {
                 <Route
                   path={ROUTES.TENANT.FUND}
                   element={<TenantFundPageContainer />}
+                />
+                <Route
+                  path={ROUTES.TENANT.FUND_REQUESTS}
+                  element={<TenantFundRequestsPage />}
                 />
                 <Route
                   path={ROUTES.TENANT.SUBSCRIPTION}

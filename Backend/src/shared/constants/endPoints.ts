@@ -29,6 +29,14 @@ export const ENDPOINTS = {
 
     CHIT_FUND: {
       GET_AVAILABLE: "/chit-funds",
+      GET_DETAILS: "/chit-funds/:id",
+      GET_KYC_REQUIREMENTS: "/chit-funds/:id/kyc-requirements",
+      GET_JOIN_STATUS: "/chit-funds/:id/join-status",
+      SUBMIT_JOIN_REQUEST: "/chit-funds/:id/join-request",
+      REUPLOAD_KYC: "/chit-funds/:id/reupload-kyc",
+      CREATE_CHECKOUT: "/chit-funds/:id/checkout",
+      VERIFY_CHECKOUT: "/chit-funds/verify-checkout",
+      VERIFY_CHECKOUT_BY_ID: "/chit-funds/:id/verify-checkout",
     },
   },
 
@@ -122,6 +130,8 @@ export const ENDPOINTS = {
       CREATE_MULTI_DIVISION: "/chit-funds/multi-division",
       BLOCK: "/chit-funds/:id/block",
       UNBLOCK: "/chit-funds/:id/unblock",
+      GET_JOIN_REQUESTS: "/chit-funds/join-requests",
+      REVIEW_JOIN_REQUEST: "/chit-funds/join-requests/:id/review",
     },
 
     KYC_CONFIG: {

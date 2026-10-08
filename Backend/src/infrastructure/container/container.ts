@@ -143,6 +143,8 @@ import { UnblockChitFundUseCase } from "../../application/tenant/chitfund/use-ca
 import { GetTenantChitFundsUseCase } from "../../application/tenant/chitfund/use-cases/GetTenantChitFundsUseCase";
 import { IGetAvailableChitFundsUseCase } from "../../application/interface/user/IGetAvailableChitFundsUseCase";
 import { GetAvailableChitFundsUseCase } from "../../application/user/use-cases/GetAvailableChitFundsUseCase";
+import { IGetFundDetailsUseCase } from "../../application/interface/user/IGetFundDetailsUseCase";
+import { GetFundDetailsUseCase } from "../../application/user/use-cases/GetFundDetailsUseCase";
 import { IGetTenantKycTemplateUseCase } from "../../application/interface/tenant/kyc-config/IGetTenantKycTemplateUseCase";
 import { IConfigureTenantKycTemplateUseCase } from "../../application/interface/tenant/kyc-config/IConfigureTenantKycTemplateUseCase";
 import { GetKycRequirementsForFundUseCase } from "../../application/user/use-cases/GetKycRequirementsForFundUseCase";
@@ -154,6 +156,27 @@ import { IDeleteSubscriptionPlanUseCase } from "../../application/interface/admi
 import { DeleteSubscriptionPlanUseCase } from "../../application/admin/subscription/use-case/DeleteSubscriptionPlanUseCase";
 import { IGetAdminBillingHistoryUseCase } from "../../application/interface/admin/subscription/IGetAdminBillingHistoryUseCase";
 import { GetAdminBillingHistoryUseCase } from "../../application/admin/subscription/use-case/GetAdminBillingHistoryUseCase";
+
+import { ISubmitFundJoinRequestUseCase } from "../../application/interface/user/ISubmitFundJoinRequestUseCase";
+import { SubmitFundJoinRequestUseCase } from "../../application/user/use-cases/SubmitFundJoinRequestUseCase";
+import { IReuploadFundKycUseCase } from "../../application/interface/user/IReuploadFundKycUseCase";
+import { ReuploadFundKycUseCase } from "../../application/user/use-cases/ReuploadFundKycUseCase";
+import { IGetUserFundJoinStatusUseCase } from "../../application/interface/user/IGetUserFundJoinStatusUseCase";
+import { GetUserFundJoinStatusUseCase } from "../../application/user/use-cases/GetUserFundJoinStatusUseCase";
+import { ICreateFundJoinCheckoutUseCase } from "../../application/interface/user/ICreateFundJoinCheckoutUseCase";
+import { CreateFundJoinCheckoutUseCase } from "../../application/user/use-cases/CreateFundJoinCheckoutUseCase";
+import { IVerifyFundJoinCheckoutUseCase } from "../../application/interface/user/IVerifyFundJoinCheckoutUseCase";
+import { VerifyFundJoinCheckoutUseCase } from "../../application/user/use-cases/VerifyFundJoinCheckoutUseCase";
+
+import { IGetTenantFundJoinRequestsUseCase } from "../../application/interface/tenant/IGetTenantFundJoinRequestsUseCase";
+import { GetTenantFundJoinRequestsUseCase } from "../../application/tenant/use-cases/GetTenantFundJoinRequestsUseCase";
+import { IReviewFundJoinRequestUseCase } from "../../application/interface/tenant/IReviewFundJoinRequestUseCase";
+import { ReviewFundJoinRequestUseCase } from "../../application/tenant/use-cases/ReviewFundJoinRequestUseCase";
+
+import { IFundJoinRequestRepository } from "../../domain/repositories/IFundJoinRequestRepository";
+import { FundJoinRequestRepository } from "../repositories/FundJoinRequestRepository";
+import { IChitFundMemberRepository } from "../../domain/repositories/IChitFundMemberRepository";
+import { ChitFundMemberRepository } from "../repositories/ChitFundMemberRepository";
 
 // Services
 container.register<IJwtService>(TOKENS.JwtService, {
@@ -472,6 +495,12 @@ container.register<IGetAvailableChitFundsUseCase>(
     useClass: GetAvailableChitFundsUseCase,
   },
 );
+container.register<IGetFundDetailsUseCase>(
+  TOKENS.GetFundDetailsUseCase,
+  {
+    useClass: GetFundDetailsUseCase,
+  },
+);
 container.register<IGetTenantKycTemplateUseCase>(
   TOKENS.GetTenantKycTemplateUseCase,
   { useClass: GetTenantKycTemplateUseCase },
@@ -528,4 +557,43 @@ container.register<ITenantKycTemplateRepository>(
   TOKENS.TenantKycTemplateRepository,
   { useClass: TenantKycTemplateRepository },
 );
+container.register<IFundJoinRequestRepository>(
+  TOKENS.FundJoinRequestRepository,
+  { useClass: FundJoinRequestRepository },
+);
+container.register<IChitFundMemberRepository>(
+  TOKENS.ChitFundMemberRepository,
+  { useClass: ChitFundMemberRepository },
+);
+
+// Fund Join Use Cases
+container.register<ISubmitFundJoinRequestUseCase>(
+  TOKENS.SubmitFundJoinRequestUseCase,
+  { useClass: SubmitFundJoinRequestUseCase },
+);
+container.register<IReuploadFundKycUseCase>(
+  TOKENS.ReuploadFundKycUseCase,
+  { useClass: ReuploadFundKycUseCase },
+);
+container.register<IGetUserFundJoinStatusUseCase>(
+  TOKENS.GetUserFundJoinStatusUseCase,
+  { useClass: GetUserFundJoinStatusUseCase },
+);
+container.register<ICreateFundJoinCheckoutUseCase>(
+  TOKENS.CreateFundJoinCheckoutUseCase,
+  { useClass: CreateFundJoinCheckoutUseCase },
+);
+container.register<IVerifyFundJoinCheckoutUseCase>(
+  TOKENS.VerifyFundJoinCheckoutUseCase,
+  { useClass: VerifyFundJoinCheckoutUseCase },
+);
+container.register<IGetTenantFundJoinRequestsUseCase>(
+  TOKENS.GetTenantFundJoinRequestsUseCase,
+  { useClass: GetTenantFundJoinRequestsUseCase },
+);
+container.register<IReviewFundJoinRequestUseCase>(
+  TOKENS.ReviewFundJoinRequestUseCase,
+  { useClass: ReviewFundJoinRequestUseCase },
+);
+
 export { container };

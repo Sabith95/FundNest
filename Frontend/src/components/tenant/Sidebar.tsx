@@ -10,6 +10,7 @@ import {
   Receipt,
   LogOut,
   X,
+  UserCheck,
 } from "lucide-react";
 import type { NavItem } from "../../types/tenant.types";
 import { ROUTES } from "../../shared/constants";
@@ -18,6 +19,11 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Dashboard", href: ROUTES.TENANT.DASHBOARD, icon: LayoutGrid },
   { label: "User Management", href: "/users", icon: Users },
   { label: "Fund", href: ROUTES.TENANT.FUND, icon: Wallet },
+  {
+    label: "Join Requests",
+    href: ROUTES.TENANT.FUND_REQUESTS,
+    icon: UserCheck,
+  },
   { label: "Lot Management", href: "/lots", icon: Package },
   { label: "Payments", href: "/payments", icon: CreditCard },
   { label: "Wallet and Transaction", href: "/wallet", icon: ArrowLeftRight },

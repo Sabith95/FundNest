@@ -15,6 +15,7 @@ export class ChitFundPersistenceMapper {
       tenantId: fund.tenantId.toString(),
       name: fund.name,
       description: fund.description,
+      highlights: fund.highlights ?? [],
       fundType: fund.fundType as FundType,
       chitValue: fund.chitValue,
       contributionAmount: fund.contributionAmount,

@@ -15,14 +15,14 @@ const storageController = container.resolve(StorageController);
 router.post(
   "/presigned-url",
   authenticate,
-  authorize(ROLES.TENANT_ADMIN),
+  authorize(ROLES.TENANT_ADMIN, ROLES.USER),
   storageController.generateUploadUrl,
 );
 
 router.post(
   "/presigned-download-url",
   authenticate,
-  authorize(ROLES.SUPER_ADMIN, ROLES.TENANT_ADMIN),
+  authorize(ROLES.SUPER_ADMIN, ROLES.TENANT_ADMIN, ROLES.USER),
   storageController.generateDownloadUrl,
 );
 

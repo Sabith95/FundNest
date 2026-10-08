@@ -71,7 +71,7 @@ const JoinButton: React.FC<{ primary: boolean; onClick: () => void; label: strin
       primary ? "bg-indigo-700 text-white hover:bg-indigo-800" : "bg-gray-200 text-gray-800 hover:bg-gray-300"
     }`}
   >
-    Join &amp; Participate
+    View details
   </button>
 );
 

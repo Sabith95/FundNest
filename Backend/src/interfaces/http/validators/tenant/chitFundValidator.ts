@@ -13,6 +13,11 @@ const baseFundSchema = z.object({
     .max(500, "Description must not exceed 500 characters")
     .optional(),
 
+  highlights: z
+    .array(z.string().trim().min(1, "Highlight cannot be empty"))
+    .max(10, "Highlights cannot exceed 10 items")
+    .optional(),
+
   chitValue: z
     .number()
     .finite("Chit value must be a valid number")

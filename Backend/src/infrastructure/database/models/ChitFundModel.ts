@@ -6,6 +6,7 @@ export interface ChitFundDocument {
   tenantId: Types.ObjectId | string;
   name: string;
   description?: string;
+  highlights?: string[];
   fundType: FundType;
   chitValue: number;
   contributionAmount: number;
@@ -36,6 +37,10 @@ const chitFundSchema = new Schema<ChitFundDocument>(
     description: {
       type: String,
       trim: true,
+    },
+    highlights: {
+      type: [String],
+      default: [],
     },
     fundType: {
       type: String,

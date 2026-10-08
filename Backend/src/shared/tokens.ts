@@ -94,6 +94,14 @@ export const TOKENS = {
   ),
   DeleteSubscriptionPlanUseCase: Symbol.for("DeleteSubscriptionPlanUseCase"),
   GetAdminBillingHistoryUseCase: Symbol.for("GetAdminBillingHistoryUseCase"),
+  GetFundDetailsUseCase: Symbol.for("GetFundDetailsUseCase"),
+  SubmitFundJoinRequestUseCase: Symbol.for("SubmitFundJoinRequestUseCase"),
+  ReuploadFundKycUseCase: Symbol.for("ReuploadFundKycUseCase"),
+  GetUserFundJoinStatusUseCase: Symbol.for("GetUserFundJoinStatusUseCase"),
+  CreateFundJoinCheckoutUseCase: Symbol.for("CreateFundJoinCheckoutUseCase"),
+  VerifyFundJoinCheckoutUseCase: Symbol.for("VerifyFundJoinCheckoutUseCase"),
+  GetTenantFundJoinRequestsUseCase: Symbol.for("GetTenantFundJoinRequestsUseCase"),
+  ReviewFundJoinRequestUseCase: Symbol.for("ReviewFundJoinRequestUseCase"),
 
   //repositories
 
@@ -104,4 +112,6 @@ export const TOKENS = {
   TenantSubscriptionRepository: Symbol.for("TenantSubscriptionRepository"),
   ChitFundRepository: Symbol.for("ChitFundRepository"),
   TenantKycTemplateRepository: Symbol.for("TenantKycTemplateRepository"),
+  FundJoinRequestRepository: Symbol.for("FundJoinRequestRepository"),
+  ChitFundMemberRepository: Symbol.for("ChitFundMemberRepository"),
 } as const;

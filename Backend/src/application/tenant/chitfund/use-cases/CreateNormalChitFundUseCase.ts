@@ -71,6 +71,7 @@ export class CreateNormalChitFundUseCase implements ICreateNormalChitFundUseCase
       tenantId,
       name: dto.name.trim(),
       description: dto.description?.trim(),
+      highlights: dto.highlights?.map((h) => h.trim()).filter(Boolean),
       fundType: FundType.NORMAL,
       chitValue: dto.chitValue,
       contributionAmount: dto.contributionAmount,

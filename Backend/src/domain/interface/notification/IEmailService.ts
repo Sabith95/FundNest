@@ -29,5 +29,25 @@ export interface ITenantVerificationEmailService {
   ): Promise<void>;
 }
 
+export interface IFundJoinEmailService {
+  sendFundJoinKycApprovedEmail(
+    email: string,
+    userName: string,
+    fundName: string,
+    contributionAmount: number,
+    fundId: string,
+  ): Promise<void>;
+  sendFundJoinKycRejectedEmail(
+    email: string,
+    userName: string,
+    fundName: string,
+    reason: string,
+    fundId: string,
+  ): Promise<void>;
+}
+
 export interface IEmailService
-  extends IOtpEmailService, ITenantVerificationEmailService {}
+  extends IOtpEmailService,
+    ITenantVerificationEmailService,
+    IFundJoinEmailService {}
+

@@ -57,6 +57,7 @@ export const ROUTES = {
     PAYMENT_RESULT: "/payment/result",
     BILLING_DETAILS: "/tenants/billing-details",
     FUND: "/tenants/fund",
+    FUND_REQUESTS: "/tenants/fund-requests",
     KYC_CONFIG: "/tenants/kyc-config"
   },
   USER: {
@@ -70,5 +71,8 @@ export const ROUTES = {
     RESET_PASSWORD: "/reset-password",
     PROFILE: "/profile",
     PROFILE_INFO: "/profile/info",
+    FUNDS: "/funds",
+    FUND_DETAILS: "/funds/:fundId",
+    FUND_KYC: "/funds/:fundId/kyc",
   },
 } as const;

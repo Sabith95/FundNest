@@ -78,6 +78,7 @@ export class CreateMultiDivisionChitFundUseCase implements ICreateMultiDivisionC
       tenantId,
       name: dto.name.trim(),
       description: dto.description?.trim(),
+      highlights: dto.highlights?.map((h) => h.trim()).filter(Boolean),
       fundType: FundType.MULTI_DIVISION,
       chitValue: dto.chitValue,
       contributionAmount: dto.contributionAmount,

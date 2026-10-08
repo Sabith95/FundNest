@@ -14,6 +14,7 @@ import { TenantSubscriptionPlanController } from "../../controllers/Tenant/Tenan
 import { TenantSubscriptionCheckoutController } from "../../controllers/Tenant/TenantSubscriptionCheckoutController";
 import { TenantChitFundController } from "../../controllers/Tenant/TenantChitFundController";
 import { TenantKycConfigController } from "../../controllers/Tenant/TenantKycConfigController";
+import { TenantFundJoinController } from "../../controllers/Tenant/TenantFundJoinController";
 
 const router = Router();
 const jwtService = container.resolve(TOKENS.JwtService) as JwtService;
@@ -34,6 +35,7 @@ const tenantSubscriptionCheckoutController = container.resolve(
 );
 const tenantChitFundController = container.resolve(TenantChitFundController);
 const tenantKycConfigController = container.resolve(TenantKycConfigController);
+const tenantFundJoinController = container.resolve(TenantFundJoinController);
 
 //tenant registration
 router.post(
@@ -160,6 +162,21 @@ router.patch(
   authenticate,
   authorize(ROLES.TENANT_ADMIN),
   tenantChitFundController.unblock,
+);
+
+// Member Join Requests & KYC Review
+router.get(
+  ENDPOINTS.TENANT.CHIT_FUND.GET_JOIN_REQUESTS,
+  authenticate,
+  authorize(ROLES.TENANT_ADMIN),
+  tenantFundJoinController.getJoinRequests,
+);
+
+router.post(
+  ENDPOINTS.TENANT.CHIT_FUND.REVIEW_JOIN_REQUEST,
+  authenticate,
+  authorize(ROLES.TENANT_ADMIN),
+  tenantFundJoinController.reviewJoinRequest,
 );
 
 // kyc configuration

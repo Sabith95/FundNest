@@ -8,6 +8,7 @@ export interface ChitFund {
   tenantId: string;
   name: string;
   description?: string;
+  highlights?: string[];
   fundType: FundType;
   chitValue: number;
   contributionAmount: number;
@@ -24,6 +25,7 @@ export interface ChitFund {
 export interface CreateNormalFundPayload {
   name: string;
   description?: string;
+  highlights?: string[];
   chitValue: number;
   contributionAmount: number;
   durationMonths: number;
@@ -84,5 +86,59 @@ export const tenantFundService = {
       API_ROUTES.TENANTS.UNBLOCK_CHIT_FUND(fundId),
     );
     return response.data.data.fund;
+  },
+
+  /**
+   * Fetch member join requests for tenant's chit funds.
+   */
+  async getJoinRequests(params?: {
+    page?: number;
+    limit?: number;
+    fundId?: string;
+    status?: string;
+    search?: string;
+  }): Promise<{
+    data: any[];
+    total: number;
+    page: number;
+    limit: number;
+  }> {
+    const response = await api.get(API_ROUTES.TENANTS.GET_JOIN_REQUESTS, {
+      params,
+    });
+    return response.data.data;
+  },
+
+  /**
+   * Review (Approve or Reject) an applicant's fund join request.
+   */
+  async reviewJoinRequest(
+    requestId: string,
+    payload: {
+      decision: "APPROVED" | "REJECTED";
+      rejectionReason?: string;
+      documentReviews?: Array<{
+        requirementId: string;
+        status: "ACCEPTED" | "REJECTED";
+        rejectionReason?: string;
+      }>;
+    },
+  ): Promise<any> {
+    const response = await api.post(
+      API_ROUTES.TENANTS.REVIEW_JOIN_REQUEST(requestId),
+      payload,
+    );
+    return response.data.data;
+  },
+
+  /**
+   * Get temporary presigned download URL for S3 stored document preview.
+   */
+  async getDocumentDownloadUrl(objectKey: string): Promise<string> {
+    const response = await api.post(
+      API_ROUTES.STORAGE.PRESIGNED_DOWNLOAD_URL,
+      { objectKey },
+    );
+    return response.data.data;
   },
 };

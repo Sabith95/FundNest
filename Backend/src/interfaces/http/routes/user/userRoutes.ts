@@ -10,11 +10,13 @@ import { authorize } from "../../middleware/authorize";
 import upload from "../../middleware/upload";
 import { ENDPOINTS } from "../../../../shared/constants/endPoints";
 import { UserChitFundController } from "../../controllers/user/UserChitFundController";
+import { UserFundJoinController } from "../../controllers/user/UserFundJoinController";
 
 const router = Router();
 const authController = container.resolve(AuthController);
 const userProfileController = container.resolve(UserProfileController);
 const userChitFundController = container.resolve(UserChitFundController);
+const userFundJoinController = container.resolve(UserFundJoinController);
 
 const jwtService = container.resolve<IJwtService>(TOKENS.JwtService);
 const authenticate = createAuthMiddleware(jwtService);
@@ -72,8 +74,6 @@ router.patch(
   userProfileController.changePassword,
 );
 
-// chit funds
-
 // Chit funds
 router.get(
   ENDPOINTS.USER.CHIT_FUND.GET_AVAILABLE,
@@ -81,4 +81,62 @@ router.get(
   authorize(ROLES.USER),
   userChitFundController.getAvailableFunds,
 );
+
+router.get(
+  ENDPOINTS.USER.CHIT_FUND.GET_DETAILS,
+  authenticate,
+  authorize(ROLES.USER),
+  userChitFundController.getFundDetails,
+);
+
+// Fund Joining & KYC
+router.get(
+  ENDPOINTS.USER.CHIT_FUND.GET_KYC_REQUIREMENTS,
+  authenticate,
+  authorize(ROLES.USER),
+  userFundJoinController.getKycRequirements,
+);
+
+router.get(
+  ENDPOINTS.USER.CHIT_FUND.GET_JOIN_STATUS,
+  authenticate,
+  authorize(ROLES.USER),
+  userFundJoinController.getJoinStatus,
+);
+
+router.post(
+  ENDPOINTS.USER.CHIT_FUND.SUBMIT_JOIN_REQUEST,
+  authenticate,
+  authorize(ROLES.USER),
+  userFundJoinController.submitJoinRequest,
+);
+
+router.post(
+  ENDPOINTS.USER.CHIT_FUND.REUPLOAD_KYC,
+  authenticate,
+  authorize(ROLES.USER),
+  userFundJoinController.reuploadKyc,
+);
+
+router.post(
+  ENDPOINTS.USER.CHIT_FUND.CREATE_CHECKOUT,
+  authenticate,
+  authorize(ROLES.USER),
+  userFundJoinController.createCheckout,
+);
+
+router.post(
+  ENDPOINTS.USER.CHIT_FUND.VERIFY_CHECKOUT,
+  authenticate,
+  authorize(ROLES.USER),
+  userFundJoinController.verifyCheckout,
+);
+
+router.post(
+  ENDPOINTS.USER.CHIT_FUND.VERIFY_CHECKOUT_BY_ID,
+  authenticate,
+  authorize(ROLES.USER),
+  userFundJoinController.verifyCheckout,
+);
+
 export default router;

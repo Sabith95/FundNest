@@ -62,6 +62,25 @@ export default function ViewFundModal({ fund, onClose }: ViewFundModalProps) {
             </div>
           )}
 
+          {fund.highlights && fund.highlights.length > 0 && (
+            <div className="rounded-xl bg-slate-50 p-3.5 text-slate-700">
+              <p className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
+                Fund Highlights
+              </p>
+              <ul className="flex flex-wrap gap-2">
+                {fund.highlights.map((h, i) => (
+                  <li
+                    key={i}
+                    className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-2.5 py-1 text-xs font-medium text-slate-800 shadow-xs"
+                  >
+                    <span className="text-indigo-600 font-bold">•</span>
+                    {h}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
           <div className="grid grid-cols-2 gap-4">
             <div className="rounded-xl border border-slate-100 bg-slate-50/50 p-4">
               <div className="flex items-center gap-2 text-indigo-600 mb-1">

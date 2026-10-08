@@ -8,6 +8,7 @@ export class ChitFundDtoMapper {
       tenantId: fund.tenantId,
       name: fund.name,
       description: fund.description,
+      highlights: fund.highlights,
       fundType: fund.fundType,
       chitValue: fund.chitValue,
       contributionAmount: fund.contributionAmount,

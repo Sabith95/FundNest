@@ -39,6 +39,18 @@ export const API_ROUTES = {
     UPDATE_PROFILE_PHOTO: "/users/me/photo",
     CHANGE_PASSWORD: "/users/me/password",
     GET_AVAILABLE_CHIT_FUNDS: "/users/chit-funds",
+    GET_CHIT_FUND_DETAILS: (id: string) => `/users/chit-funds/${id}`,
+    GET_KYC_REQUIREMENTS: (id: string) => `/users/chit-funds/${id}/kyc-requirements`,
+    GET_JOIN_STATUS: (id: string) => `/users/chit-funds/${id}/join-status`,
+    SUBMIT_JOIN_REQUEST: (id: string) => `/users/chit-funds/${id}/join-request`,
+    REUPLOAD_KYC: (id: string) => `/users/chit-funds/${id}/reupload-kyc`,
+    CREATE_JOIN_CHECKOUT: (id: string) => `/users/chit-funds/${id}/checkout`,
+    VERIFY_JOIN_CHECKOUT: "/users/chit-funds/verify-checkout",
+  },
+
+  STORAGE: {
+    PRESIGNED_URL: "/storage/presigned-url",
+    PRESIGNED_DOWNLOAD_URL: "/storage/presigned-download-url",
   },
 
   TENANTS: {
@@ -65,6 +77,9 @@ export const API_ROUTES = {
     CREATE_MULTI_DIVISION_CHIT_FUND: "/tenants/chit-funds/multi-division",
     BLOCK_CHIT_FUND: (id: string) => `/tenants/chit-funds/${id}/block`,
     UNBLOCK_CHIT_FUND: (id: string) => `/tenants/chit-funds/${id}/unblock`,
+    GET_JOIN_REQUESTS: "/tenants/chit-funds/join-requests",
+    REVIEW_JOIN_REQUEST: (id: string) =>
+      `/tenants/chit-funds/join-requests/${id}/review`,
     GET_KYC_TEMPLATE: "/tenants/kyc-config",
     CONFIG_KYC: "/tenants/kyc-config",
   },

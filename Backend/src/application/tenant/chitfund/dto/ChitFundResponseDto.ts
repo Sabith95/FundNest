@@ -5,6 +5,7 @@ export interface ChitFundResponseDto {
   tenantId: string;
   name: string;
   description?: string;
+  highlights: string[];
   fundType: FundType;
   chitValue: number;
   contributionAmount: number;

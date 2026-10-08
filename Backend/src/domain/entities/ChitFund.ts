@@ -7,6 +7,7 @@ export interface ChitFundProps {
 
   name: string;
   description?: string;
+  highlights?: string[];
 
   fundType: FundType;
 
@@ -57,6 +58,10 @@ export class ChitFund {
 
   public get description(): string | undefined {
     return this._props.description;
+  }
+
+  public get highlights(): string[] {
+    return this._props.highlights ? [...this._props.highlights] : [];
   }
 
   public get fundType(): FundType {

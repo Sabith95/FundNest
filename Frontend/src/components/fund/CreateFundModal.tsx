@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect } from "react";
-import { X, Layers, Plus, Loader2, AlertCircle, Calculator, CheckCircle2 } from "lucide-react";
+import { X, Layers, Plus, Loader2, AlertCircle, Calculator, CheckCircle2, Sparkles } from "lucide-react";
 import { toast } from "react-toastify";
 import {
   tenantFundService,
@@ -12,6 +12,14 @@ interface CreateFundModalProps {
   onSuccess: () => void;
 }
 
+const PRESET_HIGHLIGHTS = [
+  "High ROI Potential",
+  "Secure & Transparent",
+  "Low Entry Barriers",
+  "Emergency Liquidity",
+  "Guaranteed Dividend",
+];
+
 export default function CreateFundModal({
   isOpen,
   onClose,
@@ -20,6 +28,8 @@ export default function CreateFundModal({
   const [fundType, setFundType] = useState<FundType>("NORMAL");
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
+  const [highlights, setHighlights] = useState<string[]>([]);
+  const [highlightInput, setHighlightInput] = useState("");
   const [chitValue, setChitValue] = useState<number | "">("");
   const [contributionAmount, setContributionAmount] = useState<number | "">("");
   const [durationMonths, setDurationMonths] = useState<number | "">("");
@@ -29,6 +39,25 @@ export default function CreateFundModal({
   const [submitting, setSubmitting] = useState(false);
   const [touched, setTouched] = useState<Record<string, boolean>>({});
   const [durationManuallyEdited, setDurationManuallyEdited] = useState(false);
+
+  const handleAddHighlight = (text?: string) => {
+    const val = (text ?? highlightInput).trim();
+    if (!val) return;
+    if (highlights.includes(val)) {
+      toast.info("This highlight is already added");
+      return;
+    }
+    if (highlights.length >= 10) {
+      toast.warning("Maximum 10 highlights allowed");
+      return;
+    }
+    setHighlights((prev) => [...prev, val]);
+    if (!text) setHighlightInput("");
+  };
+
+  const handleRemoveHighlight = (index: number) => {
+    setHighlights((prev) => prev.filter((_, i) => i !== index));
+  };
 
   const markTouched = (field: string) => {
     setTouched((prev) => ({ ...prev, [field]: true }));
@@ -184,6 +213,7 @@ export default function CreateFundModal({
         await tenantFundService.createNormalFund({
           name: name.trim(),
           description: description.trim() || undefined,
+          highlights: highlights.length > 0 ? highlights : undefined,
           chitValue: Number(chitValue),
           contributionAmount: Number(contributionAmount),
           durationMonths: Number(durationMonths),
@@ -194,6 +224,7 @@ export default function CreateFundModal({
         await tenantFundService.createMultiDivisionFund({
           name: name.trim(),
           description: description.trim() || undefined,
+          highlights: highlights.length > 0 ? highlights : undefined,
           chitValue: Number(chitValue),
           contributionAmount: Number(contributionAmount),
           durationMonths: Number(durationMonths),
@@ -311,6 +342,85 @@ export default function CreateFundModal({
             />
             {touched.description && errors.description && (
               <p className="mt-1 text-xs text-red-500">{errors.description}</p>
+            )}
+          </div>
+
+          {/* Fund Highlights */}
+          <div>
+            <div className="flex items-center justify-between">
+              <label className="block text-xs font-medium text-slate-700">
+                Fund Highlights (Bullet Points)
+              </label>
+              <span className="text-[11px] text-slate-400">
+                {highlights.length}/10 points
+              </span>
+            </div>
+            <div className="mt-1 flex gap-2">
+              <input
+                type="text"
+                value={highlightInput}
+                onChange={(e) => setHighlightInput(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    handleAddHighlight();
+                  }
+                }}
+                placeholder="e.g. High ROI Potential (press enter)"
+                className="flex-1 rounded-lg border border-slate-200 bg-slate-50 px-3.5 py-2 text-sm text-slate-800 focus:border-indigo-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-100"
+              />
+              <button
+                type="button"
+                onClick={() => handleAddHighlight()}
+                className="inline-flex items-center gap-1 rounded-lg border border-indigo-200 bg-indigo-50 px-3 py-2 text-xs font-semibold text-indigo-700 transition hover:bg-indigo-100"
+              >
+                <Plus className="h-3.5 w-3.5" /> Add
+              </button>
+            </div>
+
+            {/* Quick Suggestions */}
+            <div className="mt-2 flex flex-wrap items-center gap-1.5">
+              <span className="text-[10px] font-semibold uppercase text-slate-400">
+                Suggestions:
+              </span>
+              {PRESET_HIGHLIGHTS.map((preset) => (
+                <button
+                  key={preset}
+                  type="button"
+                  disabled={highlights.includes(preset)}
+                  onClick={() => handleAddHighlight(preset)}
+                  className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[11px] font-medium transition ${
+                    highlights.includes(preset)
+                      ? "bg-slate-100 text-slate-400 cursor-not-allowed"
+                      : "bg-slate-100 text-slate-600 hover:bg-indigo-50 hover:text-indigo-700"
+                  }`}
+                >
+                  <Sparkles className="h-2.5 w-2.5" />
+                  {preset}
+                </button>
+              ))}
+            </div>
+
+            {/* Added Highlights Chips */}
+            {highlights.length > 0 && (
+              <div className="mt-2.5 flex flex-wrap gap-1.5 rounded-lg border border-slate-100 bg-slate-50/70 p-2.5">
+                {highlights.map((item, idx) => (
+                  <span
+                    key={idx}
+                    className="inline-flex items-center gap-1.5 rounded-md bg-white px-2.5 py-1 text-xs font-medium text-slate-800 shadow-sm border border-slate-200"
+                  >
+                    <span>• {item}</span>
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveHighlight(idx)}
+                      className="text-slate-400 hover:text-red-500"
+                      title="Remove highlight"
+                    >
+                      <X className="h-3 w-3" />
+                    </button>
+                  </span>
+                ))}
+              </div>
             )}
           </div>
 
