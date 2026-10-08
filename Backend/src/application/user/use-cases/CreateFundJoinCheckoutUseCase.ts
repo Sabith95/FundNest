@@ -52,10 +52,10 @@ export class CreateFundJoinCheckoutUseCase
       throw new BadRequestError("Chit fund is inactive");
     }
     if (fund.currentMembersCount >= fund.totalMembers) {
-      throw new ConflictError("Chit fund has already reached maximum capacity");
+      throw new ConflictError(MESSAGES.FUND.REACHED_MAXIMUM_CAPACITY);
     }
     if (new Date(fund.startDate).getTime() <= Date.now()) {
-      throw new BadRequestError("Enrollment has closed as the fund has already started");
+      throw new BadRequestError(MESSAGES.FUND.ENROLLMENT_CLOSED);
     }
 
     const request = await this._fundJoinRequestRepository.findByFundAndUser(
@@ -63,11 +63,11 @@ export class CreateFundJoinCheckoutUseCase
       userId,
     );
     if (!request) {
-      throw new BadRequestError("No join request found. Please complete KYC submission first");
+      throw new BadRequestError(MESSAGES.FUND.COMPLETE_KYC);
     }
 
     if (request.status === FundJoinStatus.COMPLETED) {
-      throw new ConflictError("You have already completed joining this fund");
+      throw new ConflictError(MESSAGES.FUND.ALREADY_COMPLETED_THE_JOINING);
     }
 
     if (

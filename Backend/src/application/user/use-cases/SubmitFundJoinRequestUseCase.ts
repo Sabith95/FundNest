@@ -56,13 +56,13 @@ export class SubmitFundJoinRequestUseCase
       throw new NotFoundError(MESSAGES.FUND.NOT_FOUND);
     }
     if (!fund.isActive) {
-      throw new BadRequestError("This chit fund is inactive");
+      throw new BadRequestError(MESSAGES.FUND.FUND_IS_INACTIVE);
     }
     if (fund.currentMembersCount >= fund.totalMembers) {
-      throw new ConflictError("This chit fund is already full");
+      throw new ConflictError(MESSAGES.FUND.FUND_IS_FULL);
     }
     if (new Date(fund.startDate).getTime() <= Date.now()) {
-      throw new BadRequestError("Enrollment has closed as the chit fund has already started");
+      throw new BadRequestError(MESSAGES.FUND.ENROLLMENT_CLOSED);
     }
 
     // Check existing request
@@ -72,16 +72,16 @@ export class SubmitFundJoinRequestUseCase
     );
     if (existing) {
       if (existing.status === FundJoinStatus.COMPLETED) {
-        throw new ConflictError("You are already an active member of this fund");
+        throw new ConflictError(MESSAGES.FUND.YOU_ARE_A_ACTIVE_MEMBER);
       }
       if (existing.status === FundJoinStatus.PENDING_VERIFICATION) {
-        throw new ConflictError("Your application is currently pending verification");
+        throw new ConflictError(MESSAGES.FUND.APPLICATION_IS_UNDER_VERIFICATION);
       }
       if (existing.status === FundJoinStatus.APPROVED) {
-        throw new ConflictError("Your application is already approved. Please proceed to payment");
+        throw new ConflictError(MESSAGES.FUND.APPLICATION_VERIFIED);
       }
       if (existing.status === FundJoinStatus.REJECTED) {
-        throw new ConflictError("Your application was rejected. Please use the re-upload endpoint");
+        throw new ConflictError(MESSAGES.FUND.APPLICATION_REJECTED);
       }
     }
 

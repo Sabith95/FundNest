@@ -115,7 +115,7 @@ export class VerifyFundJoinCheckoutUseCase
 
     if (!updatedFund) {
       throw new ConflictError(
-        "Chit fund reached maximum capacity before checkout could be finalized. Please contact support for an immediate refund.",
+        MESSAGES.FUND.REACHED_MAXIMUM_CAPACITY_BEFORE_CHECKOUT,
       );
     }
 

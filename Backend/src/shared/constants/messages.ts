@@ -150,6 +150,17 @@ export const MESSAGES = {
       "You have reached the maximum number of funds allowed by your subscription plan.",
     MAX_USERS_EXCEEDED:
       "Creating this fund would exceed the total member limit allowed by your subscription plan.",
+    REACHED_MAXIMUM_CAPACITY: "Chit fund has already reached maximum capacity",
+    ENROLLMENT_CLOSED: "Enrollment has closed as the fund has already started",
+    COMPLETE_KYC: "No join request found. Please complete KYC submission first",
+    ALREADY_COMPLETED_THE_JOINING: "You have already completed joining this fund",
+    FUND_IS_INACTIVE: "This chit fund is inactive",
+    FUND_IS_FULL: "This chit fund is already full",
+    YOU_ARE_A_ACTIVE_MEMBER: "You are already an active member of this fund",
+    APPLICATION_IS_UNDER_VERIFICATION: "Your application is currently pending verification",
+    APPLICATION_VERIFIED: "Your application is already approved. Please proceed to payment",
+    APPLICATION_REJECTED: "Your application was rejected. Please use the re-upload endpoint",
+    REACHED_MAXIMUM_CAPACITY_BEFORE_CHECKOUT: "Chit fund reached maximum capacity before checkout could be finalized. Please contact support for an immediate refund.",
   },
 
   COMMON: {
